@@ -39,9 +39,10 @@ public:
 
 	bool				isDepValid;			//18 ott: flag che indica se la partenza presente in departurelistB
 								// deve essere reinstradata (dipende dalla posizione temporale
-	
+
+	Event				*midhaulEvent;      // -L  if it is a backhaul event, it will point to the corresponding midhaul event
 	Event				*fronthaulEvent;	//-B a backhaul event points to its corresponding fronthaul event
-	Event				*midhaulEvent;      // -L if it is a backhaul event, it will point to the corresponding midhaul event
+	
 	bool				backhaulBlocked;
 };
 

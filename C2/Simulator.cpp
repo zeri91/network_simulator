@@ -333,7 +333,7 @@ while ((pEvent = m_hEventList.nextEvent()) && (!bDone) && (!stat_achieved))
 	assert(pEvent);
 	
 	//-B: if pEvent is a backhaul event, I have to delete its corresponding fronthaul event in the related events' list
-	if (pEvent->fronthaulEvent) // -L: if true -> it's a backhaul event // DA MODIFICARE
+	if (pEvent->fronthaulEvent) // -L: if true -> it's a backhaul event // DA  MODIFICARE
 	{
 		m_hFrontEventList.updateFronthaulEventList(pEvent);
 	}
@@ -2187,7 +2187,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 
 	//-B: precomputedPath cleared, from previous cycle calculation, each time the cycle calls BBU_newConnection method
 	m_pNetMan->clearPrecomputedPath();
-	//-L: significa che è un fronthaulEvent
+	//-L:  significa che è un fronthaulEvent
 	//-B: if fronthaul has not been routed yet
 	if (pEvent->fronthaulEvent == NULL)
 	{
