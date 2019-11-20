@@ -1,0 +1,86 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: photoWLv2 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP22.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/photoWLv2.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\Circuit.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\ConProvisionMain.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\EventList.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\Lightpath.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\Lightpath_Seg.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\LightpathDB.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\Log.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\NetMan.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\OXCNode.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\Simulator.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\TopoReader.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\UniFiber.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoWPv2a\WDMNetwork.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP22.tmp" 
+Creating temporary file "C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP23.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/photoWLv2.pdb" /debug /machine:I386 /out:"Debug/photoWLv2.exe" /pdbtype:sept 
+".\Debug\AbsPath.obj"
+".\Debug\AbstractGraph.obj"
+".\Debug\AbstractPath.obj"
+".\Debug\BinaryHeap.obj"
+".\Debug\Channel.obj"
+".\Debug\Circuit.obj"
+".\Debug\Connection.obj"
+".\Debug\ConnectionDB.obj"
+".\Debug\ConProvisionMain.obj"
+".\Debug\Event.obj"
+".\Debug\EventList.obj"
+".\Debug\Graph.obj"
+".\Debug\Lightpath.obj"
+".\Debug\Lightpath_Seg.obj"
+".\Debug\LightpathDB.obj"
+".\Debug\Log.obj"
+".\Debug\MappedLinkList.obj"
+".\Debug\matrix.obj"
+".\Debug\NetMan.obj"
+".\Debug\OchException.obj"
+".\Debug\OchMemDebug.obj"
+".\Debug\OchObject.obj"
+".\Debug\OXCNode.obj"
+".\Debug\SimplexLink.obj"
+".\Debug\Simulator.obj"
+".\Debug\Stat.obj"
+".\Debug\TopoReader.obj"
+".\Debug\UniFiber.obj"
+".\Debug\Vertex.obj"
+".\Debug\WDMNetwork.obj"
+]
+Creating command line "link.exe @C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP23.tmp"
+<h3>Output Window</h3>
+Compiling...
+Log.cpp
+Simulator.cpp
+WDMNetwork.cpp
+Skipping... (no relevant changes detected)
+Circuit.cpp
+ConProvisionMain.cpp
+EventList.cpp
+Lightpath.cpp
+Lightpath_Seg.cpp
+LightpathDB.cpp
+NetMan.cpp
+OXCNode.cpp
+TopoReader.cpp
+UniFiber.cpp
+Linking...
+
+
+
+<h3>Results</h3>
+photoWLv2.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

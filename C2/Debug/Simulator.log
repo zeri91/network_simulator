@@ -1,0 +1,47 @@
+﻿  matrix.cpp
+matrix.cpp(106): warning C4018: '<': signed/unsigned mismatch
+matrix.cpp(108): warning C4018: '<': signed/unsigned mismatch
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\numeric(113): warning C4996: 'std::_Inner_product2': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\numeric(92): note: see declaration of 'std::_Inner_product2'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\numeric(144): note: see reference to function template instantiation '_Ty std::inner_product<_InIt1,_InIt2,_Ty,std::plus<void>,std::multiplies<void>>(_InIt1,_InIt1,_InIt2,_Ty,_Fn21,_Fn22)' being compiled
+          with
+          [
+              _Ty=double,
+              _InIt1=Cslice_iter<double>,
+              _InIt2=double *,
+              _Fn21=std::plus<void>,
+              _Fn22=std::multiplies<void>
+          ]
+  matrix.cpp(78): note: see reference to function template instantiation '_Ty std::inner_product<Cslice_iter<double>,_Ty*,double>(_InIt1,_InIt1,_InIt2,_Ty)' being compiled
+          with
+          [
+              _Ty=double,
+              _InIt1=Cslice_iter<double>,
+              _InIt2=double *
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(917): error C2672: '_Iter_cat': no matching overloaded function found
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\numeric(110): note: see reference to function template instantiation 'void std::_Debug_range_ptr<_InIt1,_InIt2>(_InIt,_InIt,_Pty &,std::_Dbfile_t,std::_Dbline_t)' being compiled
+          with
+          [
+              _InIt1=Cslice_iter<double>,
+              _InIt2=double *,
+              _InIt=Cslice_iter<double>,
+              _Pty=double *
+          ]
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\numeric(144): note: see reference to function template instantiation '_Ty std::inner_product<_InIt1,_InIt2,_Ty,std::plus<void>,std::multiplies<void>>(_InIt1,_InIt1,_InIt2,_Ty,_Fn21,_Fn22)' being compiled
+          with
+          [
+              _Ty=double,
+              _InIt1=Cslice_iter<double>,
+              _InIt2=double *,
+              _Fn21=std::plus<void>,
+              _Fn22=std::multiplies<void>
+          ]
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(917): error C2893: Failed to specialize function template 'iterator_traits<_Iter>::iterator_category std::_Iter_cat(const _Iter &)'
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(917): note: With the following template arguments:
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(917): note: '_Iter=Cslice_iter<double>'
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(917): error C2672: '_Debug_range_ptr2': no matching overloaded function found
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(917): error C2780: 'void std::_Debug_range_ptr2(_RanIt,_RanIt,_Pty &,std::_Dbfile_t,std::_Dbline_t,std::random_access_iterator_tag)': expects 6 arguments - 5 provided
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(899): note: see declaration of 'std::_Debug_range_ptr2'
+C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(917): error C2780: 'void std::_Debug_range_ptr2(_InIt,_InIt,_Pty &,std::_Dbfile_t,std::_Dbline_t,std::input_iterator_tag)': expects 6 arguments - 5 provided
+  C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\xutility(890): note: see declaration of 'std::_Debug_range_ptr2'

@@ -1,0 +1,16 @@
+SP ht tras AR  	delay  	Pb	PTot	PGreen  	PBrown 	     PTran	     PEDFA	     PProc	 ConnBlock	  ConnProv	  Tot Hop
+
+	    180	0.005	0.00198581	2127.39	  476.247	  516.243	  1134.9	  506.097	  628.806	19776	9.92918e+006	8.73714e+006
+
+AR  	delay  	Pb	PTot	PGreen  	PBrown 	     PTran	     PEDFA	     PProc	 ConnBlock	  ConnProv	  Tot Hop
+
+180	0.005	0.0427306	2697.73	  785.607	  166.315	  1745.81	  891.734	  854.073	425538	9.52342e+006	1.47618e+007
+
+AR  	delay  	Pb	PTot	PGreen  	PBrown 	     PTran	     PEDFA	     PProc	 ConnBlock	  ConnProv	  Tot Hop
+
+180	0.005	0.012613	2651.99	  757.133	  224.753	  1670.1	  835.195	  834.909	125610	9.82334e+006	1.40483e+007
+
+AR  	delay  	Pb	PTot	PGreen  	PBrown 	     PTran	     PEDFA	     PProc	 ConnBlock	  ConnProv	  Tot Hop
+
+180	0.005	0.106829	3151.28	  612.42	  275.735	  2263.13	  1248.46	  1014.67	1.0638e+006	8.88515e+006	1.93313e+007
+

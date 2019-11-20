@@ -1,0 +1,66 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: photoNEW - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP86.tmp" with contents
+[
+/nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Release/photoNEW.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoNEW\AbstractGraph.cpp"
+"C:\Programmi\Microsoft Visual Studio\MyProjects\photoNEW\Simulator.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP86.tmp" 
+Creating temporary file "C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP87.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/photoNEW.pdb" /machine:I386 /out:"Release/photoNEW.exe" 
+".\Release\AbsPath.obj"
+".\Release\AbstractGraph.obj"
+".\Release\AbstractPath.obj"
+".\Release\BinaryHeap.obj"
+".\Release\Channel.obj"
+".\Release\Circuit.obj"
+".\Release\Connection.obj"
+".\Release\ConnectionDB.obj"
+".\Release\ConProvisionMain.obj"
+".\Release\Event.obj"
+".\Release\EventList.obj"
+".\Release\Graph.obj"
+".\Release\Lightpath.obj"
+".\Release\Lightpath_Seg.obj"
+".\Release\LightpathDB.obj"
+".\Release\Log.obj"
+".\Release\MappedLinkList.obj"
+".\Release\matrix.obj"
+".\Release\NetMan.obj"
+".\Release\OchException.obj"
+".\Release\OchMemDebug.obj"
+".\Release\OchObject.obj"
+".\Release\OXCNode.obj"
+".\Release\SimplexLink.obj"
+".\Release\Simulator.obj"
+".\Release\Stat.obj"
+".\Release\TopoReader.obj"
+".\Release\UniFiber.obj"
+".\Release\Vertex.obj"
+".\Release\WDMNetwork.obj"
+]
+Creating command line "link.exe @C:\DOCUME~1\FABIOP~1.000\IMPOST~1\Temp\RSP87.tmp"
+<h3>Output Window</h3>
+Compiling...
+AbstractGraph.cpp
+C:\Programmi\Microsoft Visual Studio\MyProjects\photoNEW\AbstractGraph.cpp(37) : warning C4101: 'i' : unreferenced local variable
+C:\Programmi\Microsoft Visual Studio\MyProjects\photoNEW\AbstractGraph.cpp(100) : warning C4101: 'i' : unreferenced local variable
+C:\Programmi\Microsoft Visual Studio\MyProjects\photoNEW\AbstractGraph.cpp(167) : warning C4101: 'i' : unreferenced local variable
+Simulator.cpp
+Linking...
+
+
+
+<h3>Results</h3>
+photoNEW.exe - 0 error(s), 3 warning(s)
+</pre>
+</body>
+</html>

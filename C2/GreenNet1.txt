@@ -1,0 +1,39 @@
+NumberOfWavelengths = 0;
+ChannelCapacity = 192;
+NumberOfTx = 1;
+NumberOfRx = 1;
+NumberOfDataCenter = 3;
+TxScale = 1.0;	// NumberOfTx = Nodal Degree * TxScale
+NumberOfOXCNodes = 8;
+NumberOfUniFibers = 26;
+
+// Format: 
+//	<OXCNodeId, WConvertible(0,F|1,P|2,N), GroomingCap(0|1|2), Tx, Rx, DCFlag, TimeZone>
+//	Tx (Rx) is valid only if NumberOfTx (NumberOfRx) is 0
+//      DCFlag is 1,2 or 3 if Data Center Wind,Solar or Hydro is present, -1 for Dummy Node
+//      TimeZone is valid only for node with DC, range (-12:+12)
+OXCNodes = [
+	<1, 0, 0, 1, 1, 0, 0>,
+	<2, 0, 0, 1, 1, 0, 0>,
+	<3, 0, 0, 1, 1, 0, 0>,
+	<4, 0, 0, 1, 1, 2, -1>,
+	<5, 0, 0, 1, 1, 2, 0>,
+	<6, 0, 0, 1, 1, 2, +1>,
+	<7, 0, 0, 1, 1, 0, 0>, 
+	<0, 0, 0, 1, 1, -1, 0>, //DUMMY NODE, sempre nodo 0	
+
+];
+
+// Format: <FiberId, Src, Dst, # of wavelengths, Cost, Length>
+//	"# of wavelengths" is valid only if NumberOfWavelength is 0
+UniFibers = [
+	<0, 7, 1, 8, 1, 0, 3000>, <1, 1, 7, 8, 1, 0, 3000>, <2, 1, 2, 8, 1, 0, 2900>, <3, 2, 1, 8, 1, 0, 2900>,
+	<4, 1, 3, 8, 1, 0, 1400>, <5, 3, 1, 8, 1, 0, 1400>, <6, 7, 4, 8, 1, 0, 2500>, <7, 4, 7, 8, 1, 0, 2500>,
+	<8, 4, 5, 8, 1, 0, 3000>, <9, 5, 4, 8, 1, 0, 3000>, <10, 5, 6, 8, 1, 0, 3000>, <11, 6, 5, 8, 1, 0, 3000>,
+	<12, 7, 5, 8, 1, 0, 2800>, <13, 5, 7, 8, 1, 0, 2800>, <14, 3, 6, 8, 1, 0, 1300>, <15, 6, 3, 8, 1, 0, 1300>,
+	<16, 3, 5, 8, 1, 0, 1000>, <17, 5, 3, 8, 1, 0, 1000>, <18, 2, 6, 8, 1, 0, 2500>, <19, 6, 2, 8, 1, 0, 2500>,
+	<20, 6, 0, 1000, 1, 0, 1>, <21, 0, 6, 1000, 1, 0, 1>, <22, 5, 0, 1000, 1, 0, 1>, <23, 0, 5, 1000, 1, 0, 1>,
+	<24, 4, 0, 1000, 1, 0, 1>, <25, 0, 4, 1000, 1, 0, 1>,
+	
+	
+];

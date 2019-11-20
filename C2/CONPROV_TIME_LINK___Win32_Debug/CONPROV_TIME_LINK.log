@@ -1,0 +1,7 @@
+﻿  ConProvisionMain.cpp
+c:\users\lorenzo\desktop\maxc-new\policy 1 - blocked - 48 - fast - backg - c2\conprovisionmain.cpp(75): warning C4244: 'argomento': conversione da 'time_t' a 'unsigned int'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\policy 1 - blocked - 48 - fast - backg - c2\conprovisionmain.cpp(718): warning C4018: '<': errata corrispondenza tra signed e unsigned
+c:\users\lorenzo\desktop\maxc-new\policy 1 - blocked - 48 - fast - backg - c2\conprovisionmain.cpp(460): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: vedere la dichiarazione di 'fopen'
+  CONPROV_TIME_LINK.vcxproj -> C:\Users\lorenzo\Desktop\maxC-new\policy 1 - blocked - 48 - fast - backg - C2\.\CONPROV_TIME_LINK___Win32_Debug\CONPROV_TIME_LINK.exe
+  CONPROV_TIME_LINK.vcxproj -> .\CONPROV_TIME_LINK___Win32_Debug/CONPROV_TIME_LINK.pdb (Full PDB)

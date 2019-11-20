@@ -1,0 +1,111 @@
+SIMULATORE DE GRANDI FABIO
+
+
+
+FUNZIONALITA:
+Questo simulatore è in grado di simulare scenari di rete ottica in cui vi sono ritardi di controllo, in presenza
+o assenza di convertitori di lunghezza d'onda. 
+
+I parametri d'interesse ricavabili in uscita riguardano la Probabilità di blocco e le sue componenti e il Resource overbuild
+
+Il File d'uscita viene generato automaticamente alla fine della simulazione e si chiama "Risultati.txt":
+vedere la spiegazione dei comandi in ingresso per stabilire il tipo di dati che si vuole avere in uscita.
+
+
+
+COMANDI IN INGRESSO:
+
+
+NomeProgramma Seed FileDatiIngresso ProvisioningType #Connessioni ArrivalRate K #MaxHops BakupCoefficient TimePolicy OutputType Ritardo HoldingTime LinkDisjointSwitch
+
+-Seed
+Seme per generazione numeri casuali
+
+-FileDatiIngresso
+Nome del file di dati contenente la descrizione di rete:dev'essere nella stessa cartella del programma
+
+-ProvisioningType
+Possibili opzioni:  SEG_SPP
+		    wpSEG_SPP   	[condivisa]
+
+	            DEDICATED
+		    wpDEDICATED		[dedicata]
+
+	            UNPROTECTED
+		    UNPROTECTED_GREEN
+		    wpUNPROTECTED	[non protetta]
+
+		    SPPBw
+		    SPPCh    		[algoritmi CTTC]
+
+Per i primi 3 tipi di algoritmi, l'aggiunta del prefisso "wp" impone il vincolo di continuità di lunghezza
+d'onda.
+
+
+-#Connessioni
+Numero di connessioni in ingresso da simulare: il limite massimo impostato nel programma è di un milione di connessioni
+
+-ArrivalRate
+Frequenza di arrivo delle connessioni (arrivi/sec)
+
+-K
+Determina il numero di k-shortest path calcolati nell' algoritmo di Yen 
+(Parametro sensato solo con ProvisioningType SEG_SPP o wpSEG_SPP )
+
+-#MaxHops
+Lunghezza massima ammissibile, calcolata in hop, di un percorso
+
+-BackupCoefficient
+Coefficiente per il quale vengono moltiplicati i costi dei percorsi di backup condivisibili durante il calcolo di un
+nuovo percorso di backup: usare valori <1 .
+(Parametro sensato solo con ProvisioningType SEG_SPP , wpSEG_SPP , SPPBw , SPPCh)
+
+-TimePolicy
+0= Calcolo dei percorsi di backup SENZA tener conto delle informazioni date dalla durata delle connessioni
+1= Tengo conto della durata delle connessioni
+ATTENZIONE: La modalità "1", ereditata dalla versione precedente del simulatore, si è rivelata essere non funzionante
+usare SOLO la modalità "0"
+
+-OutputType
+Determina quali dati in uscita verranno salvati sul file "Risultati.txt":
+
+Pb= Fornisce informazioni dettagliate sulle componenti della Pb col seguente formato:
+ArrRate	Ritardo	PbGlobale	PC	BC	PC&BC	FC	PC Rel	BC Rel	PC&BC Rel	FC Rel	CB	CB Rel
+
+Ro= Fornisce informazioni sul Resource Overbuild:
+ArrRate	Ritardo	ResourceOverbuild
+
+Nd=(Normalized delay)Informazioni sulla Pb e RO indicando anche i parametri normalizzati(rispetto all'holding time) di Ar e Ritardo
+ArrRate	Ritardo	ArrRate/HoldingTime	Ritardo/HoldingTime	Pb	RO
+
+
+-Ritardo
+Ritardo di controllo: "0" per simulare con scenario ideale senza ritardi
+
+-HoldingTime
+Durata media delle connessioni (sec)
+
+-LinkDisjointSwitch
+1=impongo la condizione di link-disgiunzione tra percorsi primari e di backup
+0=come sopra ma imponendo condizioni di nodo-disgiunzione
+(parametro sensato solo per: SPP,wpSPP,DEDICATED)
+
+
+ESEMPI D'USO
+
+6233 Nsfnet.dat SPPBw 30000  0.1666 1 30 0.5 0 Pb 0.001 240  1
+
+123 Usa24.dat UNPROTECTED 300000  240 1 30 0.00001 0 Pb 0.005 1  1
+
+123 Usa24.dat SEG_SPP 300000  160 2 30 0.00001 0 Pb 0.03 1  1
+
+123 GreenNet1.txt UNPROTECTED_GREEN 30000  240 1 30 0.00001 0 power 0.005 1  1
+
+
+PROBLEMI NOTI E AVVERTENZE
+
+- Il parametro "K" per il provisioning "wpSEG_SPP" puo raggiungere il valore massimo di 2; bisogna ancora implementare la modifica
+	per consentire l'utilizzo di unvalore arbitrario.
+
+- Per Il provisioning "SPPCh" è stato rilevato un caso in cui vi è una leggera discrepanza col valore corretto atteso:bisognerebbe verificare
+	il motivo di cio.

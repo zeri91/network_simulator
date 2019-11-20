@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{911E67C6-3D85-4FCE-B560-20A9C3E3FF48}") = "CONPROV_TIME_LINK", "CONPROV_TIME_LINK.exe", "{449E0C90-4729-4C9F-9018-43D4864B45F6}"
+	ProjectSection(DebuggerProjectSystem) = preProject
+		PortSupplier = 00000000-0000-0000-0000-000000000000
+		Executable = C:\Users\User\Desktop\Monica\Version 1.2.1\CONPROV_TIME_LINK___Win32_Debug\CONPROV_TIME_LINK.exe
+		RemoteMachine = SERVER
+		StartingDirectory = C:\Users\User\Desktop\Monica\Version 1.2.1\CONPROV_TIME_LINK___Win32_Debug
+		Environment = Predefinita
+		LaunchingEngine = 00000000-0000-0000-0000-000000000000
+		LaunchSQLEngine = No
+		AttachLaunchAction = No
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{449E0C90-4729-4C9F-9018-43D4864B45F6}.Debug|x86.ActiveCfg = Debug|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
