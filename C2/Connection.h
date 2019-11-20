@@ -54,6 +54,7 @@ public:
 
 	UINT					m_nHopCount;	// max. hop count
 	UINT					m_nBackhaulSaved; // ID of the backhaul associated
+	UINT					m_nMidhaulSaved; //-L: ID of the midhaul associated
 
 	Circuit					*m_pPCircuit;	// primary if unprotected
 	Circuit					*m_pBCircuit;	// backup if protected (but not PAL)

@@ -52,12 +52,11 @@ Connection::Connection(UINT nSeqNo, UINT nSrc, UINT nDst,
 	m_dArrivalTime(tArrivalTime), m_dHoldingTime(tHoldingTime),
 	m_eBandwidth(eBW), m_eCPRIBandwidth(CPRIbw), m_eProtectionClass(ePC), m_eStatus(REQUEST),
 	m_pPCircuit(NULL), m_pBCircuit(NULL), m_bBlockedDueToUnreach(false), m_pCircuits(NULL),
-	m_bBlockedDueToTx(false), m_bBlockedDueToLatency(false), m_nHopCount(0), m_eConnType(connType), m_nBackhaulSaved(0),
+	m_bBlockedDueToTx(false), m_bBlockedDueToLatency(false), m_nHopCount(0), m_eConnType(connType), m_nBackhaulSaved(0), m_nMidhaulSaved(0),
 	m_bTrafficToBeUpdatedForDep(true)
 	{
 	m_dRoutingTime = 0.0000; //-B: max latency CPRI
 }
-
 
 // Connection::Connection(const Connection& rhs)
 // {
