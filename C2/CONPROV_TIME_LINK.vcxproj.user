@@ -4,9 +4,19 @@
     <LocalDebuggerCommandArguments>123 GreenUSA241.txt UNPROTECTED_GREEN 30000 1 1 30 0.00001 0 power 0.005 1  1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
+    <LocalDebuggerCommandArguments>123 GreenUSA241.txt UNPROTECTED_GREEN 30000 1 1 30 0.00001 0 power 0.005 1  1</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerCommandArguments>123 BBUHetNet_5G.txt BBU_HOTEL 55000 45 1 30 0.00001 0 BBU 0.005 1 1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+    <LocalDebuggerCommandArguments>123 BBUHetNet_5G.txt BBU_HOTEL 55000 45 1 30 0.00001 0 BBU 0.005 1 1</LocalDebuggerCommandArguments>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
   </PropertyGroup>
   <PropertyGroup>
     <ShowAllFiles>false</ShowAllFiles>

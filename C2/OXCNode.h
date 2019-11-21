@@ -121,7 +121,7 @@ public:
 	int						m_nReachabilityDegree;		//-B: num of mobile nodes that can reach THIS OXC (hotel) node
 	list<AbstractLink*>		pPath;						//-B: needed while computing the best Hotel node -> path between a node and the core CO
 	UINT					m_nBBUNodeIdsAssigned;		//initialized = 0 for all nodes		// hotel node id selected to contain the BBU of a certain node
-	UINT					m_nBBUNodeIdsAssignedLast;  //initialized = 0 for all nodes. it cointains the last BBU associated to the node when it associates more than one BBU
+	UINT					m_nBBUNodeIdsAssignedLast;  //initialized = 0 for all nodes. it cointains the last(previous) BBU associated to the node when it associates more than one BBU
 	UINT					m_nProximityDegree;			//-B: similar principle to reachability degree --> OBSOLETE
 														//	(#times a hotel is seen as the closest one for each node of the network)
 	UINT					m_nBetweennessCentrality;	//-B: num of times a shortest path from any node to the core CO pass through THIS node

@@ -7466,7 +7466,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 #ifdef DEBUG
 					cout << " -> puo' attivare ancora BBUs" << endl;
 #endif // DEBUGB
-					pOXCsrc->m_nBBUs++;
+					pOXCsrc->m_nBBUs++; //-L: increase num of active BBU in this node
 
 					//increase num of nodes whose BBU is in this node -> num of BBUs active in this node
 

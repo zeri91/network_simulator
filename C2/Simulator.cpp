@@ -2189,7 +2189,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	m_pNetMan->clearPrecomputedPath();
 	//-L:  significa che è un fronthaulEvent
 	//-B: if fronthaul has not been routed yet
-	if (pEvent->fronthaulEvent == NULL)
+	if (pEvent->fronthaulEvent == NULL && pEvent->midhaulEvent == NULL)
 	{
 
 		assert(pEvent->m_pSource != NULL);
@@ -2234,6 +2234,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		//-B: ASSIGN BACKHAUL BANDWIDTH
 		eBandwidth = BWDGRANULARITY;
 
+		//-L: ????????
 		//-B: ASSIGN X-HAUL BANDWIDTH
 		if (MIDHAUL)
 		{
@@ -2266,6 +2267,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		}
 
 	} //END fronthaulEvent NULL
+	// -L: da modificare, adesso per essere backhaul sia fronthaul che midhaul devono essere non nulli
+	// -L: questo potrebbe essere il midhaul cambiando solo nDst a cui andrà assegnata la best CU. 
 	else   //-B: if fronthaul is not NULL, it has been already routed -> backhaul event
 	{
 		//assert(isBBUNode(pEvent->fronthaulEvent->m_pConnection->m_nDst)); //-B: COMMENTED if we allow a node hosts its own BBU in the cell site as last extreme option
