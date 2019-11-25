@@ -319,7 +319,7 @@ void Simulator::run(SimulationTime delay)
 	//-B: pointer to NetMan object
 	m_hEventList.m_pNetMan = m_pNetMan;
 
-	cout << endl << "PREMI INVIO PER INIZIARE LA SIMULAZIONE" << endl;
+	cout << endl << "INIZIO DELLA SIMULAZIONE" << endl;
 	//cin.get();
 	cout << "..." << endl;
  
@@ -2284,9 +2284,10 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		}
 
 	} //END fronthaulEvent NULL
+	//-B: if fronthaul is not NULL, it has been already routed -> backhaul event
 	// -L: da modificare, adesso per essere backhaul sia fronthaul che midhaul devono essere non nulli
 	// -L: questo potrebbe essere il midhaul cambiando solo nDst a cui andrà assegnata la best CU. 
-	else   //-B: if fronthaul is not NULL, it has been already routed -> backhaul event
+	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL) //-L: significa che è midhaul   
 	{
 		//assert(isBBUNode(pEvent->fronthaulEvent->m_pConnection->m_nDst)); //-B: COMMENTED if we allow a node hosts its own BBU in the cell site as last extreme option
 
@@ -2302,7 +2303,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		holdingTime = pEvent->fronthaulEvent->m_pConnection->m_dHoldingTime;
 
 		//-B: original source had to be a mobile node
-		connType = Connection::MOBILE_BACKHAUL;
+		connType = Connection::FIXED_MIDHAUL;
 #ifdef DEBUG
 		cout << "MOBILE BACKHAUL\n";
 #endif // DEBUGB
@@ -2313,8 +2314,23 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		//cout << pEvent->fronthaulEvent->m_pConnection->m_nDst << endl;
 #endif // DEBUGB
 
-	}// end ELSE fronthaul != NULL
+	}// end ELSE IF fronthaul != NULL
+	// -L: signfica che è un backhaul
+	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent != NULL) {
+		//-B: SELECT SOURCE AND DESTINATION
+		nSrc = pEvent->midhaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
+		nDst = m_pNetMan->m_hWDMNet.DummyNode;					// destination = core CO/PoP node //-L: da modificare
 
+																//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
+		eBandwidth = pEvent->midhaulEvent->m_pConnection->m_eBandwidth;
+		CPRIBwd = pEvent->midhaulEvent->m_pConnection->m_eCPRIBandwidth;
+
+		//-B: assign original holding time
+		holdingTime = pEvent->midhaulEvent->m_pConnection->m_dHoldingTime;
+
+		//-B: original source had to be a mobile node
+		connType = Connection::MOBILE_BACKHAUL;
+	} // -L: fine backhaul
 	assert(0 <= nSrc && nSrc <= m_nNumberOfOXCNodes);
 	//-B: DO NOT ASSERT (0 <= nDst && nDst <= m_nNumberOfOXCNodes) 
 	//	BECAUSE FOR FRONTHAUL CONNECTIONS, IT COULD BE nDst == NULL, WHEN NO VALID (REACHABLE) BBU HOTEL NODE WAS FOUND
