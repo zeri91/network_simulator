@@ -96,10 +96,11 @@ cout<<endl<<v2[0]<<v2[1]<<v2[2];*/
 #endif // DEBUGB
 	cout << argv[0] << endl;
 	cout << argv[1] << endl;
-	cout << argv[2] << endl;
-	cout << argv[3] << endl;
-	cout << argv[4] << endl;
-	cout << argv[5] << endl;
+	cout << "Topo File: " << argv[2] << endl;
+	cout << "Provision type: " << argv[3] << endl;
+	cout << " nCon (stopping condition): " << argv[4] << endl;
+	cout << "Arrival rate: " << argv[5] << endl;
+	cout << "bandwidth distribution: DBG_Uniform192 " << endl;
     // if (!hNetMan.initialize(argv[2], argv[3], atoi(argv[6]), atof(argv[8]))) 
 	std::string type;
 	type =  argv[3];

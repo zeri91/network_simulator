@@ -80,7 +80,7 @@ bool Simulator::initialize(UINT nCon, double dArrival,
                            const char* pProvisionType,
                            int nHopCount)
 {
-	cout << "\n-> hSimulator initialize - PREMI INVIO";
+	cout << "\n-> hSimulator initialize";
 	//cin.get();
 
     assert(pBWDistribution);
@@ -333,7 +333,7 @@ while ((pEvent = m_hEventList.nextEvent()) && (!bDone) && (!stat_achieved))
 	assert(pEvent);
 	
 	//-B: if pEvent is a backhaul event, I have to delete its corresponding fronthaul event in the related events' list
-	if (pEvent->fronthaulEvent) // -L: if true -> it's a backhaul event // DA  MODIFICARE
+	if (pEvent->fronthaulEvent) // -L: if true -> it's a backhaul event // DA  MODIFICARE && pEvent->midhaulEvent)
 	{
 		m_hFrontEventList.updateFronthaulEventList(pEvent);
 	}
@@ -525,7 +525,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 		Connection *pCon;
 		if (m_pNetMan->m_eProvisionType == NetMan::ProvisionType::PT_BBU)
 		{
-			if (pEvent->m_pConnection == NULL) {
+			if (pEvent->m_pConnection == NULL) { 
 				pCon = BBU_newConnection_Bernoulli(pEvent, m);
 				pEvent->m_pConnection = pCon;
 				pCon->m_bTrafficToBeUpdatedForArrival = true;
@@ -537,7 +537,6 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				}
 			}
 			else {
-				// -L : ????
 				//it is always a fronthaul event
 				// it enters here only if the event refers to a connection changing BBUB
 				pCon = pEvent->m_pConnection;
@@ -545,8 +544,9 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				pCon->m_bTrafficToBeUpdatedForDep = true;
 
 
-				//saved id for the backhaul 
-				pCon->m_nBackhaulSaved = (pCon->m_nSequenceNo) + 1;
+				//-L: saved id for the backhaul and midhaul
+				pCon->m_nMidhaulSaved = (pCon->m_nSequenceNo) + 1;
+				pCon->m_nBackhaulSaved = (pCon->m_nSequenceNo) + 2;
 
 #ifdef DEBUGC
 				cout << "Evento contiene connessione; è di tipo " << pCon->m_eConnType <<
@@ -555,7 +555,6 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				cout << "Id for the backhaul will be " << pCon->m_nBackhaulSaved << endl;
 #endif
 
-				//cin.get();
 
 #ifdef DEBUGC
 
@@ -584,6 +583,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				{
 					if (pCon->m_eCPRIBandwidth == OC0)
 					{
+						//-L: devo fare lo stesso per il midhaul 
 						//-B: it means it is not the first connection of this source node
 						// --> it doesn't have to route its fronthaul, it just has to delay the related departure event
 						updateCorrespondingDepEvent(pCon);
@@ -751,14 +751,14 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 #endif // DEBUGB
 		
 			OXCNode*pOXCNode;
-
+			// -L: Da modificare per includere il midhaul, o faccio un altro if o unisco i due casi (meglio un altro if)
 			if (pCon->m_eConnType == Connection::MOBILE_BACKHAUL
 				|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL)
 			{
 				//-B: create and insert a departure event, for the fronthaul connection already provided, to be executed immediately!
-				Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
+				Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->midhaulEvent->m_pConnection);
 				nEv_DepFront->arrTimeAs = hPrevLogTime;
-				nEv_DepFront->backhaulBlocked = true;
+				nEv_DepFront->backhaulBlocked = true; //-L: ??????????
 				m_hEventList.insertEvent(nEv_DepFront);
 
 				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
@@ -766,6 +766,23 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 
 #ifdef DEBUGC
 				cout << "\tE' un backhaul event -> Visto che la connessione e' stata bloccata, "
+					<< "al prossimo evento faro' il deprovisioning anche della fronthaul connection corrispondente:" << endl << "\t";
+				pEvent->fronthaulEvent->m_pConnection->dump(cout);
+#endif // DEBUGB
+			}
+			else if (pCon->m_eConnType == Connection::FIXED_MIDHAUL)
+			{
+				//-B: create and insert a departure event, for the fronthaul connection already provided, to be executed immediately!
+				Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
+				nEv_DepFront->arrTimeAs = hPrevLogTime;
+				nEv_DepFront->backhaulBlocked = true; //-L: ??????????
+				m_hEventList.insertEvent(nEv_DepFront);
+
+				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
+				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->fronthaulEvent->m_pConnection->m_nSrc));
+
+#ifdef DEBUGC
+				cout << "\tE' un midhaul event -> Visto che la connessione e' stata bloccata, "
 					<< "al prossimo evento faro' il deprovisioning anche della fronthaul connection corrispondente:" << endl << "\t";
 				pEvent->fronthaulEvent->m_pConnection->dump(cout);
 #endif // DEBUGB
@@ -798,7 +815,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				//don't create any backhaul event
 
 				//-B: get OXCNode to set it as source in next Bernoulli arrival
-				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pCon->m_nSrc));
+				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pCon->m_nSrc)); //-L: ????????
 			
 			}
 			
@@ -2182,8 +2199,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	BandwidthGranularity CPRIBwd;
 	Connection::ConnectionType connType;
 	bool fronthaulFlag = false;
-	SimulationTime holdingTime = -1;
-	bool office = true;
+	SimulationTime holdingTime = -1; // -L: ???
+	bool office = true; // -L: ???
 
 	//-B: precomputedPath cleared, from previous cycle calculation, each time the cycle calls BBU_newConnection method
 	m_pNetMan->clearPrecomputedPath();
@@ -2320,6 +2337,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	}
 	//else: it has been already assigned, taken from the corresponding fronthaul connection
 	
+	//-L: DA MODIFICARE
 	if (pEvent->fronthaulEvent != NULL) { //if fronthaul already routed 
 		if (pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved > 0) {
 			UINT seqNumber = pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved;

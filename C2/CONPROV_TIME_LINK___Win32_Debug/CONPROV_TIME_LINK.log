@@ -1,78 +1,15 @@
-﻿  WDMNetwork.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\wdmnetwork.cpp(8789): warning C4101: 'pDebug': variabile locale senza riferimenti
-  Vertex.cpp
-  UniFiber.cpp
-  TopoReader.cpp
-  Stat.cpp
-  Simulator.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(629): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(1870): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2527): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2575): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2584): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2602): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2642): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2644): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2657): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2659): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2661): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2664): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-  SimplexLink.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simplexlink.cpp(74): warning C4305: '=': troncamento da 'double' a 'float'
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simplexlink.cpp(172): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'long'
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simplexlink.cpp(172): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(1769): note: vedere la dichiarazione di 'sprintf'
-  OXCNode.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\oxcnode.cpp(628): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\oxcnode.cpp(633): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\oxcnode.cpp(645): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-  OchObject.cpp
-  OchMemDebug.cpp
-  OchException.cpp
-  NetMan.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\netman.cpp(1000): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\netman.cpp(5809): warning C4101: 'linkPath': variabile locale senza riferimenti
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\netman.cpp(10446): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\netman.cpp(10447): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\netman.cpp(10599): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\netman.cpp(10600): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-  MappedLinkList.cpp
-  Log.cpp
-  LightpathDB.cpp
-  Lightpath_Seg.cpp
-  Lightpath.cpp
-  Graph.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\graph.cpp(203): warning C4101: 's': variabile locale senza riferimenti
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\graph.cpp(344): warning C4018: '>=': errata corrispondenza tra signed e unsigned
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\graph.cpp(624): warning C4101: 'pSLinkTemp': variabile locale senza riferimenti
-  EventList.cpp
-  Event.cpp
-  Generazione del codice in corso...
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\netman.cpp(10782): warning C4715: 'NS_OCH::NetMan::isLastLinkFull': non tutti i percorsi di controllo restituiscono un valore
-  Compilazione in corso...
-  ConProvisionMain.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\conprovisionmain.cpp(75): warning C4244: 'argomento': conversione da 'time_t' a 'unsigned int'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\conprovisionmain.cpp(718): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\conprovisionmain.cpp(460): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(207): note: vedere la dichiarazione di 'fopen'
-  ConnectionDB.cpp
-  Connection.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\connection.cpp(158): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(1769): note: vedere la dichiarazione di 'sprintf'
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\connection.cpp(163): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(1769): note: vedere la dichiarazione di 'sprintf'
-  Circuit.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\circuit.cpp(901): warning C4244: '+=': conversione da 'double' a 'float'. Possibile perdita di dati.
-  Channel.cpp
-  BinaryHeap.cpp
-  AbstractPath.cpp
-  AbstractGraph.cpp
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\abstractgraph.cpp(766): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'long'
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\abstractgraph.cpp(832): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'long'
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\abstractgraph.cpp(3172): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'long'
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\abstractgraph.cpp(3326): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'long'
-  AbsPath.cpp
-  Generazione del codice in corso...
-AbsPath.obj : warning LNK4075: '/EDITANDCONTINUE' ignorato a causa della specifica di '/SAFESEH'
+﻿  Simulator.cpp
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(630): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(1871): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2528): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2576): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2585): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2603): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2643): warning C4018: '<': errata corrispondenza tra signed e unsigned
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2645): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2658): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2660): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2662): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2665): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
   CONPROV_TIME_LINK.vcxproj -> C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\.\CONPROV_TIME_LINK___Win32_Debug\CONPROV_TIME_LINK.exe
   CONPROV_TIME_LINK.vcxproj -> .\CONPROV_TIME_LINK___Win32_Debug/CONPROV_TIME_LINK.pdb (Full PDB)

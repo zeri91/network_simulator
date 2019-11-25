@@ -5426,8 +5426,7 @@ bool NetMan::BBUinitialize(const char* pTopoFile,
 	int nTimePolicy,
 	const char* UnAv) // M//ANDREA
 {
-	cout << "\n-> hNetman BBUinitialize - PREMI INVIO " << endl;
-	//cin.get();
+	cout << "\n-> hNetman BBUinitialize" << endl;
 	
 	assert(pTopoFile && pProtectionType);
 	TopoReader hTopoReader;

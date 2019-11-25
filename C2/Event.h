@@ -43,7 +43,7 @@ public:
 	Event				*midhaulEvent;      // -L  if it is a backhaul event, it will point to the corresponding midhaul event
 	Event				*fronthaulEvent;	//-B a backhaul event points to its corresponding fronthaul event
 	
-	bool				backhaulBlocked;
+	bool				backhaulBlocked;	//-L: ????????
 };
 
 };
