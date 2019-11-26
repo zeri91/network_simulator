@@ -21,6 +21,7 @@ public:
 	Event();
 	Event(SimulationTime, SIM_EVENTS, Connection*);
 	Event(SimulationTime, SIM_EVENTS, Connection*, Event*);
+	Event(SimulationTime, SIM_EVENTS, Connection*, Event*, Event*);
 	Event(SimulationTime, SIM_EVENTS, Connection*, OXCNode*);
 	~Event();
 	virtual void dump(ostream&) const;

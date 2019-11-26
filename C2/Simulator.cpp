@@ -536,13 +536,11 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 					backhaul_id[pEvent->fronthaulEvent->m_pConnection->m_nSequenceNo] = pCon->m_nSequenceNo;
 				}
 			}
-			else {
-				//it is always a fronthaul event
-				// it enters here only if the event refers to a connection changing BBUB
+			// it enters here only if the event refers to a connection changing BBUB
+			else if (pCon->m_eConnType == Connection::MOBILE_FRONTHAUL) 
+			{
 				pCon = pEvent->m_pConnection;
-
 				pCon->m_bTrafficToBeUpdatedForDep = true;
-
 
 				//-L: saved id for the backhaul and midhaul
 				pCon->m_nMidhaulSaved = (pCon->m_nSequenceNo) + 1;
@@ -576,6 +574,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 #endif
 
 			}
+
 			//-B: in case of (!ONE_CONN_PER_NODE) + (!MIDHAUL) + (BBUSTACKING) --> we have to update an already existing departure event
 			if (!ONE_CONN_PER_NODE && !MIDHAUL && BBUSTACKING)
 			{
@@ -755,14 +754,19 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			if (pCon->m_eConnType == Connection::MOBILE_BACKHAUL
 				|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL)
 			{
-				//-B: create and insert a departure event, for the fronthaul connection already provided, to be executed immediately!
-				Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->midhaulEvent->m_pConnection);
-				nEv_DepFront->arrTimeAs = hPrevLogTime;
-				nEv_DepFront->backhaulBlocked = true; //-L: ??????????
-				m_hEventList.insertEvent(nEv_DepFront);
+				//-L: create and insert a departure event, for the midhaul connection already provided, to be executed immediately!
+				// Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
+				Event*nEv_DepMid = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->midhaulEvent->m_pConnection);
+				// nEv_DepFront->arrTimeAs = hPrevLogTime;
+				// nEv_DepFront->backhaulBlocked = true; 
+				// m_hEventList.insertEvent(nEv_DepFront);
+				nEv_DepMid->arrTimeAs = hPrevLogTime;
+				nEv_DepMid->backhaulBlocked = true; 
+				m_hEventList.insertEvent(nEv_DepMid);
 
+				//-L: da controllare
 				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
-				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->fronthaulEvent->m_pConnection->m_nSrc));
+				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->midhaulEvent->m_pConnection->m_nSrc));
 
 #ifdef DEBUGC
 				cout << "\tE' un backhaul event -> Visto che la connessione e' stata bloccata, "
@@ -775,7 +779,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				//-B: create and insert a departure event, for the fronthaul connection already provided, to be executed immediately!
 				Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
 				nEv_DepFront->arrTimeAs = hPrevLogTime;
-				nEv_DepFront->backhaulBlocked = true; //-L: ??????????
+				nEv_DepFront->backhaulBlocked = true; //-L: cambiare con midhaulblocked (da dichiarare)
 				m_hEventList.insertEvent(nEv_DepFront);
 
 				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
@@ -812,7 +816,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 						assert(false);
 					}
 				}
-				//don't create any backhaul event
+				//don't create any midhaul event
 
 				//-B: get OXCNode to set it as source in next Bernoulli arrival
 				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pCon->m_nSrc)); //-L: ????????
@@ -892,11 +896,10 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				}
 
 			}
+
 			else if (pCon->m_eConnType == Connection::MOBILE_FRONTHAUL
 				|| pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
 			{
-
-
 				//-B: il num di provisioned connections era stato aumentato nel metodo di provisioning
 				//	ma è giusto aumentarlo solo se la connessione nella sua interezza (fronthaul+backhaul)
 				//	viene instradata correttamente, quindi non possiamo ancora dirlo
@@ -909,8 +912,26 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				Event*nEvFront = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, pCon);
 				m_hFrontEventList.insertEvent(nEvFront);
 
-				//-B: STEP 2 - create corresponding backhaul event and insert it in (standard) events' list
-				Event*nEvBack = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, NULL, nEvFront); 
+				//-B: STEP 2 - create corresponding midhaul event and insert it in (standard) events' list
+				//-L: connection is set to NULL because it will be created if the provisioning of the midhaul succeeds. 
+				Event*nEvMid = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, NULL, nEvFront); 
+				nEvMid->arrTimeAs = hPrevLogTime; //-B: should be same as pEvent->m_hTime
+				m_hEventList.insertEvent(nEvMid);
+#ifdef DEBUGC
+				cout << "\tInserisco evento connessione di backhaul: ";
+				if (nEvBack->fronthaulEvent == NULL)
+					cout << "NO!" << endl;
+				else
+					cout << (pEvent->m_hTime) << endl;
+#endif // DEBUGB
+
+			}
+
+			else if (pCon->m_eConnType == Connection::FIXED_MIDHAUL)
+			{
+				//-L: STEP 1 - create corresponding backhaul event and insert it in (standard) events' list
+				//-L: connection is set to NULL because it will be created if the provisioning of the backhaul succeeds. 
+				Event*nEvBack = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, NULL, nEvFront, );
 				nEvBack->arrTimeAs = hPrevLogTime; //-B: should be same as pEvent->m_hTime
 				m_hEventList.insertEvent(nEvBack);
 #ifdef DEBUGC
@@ -922,23 +943,31 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 #endif // DEBUGB
 
 			}
+
 			else if (pCon->m_eConnType == Connection::MOBILE_BACKHAUL
 				|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL)
 			{
 
 				//assert(isBBUNode(pCon->m_nSrc) == true); //-B: COMMENTED if we allow a node hosts its own BBU in the cell site as last extreme option
 
-				//-B: STEP 1 - create and insert corresponding departure events, both for fronthaul and for backhaul
+				//-L: STEP 1 - create and insert corresponding departure events for fronthaul, midhaul and backhaul
 				Event*nEv_DepFront = new Event((pEvent->m_hTime + pEvent->fronthaulEvent->m_pConnection->m_dHoldingTime
 					+ pCon->m_dRoutingTime + pEvent->fronthaulEvent->m_pConnection->m_dRoutingTime),
 					Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
 				
+				Event*nEv_DepMid = new Event((pEvent->m_hTime + pEvent->fronthaulEvent->m_pConnection->m_dHoldingTime
+					+ pCon->m_dRoutingTime + pEvent->fronthaulEvent->m_pConnection->m_dRoutingTime),
+					Event::EVT_DEPARTURE, pEvent->midhaulEvent->m_pConnection);
+
 				Event*nEv_DepBack = new Event((pEvent->m_hTime + pEvent->fronthaulEvent->m_pConnection->m_dHoldingTime
 					+ pCon->m_dRoutingTime + pEvent->fronthaulEvent->m_pConnection->m_dRoutingTime),
 					Event::EVT_DEPARTURE, pCon);
+
 				nEv_DepFront->arrTimeAs = hPrevLogTime;
+				nEv_DepMid->arrTimeAs = hPrevLogTime;
 				nEv_DepBack->arrTimeAs = hPrevLogTime;
 				m_hEventList.insertEvent(nEv_DepFront);
+				m_hEventList.insertEvent(nEv_DepMid);
 				m_hEventList.insertEvent(nEv_DepBack);
 
 #ifdef DEBUGC
@@ -2206,7 +2235,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	m_pNetMan->clearPrecomputedPath();
 	//-L:  significa che è un fronthaulEvent
 	//-B: if fronthaul has not been routed yet
-	if (pEvent->fronthaulEvent == NULL && pEvent->midhaulEvent == NULL)
+	if (pEvent->fronthaulEvent == NULL)
 	{
 
 		assert(pEvent->m_pSource != NULL);
@@ -2284,9 +2313,9 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		}
 
 	} //END fronthaulEvent NULL
-	//-B: if fronthaul is not NULL, it has been already routed -> backhaul event
-	// -L: da modificare, adesso per essere backhaul sia fronthaul che midhaul devono essere non nulli
-	// -L: questo potrebbe essere il midhaul cambiando solo nDst a cui andrà assegnata la best CU. 
+	
+	// -B: if fronthaul is not NULL, it has been already routed -> backhaul or midhaul event
+	// -L: if midhaul is NULL, midhaul is not been routed yet, so it's a midhaul 
 	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL) //-L: significa che è midhaul   
 	{
 		//assert(isBBUNode(pEvent->fronthaulEvent->m_pConnection->m_nDst)); //-B: COMMENTED if we allow a node hosts its own BBU in the cell site as last extreme option
@@ -2315,7 +2344,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 #endif // DEBUGB
 
 	}// end ELSE IF fronthaul != NULL
-	// -L: signfica che è un backhaul
+	
+	 // -L: signfica che è backhaul
 	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent != NULL) {
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->midhaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
@@ -2331,6 +2361,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		//-B: original source had to be a mobile node
 		connType = Connection::MOBILE_BACKHAUL;
 	} // -L: fine backhaul
+	
 	assert(0 <= nSrc && nSrc <= m_nNumberOfOXCNodes);
 	//-B: DO NOT ASSERT (0 <= nDst && nDst <= m_nNumberOfOXCNodes) 
 	//	BECAUSE FOR FRONTHAUL CONNECTIONS, IT COULD BE nDst == NULL, WHEN NO VALID (REACHABLE) BBU HOTEL NODE WAS FOUND
@@ -2353,7 +2384,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	}
 	//else: it has been already assigned, taken from the corresponding fronthaul connection
 	
-	//-L: DA MODIFICARE
+	//-L: DA MOIIFICARE
 	if (pEvent->fronthaulEvent != NULL) { //if fronthaul already routed 
 		if (pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved > 0) {
 			UINT seqNumber = pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved;

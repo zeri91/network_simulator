@@ -53,8 +53,20 @@ m_hTime(hTime), m_hEvent(hEvent), isDepValid(true)
 	m_pSource = NULL;
 	m_pConnection = pConnection;
 	fronthaulEvent = pEvent;
+	midhaulEvent = NULL;
 	backhaulBlocked = false;
 }
+
+NS_OCH::Event::Event(SimulationTime hTime, SIM_EVENTS hEvent, Connection *pConnection, Event *pFront, Event *pMid) :
+	m_hTime(hTime), m_hEvent(hEvent), isDepValid(true)
+{
+	m_pSource = NULL;
+	m_pConnection = pConnection;
+	fronthaulEvent = pFront;
+	midhaulEvent = pMid;
+	backhaulBlocked = false;
+}
+
 
 Event::~Event()
 {
