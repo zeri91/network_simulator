@@ -217,8 +217,8 @@ else if (0 == strcmp(argv[10], "BBU"))
 	hNetMan.m_hLog.output();
 
 	cout << "SONO ALLA FINE DEL MAIN. Premi invio per stampare i risultati nel file" << endl;
-	cin.get();
-	cin.get();
+	//cin.get();
+	//cin.get();
 	cin.get();
 	cout << "----------- STAMPO RISULTATI NEL FILE Results.txt -----------" << endl;
 	

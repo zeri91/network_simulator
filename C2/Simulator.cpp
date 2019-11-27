@@ -94,7 +94,6 @@ bool Simulator::initialize(UINT nCon, double dArrival,
    // m_dMeanHoldingTime = dHoldingTime; //..in realtà questo è il mu ????
 	 m_dMeanHoldingTime = 1.0/dHoldingTime; //..cosi in ingresso dovrebbe accettare l'holding time
 	 cout << "Holding time è: "<< m_dMeanHoldingTime << endl;
-	 //cin.get();
 
     assert((nCon > 0) && (dArrival > 0) && (dHoldingTime > 0));
 
@@ -333,7 +332,7 @@ while ((pEvent = m_hEventList.nextEvent()) && (!bDone) && (!stat_achieved))
 	assert(pEvent);
 	
 	//-B: if pEvent is a backhaul event, I have to delete its corresponding fronthaul event in the related events' list
-	if (pEvent->fronthaulEvent) // -L: if true -> it's a backhaul event // DA  MODIFICARE && pEvent->midhaulEvent)
+	if (pEvent->fronthaulEvent && pEvent->midhaulEvent) // -L: if true -> it's a backhaul event
 	{
 		m_hFrontEventList.updateFronthaulEventList(pEvent);
 	}
@@ -1434,8 +1433,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 	}
 	else
 	{
-		cout << "bDone = " << bDone << " - stat_achieved = " << stat_achieved << " - Premi invio per continuare" << endl;
-		cin.get();
+		cout << "bDone = " << bDone << " - stat_achieved = " << stat_achieved << endl;
 	}
 
 	//tot num of connections during the simulation (needed in ConProvisionMain)
@@ -2653,7 +2651,7 @@ void Simulator::computeNumOfActiveHotels()
 	{
 		cout << "\tImpossible! Average number of connections per second per MC > max number of connections per second per MC";
 		offeredTraffic_MC = maxConn_MC;
-		cin.get();
+		// cin.get();
 	}
 
 #ifdef DEBUG
@@ -2716,7 +2714,7 @@ void Simulator::computeNumOfActiveHotels()
 	}
 
 	cout << "Number of active hotels : "<< this->m_nNumOfActiveHotels << endl;
-	cin.get();
+	//cin.get();
 
 	//-B: add a 20% or 50% to be conservative (grooming does not happen in each node, above all in 4G case study)
 	if (ONLY_ACTIVE_GROOMING == false) //5G (midhaul)
