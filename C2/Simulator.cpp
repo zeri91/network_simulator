@@ -1009,12 +1009,12 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 		break;
 	} //-B: end case Event::EVT_ARRIVAL:
 
-
+	//-L: Devo modificare qualcosa qui? 
 	case Event::EVT_DEPARTURE:///////////////////////////////////////////////////
 	{
 
 		UINT numOfConnections = m_pNetMan->getConnectionDB().m_hConList.size();
-		// -L: ??
+		// -L: ???
 		// Permettendo di cambiare BBU a una cell site, può avvenire che nell'eventlist ci
 		// sia departure di una connessione che è già stata deprovisioned. In questo caso
 		// se non trovo la connessione del database, esco dallo switch perché

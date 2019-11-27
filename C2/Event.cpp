@@ -34,6 +34,7 @@ m_hTime(hTime), m_hEvent(hEvent), isDepValid(true)
 	fronthaulEvent = NULL;
 	midhaulEvent = NULL; // -L
 	backhaulBlocked = false;
+	midhaulBlocked = false;
 }
 
 Event::Event(SimulationTime hTime, SIM_EVENTS hEvent, Connection* pConnection, OXCNode*pOXCNode):
@@ -44,6 +45,7 @@ Event::Event(SimulationTime hTime, SIM_EVENTS hEvent, Connection* pConnection, O
 	fronthaulEvent = NULL;
 	midhaulEvent = NULL; // -L
 	backhaulBlocked = false;
+	midhaulBlocked = false;
 }
 
 // -L da modificare!
@@ -55,6 +57,7 @@ m_hTime(hTime), m_hEvent(hEvent), isDepValid(true)
 	fronthaulEvent = pEvent;
 	midhaulEvent = NULL;
 	backhaulBlocked = false;
+	midhaulBlocked = false;
 }
 
 NS_OCH::Event::Event(SimulationTime hTime, SIM_EVENTS hEvent, Connection *pConnection, Event *pFront, Event *pMid) :
@@ -65,6 +68,7 @@ NS_OCH::Event::Event(SimulationTime hTime, SIM_EVENTS hEvent, Connection *pConne
 	fronthaulEvent = pFront;
 	midhaulEvent = pMid;
 	backhaulBlocked = false;
+	midhaulBlocked = false;
 }
 
 
