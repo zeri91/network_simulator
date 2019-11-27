@@ -931,7 +931,8 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			{
 				//-L: STEP 1 - create corresponding backhaul event and insert it in (standard) events' list
 				//-L: connection is set to NULL because it will be created if the provisioning of the backhaul succeeds. 
-				Event*nEvBack = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, NULL, nEvFront, );
+				//-L: The new backhaul event is initialized with the related fronthaul and midhaul events
+				Event*nEvBack = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, NULL, pEvent->fronthaulEvent, pEvent);
 				nEvBack->arrTimeAs = hPrevLogTime; //-B: should be same as pEvent->m_hTime
 				m_hEventList.insertEvent(nEvBack);
 #ifdef DEBUGC
