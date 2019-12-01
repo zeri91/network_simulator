@@ -95,6 +95,7 @@ UINT ConnectionDB::countBackConn(UINT&totBwd)
 				break;
 			case Connection::MOBILE_FRONTHAUL:
 			case Connection::FIXEDMOBILE_FRONTHAUL:
+			case Connection::FIXED_MIDHAUL:
 				NULL;
 				break;
 			default:
