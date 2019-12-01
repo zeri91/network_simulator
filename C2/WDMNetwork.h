@@ -236,7 +236,8 @@ public:
 	double	m_dEpsilon;					// use by the cost function in computing backup
 	int nDC;							// numero di Data Center nella rete	
 	int BestGreenNode;					// nodo con la massima disponibilità di energia
-	int DummyNode;						// nodeID del DummyNode
+	int DummyNode;						// -L: nodeID of the backhaul destination
+	int DummyNodeMid;					// -L: nodeID of the midhaul destination
 	int DCused;			                // nodeID del DataCenter che sta elaborando la connessione in quel momento
 	int DCvettALL[MAX_DC_NUMBER];		// vettore con tutti i DataCenter
 	int TZvett[MAX_DC_NUMBER];			// vettore con tutti TimeZone dei rispettivi DataCenter

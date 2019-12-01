@@ -191,6 +191,7 @@ bool TopoReader::readTopoHelper(WDMNetwork &hNetwork, ifstream &fin)
 			  }
 	    	int	DummyNode=nNodeId;
 			hNetwork.DummyNode = DummyNode;
+			hNetwork.DummyNodeMid = DummyNode - 5; //-L
 			jj++;
 
          }
@@ -463,6 +464,7 @@ bool TopoReader::BBUReadTopoHelper(WDMNetwork &hNetwork, ifstream &fin)
 			}
 			int	DummyNode = nNodeId;
 			hNetwork.DummyNode = DummyNode;
+			hNetwork.DummyNodeMid = DummyNode - 5; //-L
 			bbuFlag = 1; //-B: the core CO is always a BBU_Hotel
 			jj++;
 		}
