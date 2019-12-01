@@ -1586,8 +1586,7 @@ Connection* Simulator::newConnection(SimulationTime  tArrivalTime)
 	} while (nSrc == m_pNetMan->m_hWDMNet.DummyNode);
 
 	//nSrc = 12; //-B: 11 è l'unico nodo che ha 2 path disgiunti per arrivare al nodo destinazione 5. Viene riempito prima lo shortest e poi l'altro
-	nDst = m_pNetMan->m_hWDMNet.
-		;    //la destinazione è sempre il Core CO
+	nDst = m_pNetMan->m_hWDMNet.DummyNode;    //la destinazione è sempre il Core CO
 
 	//nDst = (nNodePair - 1) % m_nNumberOfOXCNodes;  //non mod
 	//nSrc = (int) (rand() %(m_nNumberOfOXCNodes-1) +1); // sorgente casuale, se DummyNode è nodo 0
@@ -2322,7 +2321,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		nDst = m_pNetMan->m_hWDMNet.DummyNode;					// destination = core CO/PoP node
+		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
 		eBandwidth = pEvent->fronthaulEvent->m_pConnection->m_eBandwidth;

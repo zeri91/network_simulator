@@ -1,15 +1,14 @@
 ﻿  Simulator.cpp
 c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(627): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(1916): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2592): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2640): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2649): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2667): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2707): warning C4018: '<': errata corrispondenza tra signed e unsigned
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2709): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2722): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2724): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2726): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2729): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-  CONPROV_TIME_LINK.vcxproj -> C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\.\CONPROV_TIME_LINK___Win32_Debug\CONPROV_TIME_LINK.exe
-  CONPROV_TIME_LINK.vcxproj -> .\CONPROV_TIME_LINK___Win32_Debug/CONPROV_TIME_LINK.pdb (Full PDB)
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(1915): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2591): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2639): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2648): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2666): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2706): warning C4018: '<': errata corrispondenza tra signed e unsigned
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2708): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2721): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2723): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2725): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+c:\users\lorenzo\desktop\maxc-new\network_simulator\c2\simulator.cpp(2728): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+LINK : fatal error LNK1168: impossibile aprire '.\CONPROV_TIME_LINK___Win32_Debug/CONPROV_TIME_LINK.exe' per la scrittura
