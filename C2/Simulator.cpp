@@ -694,6 +694,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 //		pCon->m_nDst=4;
 //if(pCon->m_nSequenceNo>500)
 
+		//-L: ??? perchè? 
 		//-B: non incremento il num di arrivi solo nel caso in cui l'evento corrente sia un mobile/fixed-mobile backhaul event
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_FRONTHAUL
@@ -928,10 +929,14 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 
 			else if (pCon->m_eConnType == Connection::FIXED_MIDHAUL)
 			{
-				//-L: STEP 1 - create corresponding backhaul event and insert it in (standard) events' list
+				//-L: create a new event corresponding to connection served in this iteration 
+				//-L: needed because pEvent will be deleted at the end of the while
+				Event*nEvMid = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, pCon, pEvent->fronthaulEvent);
+
+				//-L: STEP 2 - create corresponding backhaul event and insert it in (standard) events' list
 				//-L: connection is set to NULL because it will be created if the provisioning of the backhaul succeeds. 
 				//-L: The new backhaul event is initialized with the related fronthaul and midhaul events
-				Event*nEvBack = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, NULL, pEvent->fronthaulEvent, pEvent);
+				Event*nEvBack = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, NULL, pEvent->fronthaulEvent, nEvMid);
 				nEvBack->arrTimeAs = hPrevLogTime; //-B: should be same as pEvent->m_hTime
 				m_hEventList.insertEvent(nEvBack);
 #ifdef DEBUGC
@@ -1075,7 +1080,9 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			//-B: increase the number of departures
 			m_hEventList.increaseDep();
 		}
-		else{ //connType == MOBILE_FRONTHAUL || FIXEDMOBILE_FRONTHAUL
+		else if(pEvent->m_pConnection->m_eConnType == Connection::MOBILE_FRONTHAUL
+				|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
+		{ //connType == MOBILE_FRONTHAUL || FIXEDMOBILE_FRONTHAUL
 		
 			//-B: else, se è il departure event di una mobile/fixed-mobile fronthaul connection
 			//	non devo incrementare il num di departure perchè la connessione è considerata nella sua totalità
