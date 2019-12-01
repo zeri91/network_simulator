@@ -2383,8 +2383,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	}
 	//else: it has been already assigned, taken from the corresponding fronthaul connection
 	
-	//-L: DA MOIIFICARE
-	if (pEvent->fronthaulEvent != NULL) { //if fronthaul already routed 
+	//-L: if it is backhaul
+	if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent != NULL) {  
 		if (pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved > 0) {
 			UINT seqNumber = pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved;
 #ifdef DEBUGC
@@ -2405,7 +2405,30 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		}
 	
 	}
-	
+
+	//-L: if it is midhaul
+	if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL) {
+		if (pEvent->fronthaulEvent->m_pConnection->m_nMidhaulSaved > 0) {
+			UINT seqNumber = pEvent->fronthaulEvent->m_pConnection->m_nMidhaulSaved;
+#ifdef DEBUGC
+			cout << "Sequence number saved for the midhaul in the fronthaul is "
+				<< seqNumber << endl;
+#endif
+			pConnection = new Connection(seqNumber, nSrc, nDst, //LEAK
+				pEvent->m_hTime, holdingTime,
+				eBandwidth, CPRIBwd, m_ePClass, connType);
+
+			//-B: not useful for me
+			pConnection->m_nHopCount = m_nHopCount;
+
+			//Sequence number has not to be increased!
+
+			return pConnection;
+
+		}
+	}
+
+	//-L: if it is fronthaul
 	pConnection = new Connection(g_nConSeqNo, nSrc, nDst, //LEAK
 		pEvent->m_hTime, holdingTime,
 		eBandwidth, CPRIBwd, m_ePClass, connType);
