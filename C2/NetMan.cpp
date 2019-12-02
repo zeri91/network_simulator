@@ -5598,7 +5598,14 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 	{
 		bwd = pCon->m_eBandwidth;
 	}
-	else   //-B: if connType == MOBILE_FRONTHAUL || FIXEDMOBILE_FRONTHAUL
+	//-L: add the midhaul case
+	if (pCon->m_eConnType == Connection::FIXED_MIDHAUL)
+	{
+		bwd = pCon->m_eBandwidth;
+	}
+	//-B: if connType == MOBILE_FRONTHAUL || FIXEDMOBILE_FRONTHAUL
+	else if(pCon->m_eConnType == Connection::MOBILE_FRONTHAUL ||
+			pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
 	{
 		bwd = pCon->m_eCPRIBandwidth;
 	}
@@ -5630,6 +5637,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 			|| pCon->m_eConnType == Connection::MOBILE_BACKHAUL
 			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL)
 		{
+			// -L: VA MODIFICATO ????
 			// *************** PRE-PROCESSING ******************
 			//-B: it is used to prefer wavelength continuity over w. conversion in a condition of equality
 			//	between the wavelength that would allow a wavelength path and any other best-fit wavelegth
@@ -5739,7 +5747,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 				cout << "Connection present groomingConnections is from " << pConG->m_nSrc << " to " << pConG->m_nDst << endl;
 			}
 			groomingConnections.clear();
-			cin.get();
+			//cin.get();
 		}
 
 
@@ -5755,7 +5763,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 
 		// STEP 9 - Update connection status
 		pCon->m_eStatus = Connection::SETUP;
-	}
+	} //-L: END if(bsuccess)
 	else
 	{
 		groomingConnections.clear();
@@ -5836,7 +5844,7 @@ inline bool NetMan::BBU_ProvisionHelper_Unprotected(Connection *pCon, Circuit& h
 		{
 			hPrimaryCost = m_hGraph.DijkstraLatency(hPrimaryPath, pSrc, pDst, AbstractGraph::LCF_ByOriginalLinkCost);
 		}
-		else //BACKHAUL --> no strict latency requirements
+		else //-L: BACKHAUL and MIDHAUL --> no strict latency requirements
 		{
 			hPrimaryCost = m_hGraph.Dijkstra(hPrimaryPath, pSrc, pDst, AbstractGraph::LCF_ByOriginalLinkCost);
 		}
@@ -5933,7 +5941,7 @@ inline bool NetMan::BBU_ProvisionHelper_Unprotected(Connection *pCon, Circuit& h
 	#endif // DEBUGB
 		}
 	}
-	else //-B: backhaul connections
+	else //-L: backhaul and midhaul connections
 	{
 
 		list <Connection*>::const_iterator itrG;

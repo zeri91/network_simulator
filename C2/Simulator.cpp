@@ -1080,8 +1080,8 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			//-B: increase the number of departures
 			m_hEventList.increaseDep();
 		}
-		else if(pEvent->m_pConnection->m_eConnType == Connection::MOBILE_FRONTHAUL
-				|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
+		else if (pEvent->m_pConnection->m_eConnType == Connection::MOBILE_FRONTHAUL
+			|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
 		{ //connType == MOBILE_FRONTHAUL || FIXEDMOBILE_FRONTHAUL
 		
 			//-B: else, se è il departure event di una mobile/fixed-mobile fronthaul connection
