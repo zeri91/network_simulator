@@ -5635,7 +5635,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_BACKHAUL
-			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL)
+			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL
 		{
 			// -L: VA MODIFICATO ????
 			// *************** PRE-PROCESSING ******************
@@ -9707,7 +9707,7 @@ void NS_OCH::NetMan::invalidateSimplexLinkDueToCapOrStatus(UINT bwd, UINT connTy
 				} //end FOR netwrok links list
 			}// end IF valid
 		} //end IF LT_Channel
-		else if ((pLink->getSimplexLinkType() == SimplexLink::LT_Lightpath) && (connType!= 3 && connType != 4)) {
+		else if ((pLink->getSimplexLinkType() == SimplexLink::LT_Lightpath) && (connType!= 3 && connType != 4 && connType != 5)) {
 
 		  if (pLink->m_latency > LATENCYBUDGET) {
 
