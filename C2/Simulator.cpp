@@ -535,8 +535,9 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 					backhaul_id[pEvent->fronthaulEvent->m_pConnection->m_nSequenceNo] = pCon->m_nSequenceNo;
 				}
 			}
+			// it is always a fronthaul event
 			// it enters here only if the event refers to a connection changing BBUB
-			else if (pCon->m_eConnType == Connection::MOBILE_FRONTHAUL) 
+			else 
 			{
 				pCon = pEvent->m_pConnection;
 				pCon->m_bTrafficToBeUpdatedForDep = true;
@@ -1071,6 +1072,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 #ifdef DEBUGC
 		cout << "DEPARTURE EVENT:" << endl;
 #endif // DEBUGB
+		// -L: che deve fare il midhaul ???
 		//-B: if it is a fixed/mobile/fixed-mobile backhaul connection's departure event
 		if (pEvent->m_pConnection->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pEvent->m_pConnection->m_eConnType == Connection::MOBILE_BACKHAUL
@@ -1082,8 +1084,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 		}
 		else if (pEvent->m_pConnection->m_eConnType == Connection::MOBILE_FRONTHAUL
 			|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
-		{ //connType == MOBILE_FRONTHAUL || FIXEDMOBILE_FRONTHAUL
-		
+		{ 
 			//-B: else, se è il departure event di una mobile/fixed-mobile fronthaul connection
 			//	non devo incrementare il num di departure perchè la connessione è considerata nella sua totalità
 			//	fronthaul+backhaul -> il num di departure verrà incrementato solo nel momento in cui
