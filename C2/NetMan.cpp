@@ -5636,7 +5636,6 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_BACKHAUL
 			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL
-			|| pCon->m_eConnType == Connection::FIXED_MIDHAUL)
 		{
 			// -L: VA MODIFICATO ????
 			// *************** PRE-PROCESSING ******************
