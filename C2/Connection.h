@@ -53,8 +53,15 @@ public:
 	ConnectionState			m_eStatus;			// status
 
 	UINT					m_nHopCount;	// max. hop count
-	UINT					m_nBackhaulSaved; // ID of the backhaul associated
-	UINT					m_nMidhaulSaved; //-L: ID of the midhaul associated
+	
+	// -L: used only for the BBU handover
+	UINT					m_nBackhaulSaved; // ID of the backhaul associated. -L: actually it's the seq number to give to the backhaul in case of BBU handover
+	UINT					m_nMidhaulSaved; //-L: seq number that is given to the midhaul associated to the fronthaul in case of BBU handover
+
+	//-L: for the backhaul it's used an array of 200000 values that stores 
+	//	  all the id's for each fronthaul connection (it's declared in simulator.h)
+	//	  I prefer to add just a variable to each connection, if it's not fronthaul it will be NULL
+	UINT					midhaul_id;
 
 	Circuit					*m_pPCircuit;	// primary if unprotected
 	Circuit					*m_pBCircuit;	// backup if protected (but not PAL)

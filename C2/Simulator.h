@@ -71,7 +71,7 @@ public:
 	double			tassiarrivo[24] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }; //-B
 					//{ 0.4,0.3,0.2,0.2,0.3,0.2,0.15,0.2,0.3,0.4,1,0.9,0.8,0.8,0.8,0.9,1,0.95,0.9,0.75,0.6,0.95,1.25,1.1 };
 	UINT			m_nNumOfActiveHotels;
-
+	//UINT			midhaul_id[200000] = { 0 }; // -L: too big -> buffer overflow 
 	UINT			backhaul_id[200000] = { 0 };
 };
 

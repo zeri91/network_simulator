@@ -530,6 +530,12 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				pCon->m_bTrafficToBeUpdatedForArrival = true;
 				pCon->m_bTrafficToBeUpdatedForDep = true;
 
+				//-L: save the midhaul seq num in the related fronthaul connection
+				if (pCon->m_eConnType == Connection::FIXED_MIDHAUL) {
+					assert(pEvent->fronthaulEvent != NULL);
+					assert(pCon->m_nSequenceNo != NULL);
+					pEvent->fronthaulEvent->m_pConnection->midhaul_id = pCon->m_nSequenceNo;
+				}
 
 				if (pCon->m_eConnType == Connection::MOBILE_BACKHAUL || pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL) {
 					backhaul_id[pEvent->fronthaulEvent->m_pConnection->m_nSequenceNo] = pCon->m_nSequenceNo;
@@ -2779,12 +2785,12 @@ void Simulator::updateBBUforallConnections(UINT newBBU, UINT m_nSrc, Event* pEve
 		if (pConDB->m_nSrc == m_nSrc) {
 
 
-			//if the connection is a fronthaul, create the departure for the fronthaul and the backhaul 
-			if (pConDB->m_eConnType == Connection::MOBILE_FRONTHAUL || pConDB->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL) {
-
+			//-L: if the connection is a fronthaul, create the departure for the fronthaul, the midhaul and the backhaul 
+			if (pConDB->m_eConnType == Connection::MOBILE_FRONTHAUL || pConDB->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
+			{
 				Connection* pConNew = BBU_newConnection_Bernoulli_NewBBU(pConDB, newBBU, pEvent);
 				m_pNetMan->connectionsChangingBBU.push_back(pConNew);
-				
+
 
 				//Traffic has not to be updated (it was already updated when this connection
 				//arrived at the old bbu)
@@ -2822,25 +2828,50 @@ void Simulator::updateBBUforallConnections(UINT newBBU, UINT m_nSrc, Event* pEve
 					}
 				}
 
+				//-L: find the midhaul coresponding to the fronthaul 
+				UINT pConMidhaulId = 1;// midhaul_id[pConDB->m_nSequenceNo];
+
+#ifdef DEBUGC
+
+				cout << "\t\t+Midhaul to be departed has id: " << pConMidhaulId << endl;
+#endif
+				for (itr2 = conList.begin(); itr2 != conList.end(); itr2++) {
+					pCon2DB = (Connection*)(*itr2);
+					if (pCon2DB->m_nSequenceNo == pConMidhaulId) {
+
+						//-L: departure for the midhaul
+						Event* nEvDepMid = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pCon2DB);
+						nEvDepMid->arrTimeAs = pEvent->m_hTime;
+						m_hEventList.insertEvent(nEvDepMid);
+
+#ifdef DEBUGC
+						cout << "\t\t+Created event departure (midhaul)" << endl;
+#endif
+						break;
+					}
+				}
+
 				m_hEventList.insertEvent(new Event(pEvent->m_hTime, Event::EVT_ARRIVAL, pConNew));
 				m_pNetMan->m_hLog.m_nNumConnectionsChangingBBU++;
 #ifdef DEBUG
 
 				cout << "\t\t+Arrival created" << endl;
 #endif
-			}
-			else {
+			} //-L: fine fronthaul
+
+			else
+			{
 #ifdef DEBUGC
 				cout << "E' un backhaul che va da " << pConDB->m_nSrc <<
 					" a " << pConDB->m_nDst << " con id " << pConDB->m_nSequenceNo <<
 					" ma in teoria non dovrei fare nulla..." << endl;
 				//cin.get();
 #endif
-			}
+			} //-L: fine backhaul
 		}
-
 	}
 }
+
 
 Connection* Simulator::BBU_newConnection_Bernoulli_NewBBU(Connection* pConTobeSwitched, int newBBU, Event* pEvent){
 	//-B: ------------- SELECT SOURCE AND DESTINATION NODE && ASSIGN CONNECTION'S BANDWIDTHS -----------------------
