@@ -2246,6 +2246,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 
 	//-B: precomputedPath cleared, from previous cycle calculation, each time the cycle calls BBU_newConnection method
 	m_pNetMan->clearPrecomputedPath();
+
 	//-L:  significa che è un fronthaulEvent
 	//-B: if fronthaul has not been routed yet
 	if (pEvent->fronthaulEvent == NULL)
@@ -2329,10 +2330,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	
 	// -B: if fronthaul is not NULL, it has been already routed -> backhaul or midhaul event
 	// -L: if midhaul is NULL, midhaul is not been routed yet, so it's a midhaul 
-	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL) //-L: significa che è midhaul   
+	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL)    
 	{
-		//assert(isBBUNode(pEvent->fronthaulEvent->m_pConnection->m_nDst)); //-B: COMMENTED if we allow a node hosts its own BBU in the cell site as last extreme option
-
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
 		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
@@ -2350,21 +2349,15 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		cout << "MOBILE BACKHAUL\n";
 #endif // DEBUGB
 
-#ifdef DEBUG
-		//cout << "\tFronthaul già instradato nella connection: " << pEvent->fronthaulEvent->m_pConnection->m_nSequenceNo;
-		//cout << " - " << pEvent->fronthaulEvent->m_pConnection->m_nSrc << "->";
-		//cout << pEvent->fronthaulEvent->m_pConnection->m_nDst << endl;
-#endif // DEBUGB
-
-	}// end ELSE IF fronthaul != NULL
+	} //-L: end midhaul
 	
 	 // -L: signfica che è backhaul
 	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent != NULL) {
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->midhaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		nDst = m_pNetMan->m_hWDMNet.DummyNode;					// destination = core CO/PoP node //-L: da modificare
+		nDst = m_pNetMan->m_hWDMNet.DummyNode;					// destination = core CO/PoP node
 
-																//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
+		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
 		eBandwidth = pEvent->midhaulEvent->m_pConnection->m_eBandwidth;
 		CPRIBwd = pEvent->midhaulEvent->m_pConnection->m_eCPRIBandwidth;
 
@@ -2381,7 +2374,6 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 
 	//restore node reachability cost and other var
 	this->m_pNetMan->m_hWDMNet.resetPreProcessing();
-
 
 	//-B: ******************* CREATE CONNECTION **********************
 	//-B: perchè viene passato g_nConSeqNo++ come num di seq della connessione???
@@ -2783,8 +2775,6 @@ void Simulator::updateBBUforallConnections(UINT newBBU, UINT m_nSrc, Event* pEve
 	for (itr = conList.begin(); itr != conList.end(); itr++) {
 		pConDB = (Connection*)(*itr);
 		if (pConDB->m_nSrc == m_nSrc) {
-
-
 			//-L: if the connection is a fronthaul, create the departure for the fronthaul, the midhaul and the backhaul 
 			if (pConDB->m_eConnType == Connection::MOBILE_FRONTHAUL || pConDB->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
 			{
@@ -2829,12 +2819,13 @@ void Simulator::updateBBUforallConnections(UINT newBBU, UINT m_nSrc, Event* pEve
 				}
 
 				//-L: find the midhaul coresponding to the fronthaul 
-				UINT pConMidhaulId = 1;// midhaul_id[pConDB->m_nSequenceNo];
+				UINT pConMidhaulId = pConDB->midhaul_id;
 
 #ifdef DEBUGC
 
 				cout << "\t\t+Midhaul to be departed has id: " << pConMidhaulId << endl;
 #endif
+
 				for (itr2 = conList.begin(); itr2 != conList.end(); itr2++) {
 					pCon2DB = (Connection*)(*itr2);
 					if (pCon2DB->m_nSequenceNo == pConMidhaulId) {
@@ -2861,12 +2852,7 @@ void Simulator::updateBBUforallConnections(UINT newBBU, UINT m_nSrc, Event* pEve
 
 			else
 			{
-#ifdef DEBUGC
-				cout << "E' un backhaul che va da " << pConDB->m_nSrc <<
-					" a " << pConDB->m_nDst << " con id " << pConDB->m_nSequenceNo <<
-					" ma in teoria non dovrei fare nulla..." << endl;
-				//cin.get();
-#endif
+				;
 			} //-L: fine backhaul
 		}
 	}
