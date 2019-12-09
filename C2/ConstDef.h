@@ -34,7 +34,7 @@
 #define MIDHAUL_FACTOR 4.751		//-B: value to be multiplied with backhaul bwd to get midhaul bwd
 
 #define ONE_CONN_PER_NODE false		//-B: if true, we consider a on-off model of traffic in each cell
-#define BBUPOLICY 3					//-B: 0 --> placeBBUHigh; 1 --> placeBBUClose; 2 --> placeBBU_Metric; 3--> placeBBUHigh: if last link full, add another BBU
+#define BBUPOLICY 1					//-B: 0 --> placeBBUHigh; 1 --> placeBBUClose; 2 --> placeBBU_Metric; 3--> placeBBUHigh: if last link full, add another BBU
 #define BBU_CHANGE_INTERVAL 1.2		//-B:  time interval between changes
 #define MAXVALUE_LATENCY 1000		//-B: random high value 
 
