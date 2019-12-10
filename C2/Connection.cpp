@@ -381,6 +381,15 @@ void Connection::log(Log &hLog)
 				break;
 			}
 
+			//-L
+			case FIXED_MIDHAUL:
+			{
+				hLog.m_nBlockedFixMidConn++;
+				hLog.m_nBlockedBW += this->m_eBandwidth;
+				hLog.m_nBlockedFixMidBW += this->m_eBandwidth;
+				break;
+			}
+
 			default:
 				assert(false);
 				break; //nothing to do

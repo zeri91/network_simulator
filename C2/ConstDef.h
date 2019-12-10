@@ -25,6 +25,8 @@
 #define	PROPAGATIONLATENCY 0.000005 //-B: propagation latency per km
 #define ELSWITCHLATENCY 0.00002		//-B: electronic switch latency 0.00002
 #define LATENCYBUDGET 0.0001		//-B: max fronthaul latency
+#define LATENCY_MH 0.001			//-L: max midhaul latency
+#define LATENCY_BH 0.04				//-L: max backhaul latency
 #define MAXNUMBBU 2000				//-B: max num of active BBU in the same hotel node (to not limit: > num of nodes in the network)
 #define MAXTRAFFIC_FORPOOL OCmax	//-B: amount of traffic that a BBU pooling node can process
 #define LINKOCCUPANCY_PERC 1		//-B: percentage of link occupancy allowed

@@ -10,9 +10,9 @@ Number of mobile nodes: 79
 Number of fixed nodes: 0
 Number of fixed-mobile nodes: 0
 Number of candidate hotel nodes: 15
-Avg arrival rate: 90.000000
+Avg arrival rate: 45.000000
 Avg holding time: 1.000000
-Traffic (arr rate * holding time) [Erlang]: 90.000000
+Traffic (arr rate * holding time) [Erlang]: 45.000000
 Andamento traffico variabile: 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 1.000000 Amount of traffic per connection [OC1]: 6
 
 Num of wavelenghts per fiber: 8
@@ -20,44 +20,44 @@ Channel capacity [OC1]: 1944
 Fronthaul latency budget: 0.000100
 Transitory phase duration: 5000
 Running phase duration: 10000
-Max tot num of connections to be simulated: 55000
+Max tot num of connections to be simulated: 5000
 Confidence percentage: 0.950000
 
 RESULTS:
-Simulation Time: 6.975152 + transitory time: 0.471057 - # connections: 65356.000000
-Policy BBU placement:  + transitory time: 
+Simulation Time: 1.387626 + transitory time: 0.000000 - # connections: 5000.000000
+Policy BBU placement: placeBBUClose
 Errore percentuale: 100.000000
 
 CARRIED LOAD [bh prov conn*time] = 0.000000
-AVERAGE latency = 0.000029
-Number of active (hotel) nodes: 28 (PEAK) - 21.712544 (AVERAGE)
-Number of active BBUs: 81 (PEAK) - 78.125265 (AVERAGE)
-Number of active small cells: 259 (PEAK) - 207.032706 (AVERAGE)
-Number of active lightpaths: 340 (PEAK) - 309.474789 (AVERAGE)
-Network cost: 3117 (PEAK) - 2480.715401 (AVERAGE) [costo rete * time]
-Network cost per OC1 (<--> cost per connection OR cost per bit): costo rete / provisioned backhaul bwd = 2480.715401 / 362208 = 0.006849
+AVERAGE latency = 0.000012
+Number of active (hotel) nodes: 14 (PEAK) - 13.933664 (AVERAGE)
+Number of active BBUs: 80 (PEAK) - 78.702325 (AVERAGE)
+Number of active small cells: 1 (PEAK) - 0.025355 (AVERAGE)
+Number of active lightpaths: 109 (PEAK) - 92.040771 (AVERAGE)
+Network cost: 1509 (PEAK) - 1485.405666 (AVERAGE) [costo rete * time]
+Network cost per OC1 (<--> cost per connection OR cost per bit): costo rete / provisioned backhaul bwd = 1485.405666 / 29994 = 0.049523
 
-Number of provisioned connections: 60368
+Number of provisioned connections: 4999
 Number of blocked connections: 0
 Number of blocked fronthaul connections (mob + fixmob): 0 + 0 = 0
 Number of blocked backhaul connections (mob + fixmob + fixed): 0 + 0 + 0 = 0
 
-BWD of provisioned connections (FH + BH): 2112880
+BWD of provisioned connections (FH + BH): 174965
 BWD of blocked connections (FH + BH): 0
 BWD of blocked fronthaul connections (mob + fixmob): 0 + 0 = 0
 BWD of blocked backhaul connections (mob + fixmob + fix): 0 + 0 + 0 = 0
-BWD of provisioned fronthaul connections (mob + fixmob): 1750672 + 0 = 1750672
-BWD of provisioned backhaul connections (mob + fixmob + fix): 362208 + 0 + 0 = 362208
+BWD of provisioned fronthaul connections (mob + fixmob): 144971 + 0 = 144971
+BWD of provisioned backhaul connections (mob + fixmob + fix): 29994 + 0 + 0 = 29994
 Blocked BH BWD for blocked bh connections: 0
 Blocked FH BWD for blocked fh connections: 0
 
-Blocking probability - BACKHAUL (Overall; BWD) = Blocked backhaul bwd / total backhaul bwd = 0 / 362208 = 0.000000
+Blocking probability - BACKHAUL (Overall; BWD) = Blocked backhaul bwd / total backhaul bwd = 0 / 29994 = 0.000000
 
 Blocking probability because of latency: 0 / 0
 Blocking probability because of fity: 0 / 0
 
 AVERAGE LATENCY:
-0.000051 0.000043 0.000037 0.000034 0.000031 0.000029 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
 Blocking probability (connections; overall):
 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
 BLOCKING PROBABILITY (BWD; overall):
@@ -73,138 +73,116 @@ Blocking probability backhaul (connections; overall):
 BLOCKING PROBABILITY BACKHAUL (BWD; overall):
 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
 AVG NETWORK COST (weighted on time; overall):
-1053.297604 1438.665647 1835.016295 2101.360822 2345.646110 2476.775082 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
-Activity time of each node (simulation time  = 6.975152):
-Node #80 - activity time: 6.500579
-Node #78 - activity time: 6.755925
-Node #76 - activity time: 5.022833
-Node #75 - activity time: 6.661396
-Node #72 - activity time: 5.392359
-Node #68 - activity time: 0.220284
-Node #67 - activity time: 1.296621
-Node #64 - activity time: 3.669355
-Node #62 - activity time: 3.883216
-Node #61 - activity time: 0.788964
-Node #59 - activity time: 4.773087
-Node #56 - activity time: 2.990275
-Node #54 - activity time: 3.457396
-Node #52 - activity time: 5.722760
-Node #47 - activity time: 6.157253
-Node #46 - activity time: 6.975152
-Node #44 - activity time: 0.751392
-Node #43 - activity time: 6.975152
-Node #40 - activity time: 3.577168
-Node #39 - activity time: 4.975517
-Node #38 - activity time: 6.975152
-Node #36 - activity time: 6.014876
-Node #35 - activity time: 4.804050
-Node #34 - activity time: 6.852773
-Node #31 - activity time: 6.898831
-Node #26 - activity time: 2.990572
-Node #25 - activity time: 5.876190
-Node #23 - activity time: 6.052000
-Node #21 - activity time: 2.669645
-Node #19 - activity time: 6.457871
-Node #17 - activity time: 5.439000
-Node #14 - activity time: 0.063350
-Node #10 - activity time: 6.832919
-Node #5 - activity time: 6.975152
-Node #4 - activity time: 0.040634
-Node #2 - activity time: 5.990678
-Node #1 - activity time: 3.119575
+0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+Activity time of each node (simulation time  = 1.387626):
+Node #80 - activity time: 1.385833
+Node #75 - activity time: 1.383910
+Node #70 - activity time: 1.385570
+Node #58 - activity time: 1.367890
+Node #56 - activity time: 1.382105
+Node #46 - activity time: 1.386235
+Node #43 - activity time: 1.386462
+Node #38 - activity time: 1.384186
+Node #34 - activity time: 1.381046
+Node #31 - activity time: 1.387582
+Node #25 - activity time: 1.383100
+Node #14 - activity time: 1.355824
+Node #10 - activity time: 1.386887
+Node #5 - activity time: 1.377574
+Node #4 - activity time: 1.386744
 
 Hotels node of each node:
-Node #80 - hotels logged: 38 80 43 80 34 14 34 80 14 80 34 80 14 80 14 80 
-Node #79 - hotels logged: 5 31 
-Node #78 - hotels logged: 46 78 
-Node #77 - hotels logged: 46 5 75 46 75 46 75 
-Node #76 - hotels logged: 38 34 43 76 
-Node #75 - hotels logged: 46 75 
-Node #74 - hotels logged: 46 5 
+Node #80 - hotels logged: 80 
+Node #79 - hotels logged: 70 
+Node #78 - hotels logged: 80 
+Node #77 - hotels logged: 56 
+Node #76 - hotels logged: 14 
+Node #75 - hotels logged: 75 
+Node #74 - hotels logged: 70 
 Node #73 - hotels logged: 5 
-Node #72 - hotels logged: 46 31 72 
+Node #72 - hotels logged: 4 
 Node #71 - hotels logged: 46 
-Node #70 - hotels logged: 46 
+Node #70 - hotels logged: 70 
 Node #69 - hotels logged: 46 
-Node #68 - hotels logged: 46 68 75 
-Node #67 - hotels logged: 46 80 67 80 34 67 
-Node #66 - hotels logged: 46 5 
+Node #68 - hotels logged: 75 
+Node #67 - hotels logged: 80 
+Node #66 - hotels logged: 5 
 Node #65 - hotels logged: 46 
-Node #64 - hotels logged: 38 43 64 
-Node #63 - hotels logged: 38 
-Node #62 - hotels logged: 46 80 34 43 80 34 62 80 34 
-Node #61 - hotels logged: 46 5 61 56 75 5 46 
-Node #60 - hotels logged: 38 34 
-Node #59 - hotels logged: 43 31 10 59 10 59 10 59 10 59 
-Node #58 - hotels logged: 46 
-Node #57 - hotels logged: 46 
-Node #56 - hotels logged: 46 56 
-Node #55 - hotels logged: 46 31 
-Node #54 - hotels logged: 46 54 
-Node #53 - hotels logged: 38 
-Node #52 - hotels logged: 5 52 25 52 
-Node #51 - hotels logged: 46 
-Node #50 - hotels logged: 46 31 
-Node #49 - hotels logged: 5 31 
-Node #48 - hotels logged: 46 5 
-Node #47 - hotels logged: 46 10 47 
+Node #64 - hotels logged: 43 
+Node #63 - hotels logged: 34 
+Node #62 - hotels logged: 80 
+Node #61 - hotels logged: 56 
+Node #60 - hotels logged: 34 
+Node #59 - hotels logged: 10 
+Node #58 - hotels logged: 58 
+Node #57 - hotels logged: 75 
+Node #56 - hotels logged: 56 
+Node #55 - hotels logged: 31 
+Node #54 - hotels logged: 75 
+Node #53 - hotels logged: 34 
+Node #52 - hotels logged: 70 
+Node #51 - hotels logged: 75 
+Node #50 - hotels logged: 25 
+Node #49 - hotels logged: 25 
+Node #48 - hotels logged: 5 
+Node #47 - hotels logged: 10 
 Node #46 - hotels logged: 46 
-Node #45 - hotels logged: 46 75 
-Node #44 - hotels logged: 46 5 44 75 
+Node #45 - hotels logged: 75 
+Node #44 - hotels logged: 75 
 Node #43 - hotels logged: 43 
 Node #42 - hotels logged: 38 
-Node #41 - hotels logged: 43 31 43 31 43 31 43 31 43 31 43 
-Node #40 - hotels logged: 46 40 75 
-Node #39 - hotels logged: 46 39 
+Node #41 - hotels logged: 43 
+Node #40 - hotels logged: 75 
+Node #39 - hotels logged: 4 
 Node #38 - hotels logged: 38 
-Node #37 - hotels logged: 46 75 
-Node #36 - hotels logged: 46 43 80 36 80 36 
-Node #35 - hotels logged: 43 35 43 35 
-Node #34 - hotels logged: 38 34 
-Node #33 - hotels logged: 46 43 31 46 31 
+Node #37 - hotels logged: 75 
+Node #36 - hotels logged: 80 
+Node #35 - hotels logged: 43 
+Node #34 - hotels logged: 34 
+Node #33 - hotels logged: 31 
 Node #32 - hotels logged: 46 
-Node #31 - hotels logged: 46 31 
-Node #30 - hotels logged: 5 43 31 
-Node #29 - hotels logged: 38 14 43 34 43 34 43 
-Node #28 - hotels logged: 43 
+Node #31 - hotels logged: 31 
+Node #30 - hotels logged: 31 
+Node #29 - hotels logged: 14 
+Node #28 - hotels logged: 80 
 Node #27 - hotels logged: 38 
-Node #26 - hotels logged: 46 26 
-Node #25 - hotels logged: 46 25 
-Node #24 - hotels logged: 46 75 
-Node #23 - hotels logged: 46 43 38 23 10 23 10 23 10 23 10 23 
-Node #22 - hotels logged: 38 
-Node #21 - hotels logged: 46 10 21 
-Node #20 - hotels logged: 38 46 38 
-Node #19 - hotels logged: 46 19 
-Node #18 - hotels logged: 46 43 46 31 46 43 38 43 
-Node #17 - hotels logged: 38 17 
-Node #16 - hotels logged: 46 5 
-Node #15 - hotels logged: 46 
-Node #14 - hotels logged: 43 38 80 34 80 43 14 80 43 14 80 34 43 34 43 34 43 34 
-Node #13 - hotels logged: 38 
-Node #12 - hotels logged: 5 43 31 
-Node #11 - hotels logged: 46 75 
-Node #10 - hotels logged: 46 10 
+Node #26 - hotels logged: 4 
+Node #25 - hotels logged: 25 
+Node #24 - hotels logged: 58 
+Node #23 - hotels logged: 4 
+Node #22 - hotels logged: 43 
+Node #21 - hotels logged: 10 
+Node #20 - hotels logged: 38 
+Node #19 - hotels logged: 25 
+Node #18 - hotels logged: 4 
+Node #17 - hotels logged: 80 
+Node #16 - hotels logged: 56 
+Node #15 - hotels logged: 70 
+Node #14 - hotels logged: 14 
+Node #13 - hotels logged: 43 
+Node #12 - hotels logged: 10 
+Node #11 - hotels logged: 75 
+Node #10 - hotels logged: 10 
 Node #9 - hotels logged: 38 
-Node #8 - hotels logged: 38 43 4 43 
-Node #7 - hotels logged: 43 38 43 38 34 38 34 43 34 43 34 43 80 43 
+Node #8 - hotels logged: 4 
+Node #7 - hotels logged: 80 
 Node #6 - hotels logged: 46 
 Node #5 - hotels logged: 5 
-Node #4 - hotels logged: 46 43 38 4 43 38 4 43 
+Node #4 - hotels logged: 4 
 Node #3 - hotels logged: 43 
-Node #2 - hotels logged: 46 2 
-Node #1 - hotels logged: 46 1 
+Node #2 - hotels logged: 80 
+Node #1 - hotels logged: 56 
 
 BACKHAUL (provisioned) carried load MONICA[BH BWD * time] = 0.000000 (coincides with: bh provisioned conn * holding time)
-Total number of lightpaths activated during the simulation: 960
-Sum lightpath holding time(?) [SUM(lightpaths lifetime)]: 2209.971953
-Sum lightpath load(?) [used lp cap / tot lp cap ; (weighted on time)]: 251.957310
-Sum link load(?) [lifetime * hops * capacity]: 2638449.674903
-Total used OC1 time(?) [SUM(busyTime) = SUM(used lp cap * time)]: 1763411.928593
+Total number of lightpaths activated during the simulation: 110
+Sum lightpath holding time(?) [SUM(lightpaths lifetime)]: 127.718166
+Sum lightpath load(?) [used lp cap / tot lp cap ; (weighted on time)]: 44.910028
+Sum link load(?) [lifetime * hops * capacity]: 35481.034417
+Total used OC1 time(?) [SUM(busyTime) = SUM(used lp cap * time)]: 103344.081663
 
 Carico(???):
--92559631349317830736831783200707727132248687965119994463780864.000000 0.315863 0.435543 0.511324 0.594478 0.570970 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
-Real avg arrival rate PER SECOND, PER NETWORK [#connections simulated / simulation time]: 8777.083406
-Real avg arrival rate PER SECOND, PER NODE: 109.713543
-Average amount of traffic generated per second, per network [OC1]: 52662.500439
-Average amount of traffic generated per second, per node [OC1]: 658.281255
+0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+Real avg arrival rate PER SECOND, PER NETWORK [#connections simulated / simulation time]: 3603.276427
+Real avg arrival rate PER SECOND, PER NODE: 45.040955
+Average amount of traffic generated per second, per network [OC1]: 21619.658564
+Average amount of traffic generated per second, per node [OC1]: 270.245732

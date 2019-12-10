@@ -5565,6 +5565,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 	//	it means that no valid (reachable) BBU hotel node was found
 	// -L: fronthaul that hadn't find a destination in the previous step
 	//     it means that DU placement failed
+	// -L: once I add the CU placement, I have to consider also that midhaul dst can be null
 	if (pCon->m_nDst == NULL)
 	{
 #ifdef DEBUG
@@ -5950,6 +5951,7 @@ inline bool NetMan::BBU_ProvisionHelper_Unprotected(Connection *pCon, Circuit& h
 		list<Lightpath*> savedCircuit;
 
 		// check if there is a connection on the path chosen which exceeds the latency budget
+		//-L: ??? perchè == 
 		if (hPCircuit.latency == MAXVALUE_LATENCY) {
 
 			do {

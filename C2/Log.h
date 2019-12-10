@@ -34,6 +34,8 @@ public:
 	UINT	m_nBlockedFixedBackConn;
 	UINT	m_nBlockedMobileBackConn;
 	UINT	m_nBlockedFixMobBackConn;
+	//-L:
+	UINT	m_nBlockedFixMidConn;
 	// amount of BW (in terms of OC1) provisioned/blocked
 	UINT	m_nProvisionedBW;	//both fronthaul and backhaul
 	UINT	m_nBlockedBW;
@@ -53,6 +55,8 @@ public:
 	UINT	m_nBlockedFixedBackBW;
 	UINT	m_nBlockedFixMobBackBW;
 	UINT	m_nBlockedMobileBackBW;
+	//-L:
+	UINT	m_nBlockedFixMidBW;
 
 	// b/w distribution of provisioned/blocked connections
 	UINT	m_pProvisionedConPerBW[NumberOfBWGranularity];
