@@ -425,6 +425,7 @@ WDMNetwork* NetMan::getWDMNetwork()
     return (&m_hWDMNet);
 }
 
+//-L: mai usata!!!
 //-B: return true if the provisioning of the connection passed as parameter has been done correctly
 //	it calls the provisionConnectionHelper method, which calls a different method CASENAME_Provision
 //	depending on the provisioning type of the connection (these methods are implemented in this class, see below)
@@ -5571,7 +5572,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 #ifdef DEBUG
 		cout << " -> Blocked connection due to unreachability of BBU" << endl;
 #endif // DEBUGB
-		//cin.get();
+
 		//-B: check if it is NULL because it wasn't possible to find a hotel node respecting the latency budget or not
 		//	(m_bHotelNotFoundBeacauseOfLatency is set/modified in placeBBUHigh method)
 		if (m_bHotelNotFoundBecauseOfLatency) {
@@ -5639,7 +5640,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL
 			|| pCon->m_eConnType == Connection::FIXED_MIDHAUL)
 		{
-			// -L: VA MODIFICATO ????
+			// -L: VA MODIFICATO ???? ERRORE
 			// *************** PRE-PROCESSING ******************
 			//-B: it is used to prefer wavelength continuity over w. conversion in a condition of equality
 			//	between the wavelength that would allow a wavelength path and any other best-fit wavelegth
@@ -9666,6 +9667,8 @@ void NS_OCH::NetMan::invalidateSimplexLinkDueToCapOrStatus(UINT bwd, UINT connTy
 				continue;
 			}
 		}
+		//-L: DEBUG
+		//SimplexLink::SimplexLinkType LT = pLink->getSimplexLinkType();
 
 		//-B: *********** INVALIDATE SIMPLEX LINK DUE TO FREE STATUS *************
 		//-B: don't know if the following part is really useful
@@ -9710,23 +9713,28 @@ void NS_OCH::NetMan::invalidateSimplexLinkDueToCapOrStatus(UINT bwd, UINT connTy
 				} //end FOR netwrok links list
 			}// end IF valid
 		} //end IF LT_Channel
-		else if ((pLink->getSimplexLinkType() == SimplexLink::LT_Lightpath) && (connType!= 3 && connType != 4 && connType != 5)) {
+		
+		//-L: ??? perchè solo per LT_Lightpath
+		//-L: fronthaul case
+		else if ((pLink->getSimplexLinkType() == SimplexLink::LT_Lightpath) && (connType == 1 || connType == 2)) {
 
-		  if (pLink->m_latency > LATENCYBUDGET) {
-
-		  #ifdef DEBUGF
-
-		  cout << "I'm going to invalidate the lightpath from " << pLink->m_pLightpath->getSrc()->getId()
-		  << " to " << pLink->m_pLightpath->getDst()->getId() << "; its latency is " << pLink->m_latency << endl;
-		  pLink->invalidate();
-		  //cin.get();
-
-		  #endif
-
-		  }
-
-
+		  if (pLink->m_latency > LATENCYBUDGET)
+				pLink->invalidate();
 		 }
+
+		//-L: midhaul case
+		else if ((pLink->getSimplexLinkType() == SimplexLink::LT_Lightpath) && (connType == 5)) {
+
+			if (pLink->m_latency > LATENCY_MH)
+				pLink->invalidate();
+		}
+
+		//-L: backhaul case
+		else if ((pLink->getSimplexLinkType() == SimplexLink::LT_Lightpath) && (connType == 3 || connType == 4)) {
+
+			if (pLink->m_latency > LATENCY_BH)
+				pLink->invalidate();
+		}
 	} // end FOR graph links list
 }
 

@@ -495,6 +495,7 @@ else if (0 == strcmp(argv[10], "BBU"))
 		fprintf(out, "%s%d\n", text, hNetMan.m_hWDMNet.numFixMobNodes);
 		text = "Number of candidate hotel nodes: ";
 		fprintf(out, "%s%d\n", text, hNetMan.m_hWDMNet.countCandidateHotels());
+		
 		cout << "STOP 1" << endl;
 		text = "Avg arrival rate: ";
 		fprintf(out, "%s%f\n", text, ar);
@@ -517,15 +518,7 @@ else if (0 == strcmp(argv[10], "BBU"))
 		fprintf(out, "%s%d\n", text, hNetMan.m_hWDMNet.getChannelCapacity());
 		//text = "Max num BBU in a single hotel node: ";
 		//fprintf(out, "%s%d\n", text, MAXNUMBBU);
-		//out << "Smallest bandwidth for MOBILE connections: " << OC6 << " OC1" << endl;
-		//out << "Biggest bandwidth for MOBILE connections: " << OC15 << " OC1" << endl;
-		//out << "Smallest bandwidth for FIXED connections: " << OC192 << " OC1" << endl;
-		//out << "Biggest bandwidth for FIXED connections: " << OC384 << " OC1" << endl;
-		//out << "Required bandwidth for CPRI connections: " << OCcpriMC << " OC1" << endl;
-		//text = "Propagation latency: ";
-		//fprintf(out, "%s%f\n", text, PROPAGATIONLATENCY);
-		//text = "Electronic switch latency: ";
-		//fprintf(out, "%s%f\n", text, ELSWITCHLATENCY);
+		
 		text = "Fronthaul latency budget: ";
 		fprintf(out, "%s%f\n", text, LATENCYBUDGET);
 		text = "Transitory phase duration: ";
@@ -595,9 +588,9 @@ else if (0 == strcmp(argv[10], "BBU"))
 		fprintf(out, "%s%d + %d + %d = %d\n", text, hNetMan.m_hLog.m_nBlockedMobileBackConn, hNetMan.m_hLog.m_nBlockedFixMobBackConn, hNetMan.m_hLog.m_nBlockedFixedBackConn,
 			(hNetMan.m_hLog.m_nBlockedMobileBackConn + hNetMan.m_hLog.m_nBlockedFixMobBackConn + hNetMan.m_hLog.m_nBlockedFixedBackConn));
 
-		text = "\nBWD of provisioned connections (FH + BH): ";
+		text = "\nBWD of provisioned connections (FH + MH + BH): ";
 		fprintf(out, "%s%d", text, hNetMan.m_hLog.m_nProvisionedBW);
-		text = "\nBWD of blocked connections (FH + BH): ";
+		text = "\nBWD of blocked connections (FH + MH + BH): ";
 		fprintf(out, "%s%d", text, hNetMan.m_hLog.m_nBlockedBW);
 		text = "\nBWD of blocked fronthaul connections (mob + fixmob): ";
 		fprintf (out, "%s%d + %d = %d", text, hNetMan.m_hLog.m_nBlockedMobileFrontBW, hNetMan.m_hLog.m_nBlockedFixMobFrontBW,
@@ -686,13 +679,7 @@ else if (0 == strcmp(argv[10], "BBU"))
 		{
 			fprintf(out, "%f ", hNetMan.m_hLog.PblockBackBW_hour[oo]);
 		}
-		/* -B: COMMENTED BECAUSE WE SHOULD USE runLog IF WE WANT TO HAVE PERIODICAL STATS
-		text = "\n\nNetwork cost (PERIODIC; overall):\n";
-		fprintf(out, "%s", text);
-		for (int oo = 0; oo < 24; oo++)
-		{
-			fprintf(out, "%f ", hNetMan.m_hLog.NetCost_hour[oo]);
-		}*/
+		
 		text = "\nAVG NETWORK COST (weighted on time; overall):\n";
 		fprintf(out, "%s", text);
 		for (int oo = 0; oo < 24; oo++)

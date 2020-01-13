@@ -825,6 +825,7 @@ void Circuit::WPtearDownCircuit(NetMan* pNetMan, bool bLog)
 }
 
 //-B: compute circuit latency: propagation + wavel conversion
+//-L: mai chiamata
 void Circuit::computeLatency()
 {
 #ifdef DEBUGB
