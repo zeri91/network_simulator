@@ -9097,9 +9097,26 @@ UINT NetMan::placeBBUSmart(UINT src, vector<OXCNode*>& BBUsList)
 
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
+		// reset boolean var because we are considering another node
+		m_bHotelNotFoundBecauseOfLatency = false;
+
+		id = BBUsList[j]->getId();
+		pOXCdst = (OXCNode*)m_hWDMNet.lookUpNodeById(id);
+		
+		// destination node changes at each loop 
+		Vertex* pDst = m_hGraph.lookUpVertex(id, Vertex::VT_Access_In, -1);
+
+		// computation of the path cost from src to destination
+		pathCost = m_hGraph.DijkstraLatency(pOXCdst->pPath, pSrc, pDst, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
+		pOXCdst->m_nBBUReachCost = pathCost;
+
+		////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////      POLICY 4    //////////////////////////////////////
+		///////////////////////// (                                 ) //////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////
 
 	}
-
+	return bestBBU;
 }
 
 //-B: set simplex link's (LT_Lightpath) costs for best fit algorithm when grooming
