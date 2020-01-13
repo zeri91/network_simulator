@@ -8746,6 +8746,7 @@ UINT NetMan::placeBBUHigh(UINT src, vector<OXCNode*>&BBUsList)
 							savedPath = pOXCdst->pPath;
 
 							bestBBU = pOXCdst->getId();
+							//-L: da controllare meglio
 							if (bestBBU == 46) {
 								return bestBBU;
 							}
@@ -9076,6 +9077,29 @@ UINT NetMan::placeBBU_Metric(UINT src, vector<OXCNode*>&BBUsList)
 
 	} // end FOR nodes
 	return bestBBU;
+}
+
+// -L: algorithm for the CU placement
+UINT NetMan::placeBBUSmart(UINT src, vector<OXCNode*>& BBUsList) 
+{
+#ifdef DEBUGB
+	cout << "-> placeBBUSmart" << endl;
+#endif // DEBUGB
+
+	LINK_COST minCost = UNREACHABLE;
+	UINT bestBBU = 0;
+	OXCNode* pOXCdst;
+	int id;
+	LINK_COST pathCost;
+
+	//lookup source vertex
+	Vertex* pSrc = m_hGraph.lookUpVertex(src, Vertex::VT_Access_Out, -1);
+
+	for (int j = 0; j < BBUsList.size(); j++)
+	{
+
+	}
+
 }
 
 //-B: set simplex link's (LT_Lightpath) costs for best fit algorithm when grooming

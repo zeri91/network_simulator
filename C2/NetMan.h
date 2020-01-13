@@ -315,6 +315,7 @@ protected:
 	UINT placeBBUHigh(UINT src, vector<OXCNode*>&);
 	UINT placeBBUClose(UINT src, vector<OXCNode*>& BBUsList);
 	UINT placeBBU_Metric(UINT src, vector<OXCNode*>& BBUsList);
+	UINT placeBBUSmart(UINT src, vector<OXCNode*>& BBUsList);
 	void updateCostsForBestFit();
 	void buildHotelsList(vector<OXCNode*>& otherHotels);
 	void buildNotActiveBBUsList(vector<OXCNode*>&);
