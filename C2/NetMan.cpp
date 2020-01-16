@@ -8896,7 +8896,6 @@ UINT NetMan::placeBBUClose(UINT src, vector<OXCNode*>&BBUsList)
 	return bestBBU;
 }
 
-
 UINT NetMan::placeBBU_Metric(UINT src, vector<OXCNode*>&BBUsList)
 {
 #ifdef DEBUGB
@@ -9079,11 +9078,11 @@ UINT NetMan::placeBBU_Metric(UINT src, vector<OXCNode*>&BBUsList)
 	return bestBBU;
 }
 
-// -L: algorithm for the CU placement
-UINT NetMan::placeBBUSmart(UINT src, vector<OXCNode*>& BBUsList) 
+// -L: place the CU in the closest candidate of the DU
+UINT NetMan::placeCUClose(UINT src, vector<OXCNode*>& BBUsList) 
 {
 #ifdef DEBUGB
-	cout << "-> placeBBUSmart" << endl;
+	cout << "-> placeCUClose" << endl;
 #endif // DEBUGB
 
 	LINK_COST minCost = UNREACHABLE;
@@ -9098,7 +9097,7 @@ UINT NetMan::placeBBUSmart(UINT src, vector<OXCNode*>& BBUsList)
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
 		// reset boolean var because we are considering another node
-		m_bHotelNotFoundBecauseOfLatency = false;
+		m_bCUNotFoundBecauseOfLatency = false;
 
 		id = BBUsList[j]->getId();
 		pOXCdst = (OXCNode*)m_hWDMNet.lookUpNodeById(id);
@@ -9111,13 +9110,89 @@ UINT NetMan::placeBBUSmart(UINT src, vector<OXCNode*>& BBUsList)
 		pOXCdst->m_nBBUReachCost = pathCost;
 
 		////////////////////////////////////////////////////////////////////////////////////////
-		////////////////////////////////      POLICY 4    //////////////////////////////////////
-		///////////////////////// (                                 ) //////////////////////////
+		////////////////////////////////      POLICY 4      ////////////////////////////////////
+		////////////////////////////////   ( CLOSE TO DU )  ////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////////////////
-
+		
+		if (pathCost < UNREACHABLE)
+		{
+			Connection::ConnectionType connType = Connection::FIXED_MIDHAUL;
+			float lat = computeLatencyP3(pOXCdst->pPath, pSrc, (UINT)connType);
+			
+			if (lat <= LATENCY_MH) {
+				if (pathCost < minCost)
+				{
+					minCost = pathCost;
+					bestBBU = id;
+				}
+			}
+			else
+			{
+				m_bCUNotFoundBecauseOfLatency = true;
+			}
+		}
 	}
 	return bestBBU;
 }
+
+// -L: 
+UINT NetMan::placeCUSmart(UINT src, vector<OXCNode*>& BBUsList)
+{
+#ifdef DEBUGB
+	cout << "-> placeCUSmart" << endl;
+#endif // DEBUGB
+
+	LINK_COST minCost = UNREACHABLE;
+	UINT bestBBU = 0;
+	OXCNode* pOXCdst;
+	int id;
+	LINK_COST pathCost;
+
+	//lookup source vertex
+	Vertex* pSrc = m_hGraph.lookUpVertex(src, Vertex::VT_Access_Out, -1);
+
+	for (int j = 0; j < BBUsList.size(); j++)
+	{
+		// reset boolean var because we are considering another node
+		m_bCUNotFoundBecauseOfLatency = false;
+
+		id = BBUsList[j]->getId();
+		pOXCdst = (OXCNode*)m_hWDMNet.lookUpNodeById(id);
+
+		// destination node changes at each loop 
+		Vertex* pDst = m_hGraph.lookUpVertex(id, Vertex::VT_Access_In, -1);
+
+		// computation of the path cost from src to dst
+		// DA CAMBIARE
+		pathCost = m_hGraph.DijkstraLatency(pOXCdst->pPath, pSrc, pDst, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
+		pOXCdst->m_nBBUReachCost = pathCost;
+
+		////////////////////////////////////////////////////////////////////////////////////////
+		////////////////////////////////      POLICY 5      ////////////////////////////////////
+		////////////////////////////////   (             )  ////////////////////////////////////
+		////////////////////////////////////////////////////////////////////////////////////////
+
+		if (pathCost < UNREACHABLE)
+		{
+			Connection::ConnectionType connType = Connection::FIXED_MIDHAUL;
+			float lat = computeLatencyP3(pOXCdst->pPath, pSrc, (UINT)connType);
+
+			if (lat <= LATENCY_MH) {
+				if (pathCost < minCost)
+				{
+					minCost = pathCost;
+					bestBBU = id;
+				}
+			}
+			else
+			{
+				m_bCUNotFoundBecauseOfLatency = true;
+			}
+		}
+	}
+	return bestBBU;
+}
+
 
 //-B: set simplex link's (LT_Lightpath) costs for best fit algorithm when grooming
 void NetMan::updateCostsForBestFit()

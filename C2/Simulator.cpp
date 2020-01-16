@@ -319,16 +319,11 @@ void Simulator::run(SimulationTime delay)
 	m_hEventList.m_pNetMan = m_pNetMan;
 
 	cout << endl << "INIZIO DELLA SIMULAZIONE" << endl;
-	//cin.get();
 	cout << "..." << endl;
  
 	//-----------------------------------------start While--------------------------------------------------------------------
 while ((pEvent = m_hEventList.nextEvent()) && (!bDone) && (!stat_achieved))
-{//-B: si chiude a riga 778
-#ifdef DEBUGB
-	//cin.get();
-#endif // DEBUGB
-
+{
 	assert(pEvent);
 	
 	//-B: if pEvent is a backhaul event, I have to delete its corresponding fronthaul event in the related events' list
@@ -2334,6 +2329,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	{
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
+		//nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime);
 		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH

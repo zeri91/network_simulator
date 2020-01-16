@@ -315,7 +315,8 @@ protected:
 	UINT placeBBUHigh(UINT src, vector<OXCNode*>&);
 	UINT placeBBUClose(UINT src, vector<OXCNode*>& BBUsList);
 	UINT placeBBU_Metric(UINT src, vector<OXCNode*>& BBUsList);
-	UINT placeBBUSmart(UINT src, vector<OXCNode*>& BBUsList);
+	UINT placeCUClose(UINT src, vector<OXCNode*>& BBUsList);
+	UINT placeCUSmart(UINT src, vector<OXCNode*>& BBUsList);
 	void updateCostsForBestFit();
 	void buildHotelsList(vector<OXCNode*>& otherHotels);
 	void buildNotActiveBBUsList(vector<OXCNode*>&);
@@ -496,6 +497,7 @@ public:
 		WDMNetwork		m_hWDMNet;		// topo & channel usage :reso pubblico
 		WDMNetwork		m_hWDMNetPast;
 		bool			m_bHotelNotFoundBecauseOfLatency;
+		bool			m_bCUNotFoundBecauseOfLatency;
 		int				m_countConnectionsPerLink[5000] = {};
 		list<Lightpath*>	auxLightpathsList;
 		Graph			m_hGraph;				// representing network state
