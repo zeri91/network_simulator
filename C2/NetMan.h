@@ -501,7 +501,7 @@ public:
 		int				m_countConnectionsPerLink[5000] = {};
 		list<Lightpath*>	auxLightpathsList;
 		Graph			m_hGraph;				// representing network state
-		UINT		nodeActivatingNewBBU[500] = {0};
+		UINT		nodeActivatingNewBBU[500] = {0}; // number of times that each node changed BBU
 		list <Connection*> connectionsChangingBBU;
 		// FABIO:
 };

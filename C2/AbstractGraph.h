@@ -88,7 +88,7 @@ public:
 
 public:
 	// immutable attributes
-	UINT								m_nNodeId;		// unique
+	UINT	m_nNodeId;		// unique
 	MappedLinkList<UINT, AbstractLink*> m_hILinkList; 
 	MappedLinkList<UINT, AbstractLink*> m_hOLinkList; 
 

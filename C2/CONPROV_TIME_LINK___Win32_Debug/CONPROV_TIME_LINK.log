@@ -1,13 +1,10 @@
 ﻿  cl : warning della riga di comando D9035 : l'opzione 'Gm' è deprecata e verrà rimossa in una futura versione
   NetMan.cpp
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(1001,20): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(5819,16): warning C4101: 'linkPath': variabile locale senza riferimenti
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(9093,12): warning C4101: 'pathCost': variabile locale senza riferimenti
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(9091,11): warning C4101: 'pOXCdst': variabile locale senza riferimenti
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(9092,6): warning C4101: 'id': variabile locale senza riferimenti
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10488,47): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10489,49): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10641,66): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10642,68): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10824): warning C4715: 'NS_OCH::NetMan::isLastLinkFull': non tutti i percorsi di controllo restituiscono un valore
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(977,20): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(5795,16): warning C4101: 'linkPath': variabile locale senza riferimenti
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10412,47): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10413,49): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10565,66): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10566,68): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10748): warning C4715: 'NS_OCH::NetMan::isLastLinkFull': non tutti i percorsi di controllo restituiscono un valore
   CONPROV_TIME_LINK.vcxproj -> C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\.\CONPROV_TIME_LINK___Win32_Debug\CONPROV_TIME_LINK.exe
