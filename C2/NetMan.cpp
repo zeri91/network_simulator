@@ -452,32 +452,8 @@ bool NetMan::provisionConnection(Connection *pCon)
 //	e m_HArrivalTimeIncoming (appartenenti all'oggetto NetMan) uguali a quelli della connessione passata come parametro]
 // -M List Event added
 bool NetMan::provisionConnectionxTime(Connection *pCon, list<Event*>& DepaPC, EventList& evList)
-{
-// int a=0;
-//   Event *pEvent;
-//   list<Event*>::const_iterator itrE;
-//      for (itrE=DepaPC.begin(); itrE!=DepaPC.end(); itrE++) {
-//          pEvent = (Event*)(*itrE);
-//          assert(pEvent);
-//         cerr <<  pEvent-> m_hTime <<endl; 
-//         a++;
-//      }
-//      cerr << "dimensione lista" << a << endl;
-//      a=0;
-    
+{    
 	m_hDepaNet = DepaPC;
-//     int a=0;
-//     Event *pEvent;
-//     list<Event*>::const_iterator itrE;
-//     for (itrE=m_hDepaNet.begin(); itrE!=m_hDepaNet.end(); itrE++) {
-//          pEvent = (Event*)(*itrE);
-//          assert(pEvent);
-//         cerr <<  pEvent-> m_hTime <<endl; 
-//         a++;
-//      }
-//      cerr << "dimensione lista" << a << endl;
-//      a=0;
-
 	DepaPC.erase(DepaPC.begin(), DepaPC.end());
     //m_hDepaNet.erase(m_hDepaNet.begin(), m_hDepaNet.end());
 	m_hHoldingTimeIncoming = pCon->m_dHoldingTime;
@@ -7296,6 +7272,7 @@ LINK_CAPACITY NS_OCH::NetMan::getUniFiberCap(UniFiber*fiber)
 }
 
 //-B: given the source node id, return the less "expensive" BBU_hotel (according to the policy used)
+//-L: da priorità al costo. Se il migliore è un BBU hotel disattivato, lo attiva e gli mette la BBU del nodo src. 
 UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime hTime)
 {
 #ifdef DEBUG
@@ -7354,102 +7331,17 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//-B: STEP 0a: check if this source node has an already assigned BBU in one of the hotel nodes
-
-	
-	if (pOXCsrc->m_nBBUNodeIdsAssigned == 1 && BBUPOLICY != 3)
+	if (pOXCsrc->m_nBBUNodeIdsAssigned == 1)
 	{
-		#ifdef DEBUGB
-		cout << "\tIl nodo sorgente " << src << " ha gia' la sua BBU collocata nel nodo " << pOXCsrc->m_nBBUNodeIdsAssigned << endl;
-		#endif // DEBUGB
-
-
-		/*-B: PROBLEM: the semplification of the small cells, seen not as real nodes, but as sub-cells belonging to a macro-cell.
-		This makes impossible to take into account of extra latency between small cells and a macro cell when the macro-cell
-		has already its BBUNodeIdAssigned. In fact, when a connection has a small cell as source, the simulator can only see
-		that the source is the macro cell which the small cell belongs to.
-
-		--> SOLVED!!! Added an extraLatency in DijkstraHelperLatency
-		*/
-
 		//dst node of this connection will be the BBU hotel node already assigned to this source node
 		//	(independently of how many BBUs there are into it)
 		return pOXCsrc->m_nBBUNodeIdsAssigned; //-----------------------------------------------------------------------------------------
 		}
 	
-
-	/*if (BBUPOLICY == 3) {
-
-		// The src has already a BBU assigned but the last link load has been overcome
-		// Delete the BBU from the list of hotels
-		if (pOXCsrc->m_nBBUNodeIdsAssigned > 0) {
-
-			pOXCdst = (OXCNode*)this->m_hWDMNet.lookUpNodeById(pOXCsrc->m_nBBUNodeIdsAssigned);
-			
-			if (!this->isLastLinkFull(pOXCdst->pPath)) {
-				for (int i = 0; i < this->m_hWDMNet.hotelsList.size(); i++) {
-					if (this->m_hWDMNet.hotelsList[i] == pOXCdst) {
-						cout << "\tLink's load overcame the threashold: remove BBU from the hotelsList" << endl;
-						cin.get();
-						this->m_hWDMNet.hotelsList.erase(this->m_hWDMNet.hotelsList.begin() + i);
-						break;
-
-					}
-				}
-			}
-
-		}
-
-
-	}*/
-
-	//-B: For policies different from policy 3: check if this source node has an already assigned BBU in one of the hotel nodes	
-	
-	/*
-	if (BBUPOLICY == 1 || pOXCsrc->m_bBBUAlreadyChanged == true) {
-
-		if (pOXCsrc->m_nBBUNodeIdsAssigned > 0)
-		{	
-			
-			//Allow the source to change BBU for another time, if the time passed is enough
-			if ((hTime - (pOXCsrc->m_hChangeBBUTime)) < BBU_CHANGE_INTERVAL) {
-#ifdef DEBUG
-				cout << "Last BBU change was done at time " << pOXCsrc->m_hChangeBBUTime << endl;
-				cout << "\tIl nodo sorgente " << src << " ha gia' la sua BBU collocata nel nodo "
-					<< pOXCsrc->m_nBBUNodeIdsAssigned << " e il tempo passato è di "
-					<< hTime - pOXCsrc->m_hChangeBBUTime << endl;
-				//cin.get();
-#endif // DEBUGB
-
-
-				
-				-B: PROBLEM: the semplification of the small cells, seen not as real nodes, but as sub-cells belonging to a macro-cell.
-				This makes impossible to take into account of extra latency between small cells and a macro cell when the macro-cell
-				has already its BBUNodeIdAssigned. In fact, when a connection has a small cell as source, the simulator can only see
-				that the source is the macro cell which the small cell belongs to.
-
-				--> SOLVED!!! Added an extraLatency in DijkstraHelperLatency
-				
-
-				//dst node of this connection will be the BBU hotel node already assigned to this source node
-				//(independently of how many BBUs there are into it)
-				return pOXCsrc->m_nBBUNodeIdsAssigned; //-----------------------------------------------------------------------------------------
-			}
-			else {
-#ifdef DEBUG
-				cout << "Last BBU change was done at time " << pOXCsrc->m_hChangeBBUTime << endl;
-				cout << "Time passed from the last change of BBU is " << hTime - pOXCsrc->m_hChangeBBUTime << endl;
-				//cin.get();
-#endif
-			}
-		}
-	}
-	
-	*/
-
 	//  If source node is a bbu hotel node...
 	//	(but, clearly, it's the first time this node has to route a fronthaul connection.
 	//	Otherwise, it should have stopped at the previous step)
-	if (pOXCsrc->getBBUHotel())
+	if (pOXCsrc->getBBUHotel()) // -L: if the node is a BBUHotel, then getBBUHotel() returns true
 	{
 		//if the source node has already its bbu there and the source has other bbu than itself
 		if (pOXCsrc->m_nBBUNodeIdsAssigned == src && pOXCsrc->m_nBBUs > 1) {
@@ -7459,11 +7351,9 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 		
 		//if the source node has only itself as bbu, i can change bbu and switch this off
 		if ((pOXCsrc->m_nBBUNodeIdsAssigned == src && pOXCsrc->m_nBBUs == 1)) {
-		
 			cout << "\tNodo sorgente (" << src << ") ha solo se stessa come BBU"<< endl;
 		}
 		else {
-
 			//if the source does not have an already assigned bbu
 			// but it is already active, there is no need to look for best bbu hotel node
 			if (isAlreadyActive(pOXCsrc))
@@ -7478,8 +7368,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 					cout << " -> puo' attivare ancora BBUs" << endl;
 #endif // DEBUGB
 					pOXCsrc->m_nBBUs++; //-L: increase num of active BBU in this node
-
-					//increase num of nodes whose BBU is in this node -> num of BBUs active in this node
 
 					//if the source was asssigned another bbu but now it can place it at itself
 					if (pOXCsrc->m_nBBUNodeIdsAssigned > 0 && pOXCsrc->m_nBBUNodeIdsAssigned != src) {
@@ -7513,14 +7401,13 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 	//-B: reset BBUsReachCost = UNREACHABLE for all nodes (potentially modified in the previous iteration)
 	//m_hWDMNet.resetBBUsReachabilityCost(); //-B: --> ALREADY DONE BY resetPreProcessing method (inside BBU_newConnection)
 
-	pOXCdst = NULL;
-	OXCNode*pOXCdst2 = NULL;
+	pOXCdst = NULL;  // -L: best active BBU (I use an already active BBU) 
+	OXCNode*pOXCdst2 = NULL; //-L: best inactive BBU (need to activate a new one)
 	bool enough = true;
-	//LINK_COST costBestActiveHotel = UNREACHABLE;
 
 	//-B: build a list with all bbu hotel node already active (BBUs > 0) with enough "space" to host a new BBU (BBUs < MAXNUMBBU)
 	vector<OXCNode*>auxBBUsList;
-	genAuxBBUsList(auxBBUsList);
+	genAuxBBUsList(auxBBUsList); // -L: list with already active BBUs
 
 	if (auxBBUsList.size() > 0)
 	{
@@ -7534,7 +7421,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
 			case 0:
-				//(in this function the core CO is preferred over the others as BBU hotel node)
 				bestBBU = placeBBUHigh(src, auxBBUsList);
 				break;
 			case 1:
@@ -7544,9 +7430,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			case 2:
 				bestBBU = placeBBU_Metric(src, auxBBUsList);
 				enough = false;
-				break;
-			case 3:
-				bestBBU = placeBBUHigh(src, auxBBUsList);
 				break;
 			default:
 				DEFAULT_SWITCH;
@@ -7563,13 +7446,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 		//-B: it means no valid dst hotel node was found in the algorithm placeBBUX
 		enough = false;
 	}
-
-#ifdef DEBUG
-		//pOXCDst could be NULL
-		if (pOXCdst)
-			cout << "\tPath's cost towards best BBU hotel node, already active: " << pOXCdst->m_nBBUReachCost << endl << endl;
-#endif // DEBUGB
-
 
 	//-B: STEP 3 - check still inactive candidate BBU hotel nodes
 	if (!enough)
@@ -7626,20 +7502,18 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 	//CASE 1 - use an already active BBU
 	if (pOXCdst && pOXCdst2 == NULL)
 	{
-
 		//BEST BBU NODE: an already active bbu
 		//-B: save best precomputed cost
 		precomputedCost = pOXCdst->m_nBBUReachCost;
 		//-B: save best precomputed path
 		precomputedPath = pOXCdst->pPath;
 
+		// -L: bestBBU trovata è quella che aveva gia
 		if (bestBBU == pOXCsrc->m_nBBUNodeIdsAssigned) {
-#ifdef DEBUG
-			cout << "\tThe BBU found for node " << src << " is the same it already has" << endl;
-#endif
 			return bestBBU;
 		}
 
+		// -L: La BBU trovata è migliore di quella che ha, la cambio
 		// Assign a second BBU (which was already active) for the node
 		if (pOXCsrc->m_nBBUNodeIdsAssigned >0) {
 
@@ -7656,32 +7530,29 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 
 			nodeActivatingNewBBU[pOXCsrc->getId()]++;
 			//-B: assign, to the source node of the connection, the hotel node hosting its BBU
-			pOXCsrc->m_nBBUNodeIdsAssignedLast = bestBBU;
+			pOXCsrc->m_nBBUNodeIdsAssignedLast = bestBBU; // -L: ?????? non dovrebbe essere la vecchia BBU ?
 			pOXCsrc->m_bBBUAlreadyChanged = true;
 			pOXCsrc->m_hChangeBBUTime = hTime;
-
-			//-B: increase the number of active BBUs in the thotel node (the value will be more than 1 since it was already activated)
-			pOXCdst->m_nBBUs++;
 			pOXCsrc->m_nCountBBUsChanged++;
 
+			//-B: increase the number of active BBUs in the hotel node (the value will be more than 1 since it was already activated)
+			pOXCdst->m_nBBUs++;
+			
 #ifdef DEBUGC
 			cout << "Updated the number of bbus for node: " << pOXCdst->getId() << endl;
-
 			cout << "Updated number of BBUs changed to " << pOXCsrc->m_nCountBBUsChanged << endl;
 #endif
 		
-			return bestBBU; //------------------------------------------------------------------------------------------------------
-				
+			return bestBBU; //------------------------------------------------------------------------------------------------------		
 		}
-
 
 		//-B: increase the number of active BBUs in the thotel node (the value will be more than 1 since it was already activated)
 		pOXCdst->m_nBBUs++;
 
 		//-B: assign, to the source node of the connection, the hotel node hosting its BBU
 		pOXCsrc->m_nBBUNodeIdsAssigned = bestBBU;
+		
 		return bestBBU; //------------------------------------------------------------------------------------------------------
-
 	}
 
 	//CASE 2 - activate a new BBU
@@ -7696,17 +7567,11 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 		//Assign a second BBU (which was inactive) for the node
 		if (pOXCsrc->m_nBBUNodeIdsAssigned > 0) {
 
+			// -L: the inactive BBU that we found is the same assigned to the src node
+			// -L: ??? how is possible that this BBU was already assigned to the node if it is inactive?
 			if (pOXCsrc->m_nBBUNodeIdsAssigned == pOXCdst2->getId()) {
-
-				cout << "\tThe node has the BBU in itself" << endl;
 				return pOXCsrc->m_nBBUNodeIdsAssigned;
 			}
-
-#ifdef DEBUG
-			cout << "\tChange BBU ( with an inactive one): BBU: " << pOXCdst2->getId() << endl;
-			cout << "\tPrevious BBU is " << pOXCsrc->m_nBBUNodeIdsAssigned << endl;
-#endif
-
 			
 			//BEST BBU NODE: a still inactive bbu
 			//-B: save best precomputed cost
@@ -7720,17 +7585,16 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			pOXCsrc->m_nBBUNodeIdsAssignedLast = dst;
 			pOXCsrc->m_bBBUAlreadyChanged = true;
 			pOXCsrc->m_hChangeBBUTime = hTime;
+			pOXCsrc->m_nCountBBUsChanged++;
 
 			//-B: increase the number of active BBUs in the thotel node (the value will be more than 1 since it was already activated)
 			pOXCdst2->m_nBBUs++;
 
-			pOXCsrc->m_nCountBBUsChanged++;
 #ifdef DEBUGC
 			cout << "Updated the number of bbus for node: " << pOXCdst2->getId() << endl;
 			cout << "Updated number of BBUs changed to " << pOXCsrc->m_nCountBBUsChanged << endl;
 #endif
 			return dst; //----------------------------------------------------------------
-		
 		}
 
 		this->m_hWDMNet.BBUs.push_back(pOXCdst2);
@@ -7770,19 +7634,15 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 #endif // DEBUGB
 			}
 			break;
-
 		}
 		case 3:
 		default:
 			DEFAULT_SWITCH;
 		}
 
-
-
 		//choose better dst node: cost difference
 		if (alreadyActive)
 		{
-
 			//BEST BBU NODE: an already active bbu
 			//-B: save best precomputed cost
 			precomputedCost = pOXCdst->m_nBBUReachCost;
@@ -7792,8 +7652,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			// The BBU already assigned to the node is still the optimal one  
 			if (bestBBU == pOXCsrc->m_nBBUNodeIdsAssigned) {
 
-				cout << "\tThe BBU already assigned to the node is still the optimal one" << endl;
-
 				// I don't have to increase the number of bbu active at dst
 				return bestBBU;
 			}
@@ -7801,9 +7659,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			// The BBU already assigned to the node is no more the optimal one: allocate a new BBU
 			if (pOXCsrc->m_nBBUNodeIdsAssigned >0) {
 
-				cout << "\tThe BBU already assigned to the node is no more the optimal one OR the last link was full" << endl;
-				cout << "\tSecond bbu: Press enter to continue...." << endl;
-				//cin.get();
 				nodeActivatingNewBBU[pOXCsrc->getId()]++;
 				
 				//-B: assign, to the source node of the connection, the hotel node hosting its BBU
@@ -7836,12 +7691,9 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			this->m_hWDMNet.BBUs.push_back(pOXCdst2);
 
 			// Assign a new BBU to the node
+			// -L: The BBU already assigned to the node is no more the optimal one OR the number of connections has been reached: allocate a new BBU
 			if (pOXCsrc->m_nBBUNodeIdsAssigned >0) {
 
-				cout << "\tThe BBU already assigned to the node is no more the optimal one OR the number of connections has been reached: allocate a new BBU" << endl;
-				cout << "\tSecond bbu: Press enter to continue...." << endl;
-				//cin.get();
-				
 				pOXCsrc->m_nBBUNodeIdsAssignedLast = dst;
 				pOXCsrc->m_bBBUAlreadyChanged = true;
 				pOXCsrc->m_hChangeBBUTime = hTime;
@@ -7850,10 +7702,9 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 				pOXCdst2->m_nBBUs++;
 
 				return dst;
-
 			}
+			//-L: no BBU already assigned
 			else {
-
 				//-B: increase the number of active BBUs in the thotel node (the value will be 1 since it was not activated yet)
 				pOXCdst2->m_nBBUs++;
 
@@ -7863,34 +7714,17 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			}
 		}
 	}
+
 	//-B: POLICY 2 - LAST OPTION BEFORE CO-LOCATING BBU AND RRH IN THE SAME SITE
 	//-B: both for fronthaul and midhaul
 	if (pOXCdst == NULL && pOXCdst2 == NULL && BBUPOLICY == 2)
 	{
-#ifdef DEBUGB
-		cout << "\tHERE WE ARE!" << endl;
-		cin.get();
-#endif // DEBUGB
-
 		dst = 0;
 		vector<OXCNode*> otherHotels;
 		buildHotelsList(otherHotels);
 		//if there is at least a hotel
 		if (otherHotels.size() > 0)
 		{
-#ifdef DEBUGB
-			cout << "\tOther hotels list size: " << otherHotels.size() << endl;
-
-			vector<OXCNode*>::const_iterator itr;
-			OXCNode*pNode;
-			for (itr = otherHotels.begin(); itr != otherHotels.end(); itr++)
-			{
-				pNode = (OXCNode*)(*itr);
-				cout << "\t+Hotel: "<<pNode->getId() << endl;
-			}
-			cin.get();
-#endif // DEBUGB
-
 			dst = placeBBU_Metric(src, otherHotels);
 		}
 		//if a valid bbu hotel node has been selected
@@ -7910,10 +7744,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			cout << "\tNumber of BBUs in the hotel chosen(it should be 1): " << pOXCdst2->m_nBBUs << endl;
 			//-B: assign, to the source node of the connection, the hotel node hosting its BBU
 			pOXCsrc->m_nBBUNodeIdsAssigned = dst;
-#ifdef DEBUGB
-			cout << "\tScelto come destinazione l'hotel: " << dst << endl;
-			cin.get();
-#endif // DEBUGB
 
 			return dst;
 		} //END if dst
@@ -7934,7 +7764,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 	//cin.get();
 #endif // DEBUGB
 
-
 	if (pOXCsrc->m_nBBUNodeIdsAssigned == src) {
 
 		cout << "\tThe node has the BBU in itself" << endl;
@@ -7942,6 +7771,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 		return src;
 	}
 
+	// -L: this node has the BBU in another node (not himself)
 	if (pOXCsrc->m_nBBUNodeIdsAssigned > 0 && pOXCsrc->m_nBBUNodeIdsAssigned != src) {
 
 		nodeActivatingNewBBU[pOXCsrc->getId()]++;
@@ -7952,7 +7782,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 		pOXCsrc->m_hChangeBBUTime = hTime;
 		pOXCsrc->m_nBBUs++;
 
-		assert(pOXCsrc->m_nBBUs == 1);
+		assert(pOXCsrc->m_nBBUs == 1); 
 
 		return src;
 
@@ -8809,6 +8639,7 @@ UINT NetMan::placeBBUClose(UINT src, vector<OXCNode*>&BBUsList)
 
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
+		//-L: ??? useless!!
 		//-B: reset boolean var because we are considering another node
 		m_bHotelNotFoundBecauseOfLatency = false;
 
@@ -9079,6 +8910,7 @@ UINT NetMan::placeBBU_Metric(UINT src, vector<OXCNode*>&BBUsList)
 }
 
 // -L: place the CU in the closest candidate of the DU
+// -L: now src is a DU node
 UINT NetMan::placeCUClose(UINT src, vector<OXCNode*>& BBUsList) 
 {
 #ifdef DEBUGB
@@ -11181,8 +11013,6 @@ void NetMan::printSecondBBUs() {
 #endif		
 		}
 	}
-
-
 }
 
 //Verify that by adding all the connections (which are originated in pOXCSrc),
