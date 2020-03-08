@@ -511,7 +511,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 	
 	switch (pEvent->m_hEvent)
 	{
-	case Event::EVT_ARRIVAL:
+	case Event::EVT_ARRIVAL://////////////////////////////////////////////////////
 	{
 		//---------------------------------------------------------------------------------------------
 		//-B: +++++++++++++++***************** CREATE THE CONNECTION *******************+++++++++++++++
@@ -1452,78 +1452,6 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 	cout << "-----------STAMPO RISULTATI FINALI DOPO IL WHILE-----------" << endl;
 #endif // DEBUGB
 
-	/* -B: NOT NEEDED FOR MY WORK
-	std::ofstream out("GraficiGreen.txt",ios_base::app);  
-	out<<"\n------------------------------------------------------------------- ";   
-	out<<"\nPBloc: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<Pblock_hour[oo]<<" ";}
-	out<<"\n\nGreen [kW]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<green_energy_temp[oo]/1000<<" ";}
-	out<<"\n\nBrown [kW]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<brown_energy_temp[oo]/1000<<" "; }
-	out<<"\n\nTransport [kW]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<transport_temp[oo]/1000<<" ";}
-    out<<"\n\nEDFA [kW]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<EDFA_temp[oo]/1000<<" ";}
-	out<<"\n\nProcessing [kW]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<processing_temp[oo]/1000<<" ";}
-	out<<"\n\nC02comp [Kg]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<CO2emissions_comp[oo]/1000<<" ";}
-	out<<"\n\nCO2trans [Kg]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<CO2emissions_transport[oo]/1000<<" ";}
-	out<<"\n\nCO2tot [Kg]: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<CO2emissions_tot[oo]/1000<<" ";}
-	out<<"\n\ncarico: ";
-	for (int oo=0;oo<24;oo++) {
-	out<<carico[oo]<<" ";}
-	*/
-//----------------------------------------------------------------------------------
-
-	/* -B: NOT NEEDED FOR MY WORK
-		// CALCOLO COMPUTING COST TOTALE //
-double green_total=0;
-double brown_total=0;
-for (int oo = 0; oo < 24; oo++) {
-	green_total=green_total+green_energy_temp[oo];  //somma dei 24 valori presi ogni ora
-    brown_total=brown_total+brown_energy_temp[oo];
-}
-double computing_cost=green_total+brown_total;
-
-  cout <<"\n--------------------------";
-  cout <<"\nCOMPUTING COST ";
-  cout <<"\n   GREEN ENERGY: "<<green_total/1000<<" kW";
-  cout <<"\n   BROWN ENERGY: "<<brown_total/1000<<" kW";
-  cout <<"\nTRANSPORT+EDFA COST: "<<Total_Transport_Cost/1000000<<" MW";
-  int cont=0;
-  int tot=0;
-  cout <<"\n\nCONNESSIONI RIUSCITE: ";
-  for (cont = 0; cont != m_pNetMan->m_hWDMNet.nDC; cont++) {
-	  tot = tot + m_pNetMan->m_hWDMNet.DCCount[cont];
-  }
-	  //cout<<m_pNetMan->m_hWDMNet.DCCount[cont]<<" ";  } 
-      cout<<tot<<"\n";
-cout<<"\n--------------------------\n";
-
-
-m_pNetMan->PTot=Total_Transport_Cost/1000000+computing_cost/1000000;
-m_pNetMan->PTransport=Total_Transport_Cost/1000000;
-m_pNetMan->PProc=Total_NodeProcessing_Cost/1000000;
-m_pNetMan->PEDFA=Total_EDFA_Cost/1000000;
-m_pNetMan->PGreen=green_total/1000000;
-m_pNetMan->PBrown=brown_total/1000000;
-//m_pNetMan->PBrown=m_pNetMan->PTot-green_total/1000000; //Compresa Potenza Non Rinnov. EDFA
-	*/
-
-//cout<<"TotalTime:"<<pEvent->m_hTime<<endl;
     // The above while can exit when pEvent is NOT NULL;
     if (pEvent) delete pEvent;
     while (pEvent = m_hEventList.nextEvent()) {
@@ -2217,17 +2145,6 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 #endif // DEBUGB
 
 	static UINT g_nConSeqNo = 1;
-	/* -B: commented
-	static UINT g_ppBWD[][5] = {
-	{192, 64, 16, 4, 1},        // Zipf
-	{10000, 2000, 200, 20, 2},  // SBC
-	{300, 20, 6, 4, 1},         // Sprint 2003
-	{1, 1, 1, 1, 1},            // uniform
-	{0, 0, 0, 1, 0},            // for debug, everything OC48
-	{0, 0, 0, 0, 1},            // for debug, everything OC19k
-	};
-	static UINT g_pBWSummation[] = { 277, 12222, 331, 5, 1, 1 };
-	*/
 
 	//-B: ------------- SELECT SOURCE AND DESTINATION NODE && ASSIGN CONNECTION'S BANDWIDTHS -----------------------
 	UINT nDst;
@@ -2254,32 +2171,6 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		int numOfFreeSources = (pEvent->m_pSource->getNumberOfSources() - pEvent->m_pSource->getNumberOfBusySources());
 		assert(numOfFreeSources > 0);
 
-#ifdef DEBUGX
-		list<AbstractNode*>::const_iterator iter;
-		OXCNode*pOXCNode;
-		for (iter = this->m_pNetMan->m_hWDMNet.m_hNodeList.begin(); iter != this->m_pNetMan->m_hWDMNet.m_hNodeList.end(); iter++)
-		{
-			pOXCNode = (OXCNode*)(*iter);
-			MappedLinkList<UINT, Connection*> conList = this->m_pNetMan->getConnectionDB().m_hConList;
-
-			list<Connection*>::const_iterator itr;
-			Connection* pConDB;
-			UINT numConnection = 0;
-
-			for (itr = conList.begin(); itr != conList.end(); itr++) {
-				pConDB = (Connection*)(*itr);
-				if (pConDB->m_nSrc == pOXCNode->getId()) {
-					numConnection++;
-				}
-			}
-			if (numConnection > 0){
-
-				cout << "\tNumber of connections at node " << pOXCNode->getId() << ": " << numConnection << endl;
-			
-			}
-		}
-#endif
-
 		//-B: take into account small cell extra latency due to "hidden" path between SC and MC (then used in DijkstraLatencyHelper)
 		if (pEvent->m_pSource->m_dTrafficGen > MAXTRAFFIC_MACROCELL) //small cell
 			pEvent->m_pSource->m_dExtraLatency = PROPAGATIONLATENCY * DISTANCE_SC_MC; //-B: another component of ELSWITCHLATENCY should be added but we have an already sctricter than normal latency
@@ -2287,7 +2178,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 			pEvent->m_pSource->m_dExtraLatency = 0;
 		
 		//-B: ASSIGN BACKHAUL BANDWIDTH
-		eBandwidth = BWDGRANULARITY;
+		eBandwidth = BWDGRANULARITY;  // -L: why backhaul bw is = to this ??? in findBestBBUhotel CPRIbwd is used
 
 		//-L: ????????
 		//-B: ASSIGN X-HAUL BANDWIDTH
@@ -2302,15 +2193,12 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 
 		//-B: ASSIGN CONNECTION TYPE
 		connType = Connection::MOBILE_FRONTHAUL;
-#ifdef DEBUG
-		cout << "MOBILE FRONTHAUL\n";
-#endif // DEBUGB
 		
 		//-B: ASSIGN DESTINATION --> FIND BEST BBU HOTEL NODE
 		//-B: ONLY BBUSTACKING IS ACCEPTED (RRH-BBU --> 1:1 ASSOCIATION)
 		if (BBUSTACKING == true && INTRA_BBUPOOLING == false && INTER_BBUPOOLING == false)
 		{
-			nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime);
+			nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime, true);
 
 			if (pEvent->m_pSource->m_nBBUNodeIdsAssignedLast > 0 && pEvent->m_pSource->m_nBBUNodeIdsAssigned > 0) {
 				updateBBUforallConnections(nDst, nSrc, pEvent);
@@ -2329,7 +2217,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	{
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		//nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime);
+		//nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime, false); // -L: CPRIbwd to be changed with midhaul bwd
 		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH

@@ -7273,7 +7273,7 @@ LINK_CAPACITY NS_OCH::NetMan::getUniFiberCap(UniFiber*fiber)
 
 //-B: given the source node id, return the less "expensive" BBU_hotel (according to the policy used)
 //-L: da priorità al costo. Se il migliore è un BBU hotel disattivato, lo attiva e gli mette la BBU del nodo src. 
-UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime hTime)
+UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime hTime, bool duCuSwitch)
 {
 #ifdef DEBUG
 	cout << "-> findBestBBUHotel" << endl;
@@ -7463,14 +7463,14 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 #endif // DEBUGB
 	
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (BBUPOLICY)
+			switch (duCuSwitch ? DUPOLICY : CUPOLICY)
 			{
 				case 0: //1st algorithm
 					//	(in this function the core CO is preferred over the others as BBU hotel node)
 					dst = placeBBUHigh(src, inactiveBBUs);
 					break;
 				case 1: //2nd algorithm
-					dst = placeBBUClose(src, inactiveBBUs);
+					dst = (duCuSwitch ? placeBBUClose(src, inactiveBBUs) : placeCUClose(src, inactiveBBUs));
 					break;
 				case 2: //3rd algorithm
 					dst = placeBBU_Metric (src, inactiveBBUs);
@@ -7487,13 +7487,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			if (dst > 0)
 				pOXCdst2 = (OXCNode*)this->m_hWDMNet.lookUpNodeById(dst);
 
-#ifdef DEBUG
-			//pOXCDst2 could be NULL
-			if (pOXCdst2) {
-				cout << "\tBest candidate BBU hotel node, still inactive: " << pOXCdst2->getId() << endl << endl;
-				//cin.get();
-			}
-#endif // DEBUGB
 		}
 	}
 

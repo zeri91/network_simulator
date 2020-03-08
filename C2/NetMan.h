@@ -363,7 +363,8 @@ public:
 	void printChannelReference(UniFiber * pUniFiber); //-B
 	void printChannelLightpath(); //-B
 	void releaseLinkBandwidth(Lightpath*, UINT); //-B
-	UINT findBestBBUHotel(UINT src, BandwidthGranularity&, SimulationTime hTime);	//-B: for BBUSTACKING
+	// -L: duCuSwitch added to differenciate the DU policy from the CU policy
+	UINT findBestBBUHotel(UINT src, BandwidthGranularity&, SimulationTime hTime, bool duCuSwitch = true);	//-B: for BBUSTACKING
 	UINT findBestBBUPool_Soft(UINT src, BandwidthGranularity bwd); //-B: for INTRA_BBUPOOLING
 	UINT findBestBBUPool_Evolved(UINT src, BandwidthGranularity bwd, BandwidthGranularity backhaulBwd); //-B: for INTER_BBUPOOLING
 
