@@ -1,84 +1,78 @@
-﻿Compilazione avviata 21/03/2015 12:29:44.
-     1>Progetto "C:\Users\brooklyn\Desktop\Gattulli\Simulatore x tesi\Simulatore Versione Finale\CONPROV_TIME_LINK.vcxproj" sul nodo 2 (destinazioni: build).
-     1>InitializeBuildStatus:
-         Creazione di ".\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.unsuccessfulbuild". È stato specificato "AlwaysCreate".
-       ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Ob1 /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0600 /D _MBCS /GF /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo".\CONPROV_TIME_LINK___Win32_Release/" /Fd".\CONPROV_TIME_LINK___Win32_Release/vc100.pdb" /Gd /TP /analyze- /errorReport:prompt AbsPath.cpp AbstractGraph.cpp AbstractPath.cpp BinaryHeap.cpp Channel.cpp Circuit.cpp Connection.cpp ConnectionDB.cpp ConProvisionMain.cpp Event.cpp EventList.cpp Graph.cpp Lightpath.cpp Lightpath_Seg.cpp LightpathDB.cpp Log.cpp MappedLinkList.cpp NetMan.cpp OchException.cpp OchMemDebug.cpp OchObject.cpp OXCNode.cpp SimplexLink.cpp Simulator.cpp Stat.cpp TopoReader.cpp UniFiber.cpp Vertex.cpp WDMNetwork.cpp
-         AbsPath.cpp
-         AbstractGraph.cpp
-         AbstractPath.cpp
-         BinaryHeap.cpp
-         Channel.cpp
-         Circuit.cpp
-         Connection.cpp
-     1>Connection.cpp(142): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(371): vedere la dichiarazione di 'sprintf'
-         ConnectionDB.cpp
-         ConProvisionMain.cpp
-         Event.cpp
-         EventList.cpp
-         Graph.cpp
-         Lightpath.cpp
-         Lightpath_Seg.cpp
-         LightpathDB.cpp
-         Log.cpp
-         MappedLinkList.cpp
-         NetMan.cpp
-         OchException.cpp
-         OchMemDebug.cpp
-         Generazione del codice in corso...
-         Compilazione in corso...
-         OchObject.cpp
-         OXCNode.cpp
-         SimplexLink.cpp
-     1>SimplexLink.cpp(150): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\stdio.h(371): vedere la dichiarazione di 'sprintf'
-         Simulator.cpp
-     1>Simulator.cpp(319): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
-         Stat.cpp
-         TopoReader.cpp
-         UniFiber.cpp
-         Vertex.cpp
-         WDMNetwork.cpp
-         Generazione del codice in corso...
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:".\CONPROV_TIME_LINK___Win32_Release/CONPROV_TIME_LINK.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:".\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /PDB:".\CONPROV_TIME_LINK___Win32_Release/CONPROV_TIME_LINK.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.lib" /MACHINE:X86 .\CONPROV_TIME_LINK___Win32_Release/AbsPath.obj
-         .\CONPROV_TIME_LINK___Win32_Release/AbstractGraph.obj
-         .\CONPROV_TIME_LINK___Win32_Release/AbstractPath.obj
-         .\CONPROV_TIME_LINK___Win32_Release/BinaryHeap.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Channel.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Circuit.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Connection.obj
-         .\CONPROV_TIME_LINK___Win32_Release/ConnectionDB.obj
-         .\CONPROV_TIME_LINK___Win32_Release/ConProvisionMain.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Event.obj
-         .\CONPROV_TIME_LINK___Win32_Release/EventList.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Graph.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Lightpath.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Lightpath_Seg.obj
-         .\CONPROV_TIME_LINK___Win32_Release/LightpathDB.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Log.obj
-         .\CONPROV_TIME_LINK___Win32_Release/MappedLinkList.obj
-         .\CONPROV_TIME_LINK___Win32_Release/NetMan.obj
-         .\CONPROV_TIME_LINK___Win32_Release/OchException.obj
-         .\CONPROV_TIME_LINK___Win32_Release/OchMemDebug.obj
-         .\CONPROV_TIME_LINK___Win32_Release/OchObject.obj
-         .\CONPROV_TIME_LINK___Win32_Release/OXCNode.obj
-         .\CONPROV_TIME_LINK___Win32_Release/SimplexLink.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Simulator.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Stat.obj
-         .\CONPROV_TIME_LINK___Win32_Release/TopoReader.obj
-         .\CONPROV_TIME_LINK___Win32_Release/UniFiber.obj
-         .\CONPROV_TIME_LINK___Win32_Release/Vertex.obj
-         .\CONPROV_TIME_LINK___Win32_Release/WDMNetwork.obj
-         CONPROV_TIME_LINK.vcxproj -> C:\Users\brooklyn\Desktop\Gattulli\Simulatore x tesi\Simulatore Versione Finale\.\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.exe
-       Manifest:
-         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:".\CONPROV_TIME_LINK___Win32_Release/CONPROV_TIME_LINK.exe;#1" /manifest .\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.exe.intermediate.manifest
-       FinalizeBuildStatus:
-         Eliminazione del file ".\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.unsuccessfulbuild" in corso.
-         Aggiornamento timestamp di ".\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.lastbuildstate".
-     1>Compilazione progetto "C:\Users\brooklyn\Desktop\Gattulli\Simulatore x tesi\Simulatore Versione Finale\CONPROV_TIME_LINK.vcxproj" (destinazioni: build) completata.
-
-Compilazione completata.
-
-Tempo trascorso 00:00:51.29
+﻿  AbsPath.cpp
+  AbstractGraph.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\AbstractGraph.cpp(766,3): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'int'
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\AbstractGraph.cpp(832,3): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'int'
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\AbstractGraph.cpp(3172,3): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'int'
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\AbstractGraph.cpp(3326,3): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'int'
+  AbstractPath.cpp
+  BinaryHeap.cpp
+  Channel.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Channel.cpp(29,25): warning C4834: il valore restituito della funzione con attributo 'nodiscard' verrà rimosso
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Channel.cpp(39,28): warning C4834: il valore restituito della funzione con attributo 'nodiscard' verrà rimosso
+  Circuit.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Circuit.cpp(902,64): warning C4244: '+=': conversione da 'double' a 'float'. Possibile perdita di dati.
+  Connection.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Connection.cpp(158,1): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message : vedere la dichiarazione di 'sprintf'
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Connection.cpp(163,1): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message : vedere la dichiarazione di 'sprintf'
+  ConnectionDB.cpp
+  ConProvisionMain.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\ConProvisionMain.cpp(75,12): warning C4244: 'argomento': conversione da 'time_t' a 'unsigned int'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\ConProvisionMain.cpp(711,23): warning C4018: '<': errata corrispondenza tra signed e unsigned
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\ConProvisionMain.cpp(466,1): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(208): message : vedere la dichiarazione di 'fopen'
+  Event.cpp
+  EventList.cpp
+  Graph.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Graph.cpp(203,15): warning C4101: 's': variabile locale senza riferimenti
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Graph.cpp(344,76): warning C4018: '>=': errata corrispondenza tra signed e unsigned
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Graph.cpp(624,16): warning C4101: 'pSLinkTemp': variabile locale senza riferimenti
+  Lightpath.cpp
+  Lightpath_Seg.cpp
+  LightpathDB.cpp
+  Log.cpp
+  MappedLinkList.cpp
+  NetMan.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(977,20): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(5795,16): warning C4101: 'linkPath': variabile locale senza riferimenti
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10405,47): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10406,49): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10558,66): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10559,68): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+  OchException.cpp
+  OchMemDebug.cpp
+  Generazione del codice in corso...
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10741): warning C4715: 'NS_OCH::NetMan::isLastLinkFull': non tutti i percorsi di controllo restituiscono un valore
+  Compilazione in corso...
+  OchObject.cpp
+  OXCNode.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\OXCNode.cpp(628,20): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\OXCNode.cpp(633,83): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\OXCNode.cpp(645,19): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+  SimplexLink.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\SimplexLink.cpp(74,36): warning C4305: '=': troncamento da 'double' a 'float'
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\SimplexLink.cpp(172,4): warning C4477: 'sprintf': con la stringa di formato '%s' è necessario un argomento di tipo 'char *', ma il tipo dell'argomento variadic 2 è 'int'
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\SimplexLink.cpp(172,1): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message : vedere la dichiarazione di 'sprintf'
+  Simulator.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(568,12): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(1791,36): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2443,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2491,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2500,25): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2518,94): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2558,12): warning C4018: '<': errata corrispondenza tra signed e unsigned
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2560,41): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2573,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2575,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2577,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2580,47): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+  Stat.cpp
+  TopoReader.cpp
+  UniFiber.cpp
+  Vertex.cpp
+  WDMNetwork.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\WDMNetwork.cpp(8789,36): warning C4101: 'pDebug': variabile locale senza riferimenti
+  Generazione del codice in corso...
+  CONPROV_TIME_LINK.vcxproj -> C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\.\CONPROV_TIME_LINK___Win32_Release\CONPROV_TIME_LINK.exe

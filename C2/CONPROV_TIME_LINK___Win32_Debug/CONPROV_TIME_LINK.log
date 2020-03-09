@@ -1,15 +1,15 @@
 ﻿  cl : warning della riga di comando D9035 : l'opzione 'Gm' è deprecata e verrà rimossa in una futura versione
   Simulator.cpp
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(629,12): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(1852,36): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2504,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2552,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2561,25): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2579,94): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2619,12): warning C4018: '<': errata corrispondenza tra signed e unsigned
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2621,41): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2634,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2636,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2638,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2641,47): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(568,12): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(1791,36): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2443,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2491,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2500,25): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2518,94): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2558,12): warning C4018: '<': errata corrispondenza tra signed e unsigned
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2560,41): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2573,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2575,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2577,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2580,47): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
   CONPROV_TIME_LINK.vcxproj -> C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\.\CONPROV_TIME_LINK___Win32_Debug\CONPROV_TIME_LINK.exe

@@ -212,67 +212,6 @@ void Simulator::run(SimulationTime delay)
     bool bDone = false;
     Event *pEvent;
 	bool transitory = false;
-	//double diff=1000;
-	//bool first=true;
-    
-    //mettere a 0 m_used,
-	//UniFiber *pUniFiber;
-	//list<AbstractLink*>::const_iterator itr;
-	//for (itr=m_pNetMan->m_hWDMNet.m_hLinkList.begin(); itr!=m_pNetMan->m_hWDMNet.m_hLinkList.end(); itr++) {
-	//	pUniFiber = (UniFiber*)(*itr);
-	//	(*itr)->m_used=0;
-	//	cout<<"init"<<(*itr)->getId()<<"  "<<(*itr)->m_used;	
-	//}
-	
-	/* //-B: NOT NEEDED FOR MY WORK
-	// inizializzazione a 0 dei vettori che contano le connessioni nei DC
-	int kk=0;
-	for (kk = 0; kk != m_pNetMan->m_hWDMNet.nDC; kk++)
-	{
-		m_pNetMan->m_hWDMNet.DCCount[kk]=0; 
-		m_pNetMan->m_hWDMNet.nconn[kk]=0;
-	}
-
-	double Total_Transport_Cost=0;
-    double Total_EDFA_Cost=0;
-	double Total_NodeProcessing_Cost=0;
-
-	double *gp = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *green_energy_DC = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *brown_energy_DC = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *gp_rest = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *gp_incr = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *diff_conn = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *g_en = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *DCprocessing = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *diff_DCprocessing = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *DCprocessing_old = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *g_en_residual = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *gptot = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *nconn_old = new double[m_pNetMan->m_hWDMNet.nDC];
-
-	double green_energy_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double brown_energy_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double transport_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double CO2emissions_comp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };			//emissioni CO2 per computing
-	double CO2emissions_transport[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };		//emissioni CO2 per trasporto
-	double CO2emissions_tot[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };			//emissioni CO2 totali
-	double EDFA_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double processing_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double provi[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	//std::ofstream fout("dump.txt",ios_base::app);
-	for (int k = 0; k != m_pNetMan->m_hWDMNet.nDC; k++) {
-	gp_rest[k]=0;
-	gp_incr[k]=0;
-	brown_energy_DC[k]=0;
-	green_energy_DC[k]=0;
-	diff_conn[k]=0;
-	nconn_old[k]=0;
-	m_pNetMan->m_hWDMNet.DCprocessing[k]=0;
-	DCprocessing_old[k]=0;
-	diff_DCprocessing[k]=0;
-	}
-	*/
 	
 	//-B:
 	double count = -1;
@@ -2198,7 +2137,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		//-B: ONLY BBUSTACKING IS ACCEPTED (RRH-BBU --> 1:1 ASSOCIATION)
 		if (BBUSTACKING == true && INTRA_BBUPOOLING == false && INTER_BBUPOOLING == false)
 		{
-			nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime, true);
+			nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime);
 
 			if (pEvent->m_pSource->m_nBBUNodeIdsAssignedLast > 0 && pEvent->m_pSource->m_nBBUNodeIdsAssigned > 0) {
 				updateBBUforallConnections(nDst, nSrc, pEvent);
@@ -2217,8 +2156,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	{
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		//nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime, false); // -L: CPRIbwd to be changed with midhaul bwd
-		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
+		nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
+		//nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
 		eBandwidth = pEvent->fronthaulEvent->m_pConnection->m_eBandwidth;

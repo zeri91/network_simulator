@@ -33,6 +33,8 @@
 #include "BinaryHeap.h"
 #include "OXCNode.h"
 
+using namespace std;
+
 
 //#define DEBUGMASSIMO
 //#define Con_Prov
@@ -7271,9 +7273,150 @@ LINK_CAPACITY NS_OCH::NetMan::getUniFiberCap(UniFiber*fiber)
 	return cap;
 }
 
+UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime hTime) {
+	OXCNode* pOXCsrc = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
+	OXCNode* pOXCdst = NULL;
+	assert(pOXCsrc);
+	UINT dst = 0, bestCU = 0;
+
+	m_hGraph.preferWavelPath();
+	invalidateSimplexLinkDueToCapOrStatus(bwd, 1);
+
+	if (ONLY_ACTIVE_GROOMING)
+	{
+		this->invalidateSimplexLinkGrooming();
+	}
+
+	// -L: a CU is already assigned to this node
+	if (pOXCsrc->m_nCUNodeIdAssigned != 0)
+	{
+		//dst node of this connection will be the CU hotel node already assigned to this source node
+		return pOXCsrc->m_nCUNodeIdAssigned; 
+	}
+
+	//  If source node is a CU hotel node
+	if (pOXCsrc->getBBUHotel()) // -L: if the node is a BBUHotel, then getBBUHotel() returns true
+	{
+		//if the source node has already its CU there and the source has other CU than itself
+		if (pOXCsrc->m_nCUNodeIdAssigned == src && pOXCsrc->m_nCUs >= 1) {
+			return src;
+		}
+		if (isAlreadyActive(pOXCsrc))
+		{
+			//-B: check availability in terms of max num of active CUs
+			if (checkAvailabilityHotelNode(pOXCsrc))
+			{
+				pOXCsrc->m_nCUs++; //-L: increase num of active CU in this node
+				pOXCsrc->m_nBBUNodeIdsAssigned = src;
+				return src;
+			}
+		}
+		else
+			cout << "no more space for other CUs" << endl;
+	}
+
+	//ELSE IF this candidate hotel node is still inactive (does not have any CU in it)
+	//	or is already full of CUs (or, simply, the source node is not a candidate BBU hotel node)
+	// check other candidate hotel nodes using a sorted hotels list
+
+	pOXCdst = NULL;  // -L: best active CU (I use an already active CU) 
+	OXCNode* pOXCdst2 = NULL; //-L: best inactive CU (need to activate a new one)
+	bool enough = true;
+
+	//-B: build a list with all bbu hotel node already active (BBUs > 0) with enough "space" to host a new BBU (BBUs < MAXNUMBBU)
+	vector<OXCNode*>auxBBUsList;
+	genAuxBBUsList(auxBBUsList); // -L: list with already active BBUs
+
+	if (auxBBUsList.size() > 0)
+	{
+
+		//SEARCH FOR "BEST" CU AMONG (!) ALREADY ACTIVATED (!) CU HOTEL NODES
+		switch (CUPOLICY)
+		{
+			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
+			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
+		case 0:
+			bestCU = placeBBUHigh(src, auxBBUsList);
+			break;
+		case 1:
+			bestCU = placeCUClose(src, auxBBUsList);
+			break;
+		default:
+			DEFAULT_SWITCH;
+		}
+
+		//if a valid CU hotel node has been selected
+		if (bestCU > 0)
+			pOXCdst = (OXCNode*)this->m_hWDMNet.lookUpNodeById(bestCU);
+	}
+
+	if (bestCU == 0)
+	{
+		//-B: it means no valid dst hotel node was found in the algorithm placeBBUX
+		enough = false;
+	}
+
+	//-B: STEP 3 - check still inactive candidate BBU hotel nodes
+	if (!enough)
+	{
+		//-B: build inactive candidate BBU hotel nodes list
+		//(for policy #2, the hotels list was reduced before starting the simulation, in buildBestHotelsList() method)
+		vector<OXCNode*> inactiveBBUs;
+		buildNotActiveBBUsList(inactiveBBUs);
+
+		//if there is at least an INactive BBU hotel node
+		if (inactiveBBUs.size() > 0)
+		{
+			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
+			switch (CUPOLICY)
+			{
+			case 0: //1st algorithm
+				//	(in this function the core CO is preferred over the others as BBU hotel node)
+				dst = placeBBUHigh(src, inactiveBBUs);
+				break;
+			case 1: //2nd algorithm
+				dst = placeCUClose(src, inactiveBBUs);
+				break;
+			default:
+				DEFAULT_SWITCH;
+			}
+
+			//if a valid bbu hotel node has been selected
+			if (dst > 0)
+				pOXCdst2 = (OXCNode*)this->m_hWDMNet.lookUpNodeById(dst);
+		}
+	}
+
+	OXCNode* bbuNode = NULL;
+
+	//CASE 1 - use an already active BBU
+	if (pOXCdst && pOXCdst2 == NULL)
+	{
+		//BEST BBU NODE: an already active bbu
+		//-B: save best precomputed cost
+		precomputedCost = pOXCdst->m_nBBUReachCost;
+		//-B: save best precomputed path
+		precomputedPath = pOXCdst->pPath;
+
+		// -L: bestBBU trovata è quella che aveva gia
+		if (bestCU == pOXCsrc->m_nCUNodeIdAssigned) {
+			return bestCU;
+		}
+
+		//-B: increase the number of active BBUs in the hotel node (the value will be more than 1 since it was already activated)
+		pOXCdst->m_nBBUs++;
+
+		//-B: assign, to the source node of the connection, the hotel node hosting its BBU
+		pOXCsrc->m_nCUNodeIdAssigned = bestCU;
+
+		return bestCU; 
+	}
+
+}
+
 //-B: given the source node id, return the less "expensive" BBU_hotel (according to the policy used)
 //-L: da priorità al costo. Se il migliore è un BBU hotel disattivato, lo attiva e gli mette la BBU del nodo src. 
-UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime hTime, bool duCuSwitch)
+UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime hTime)
 {
 #ifdef DEBUG
 	cout << "-> findBestBBUHotel" << endl;
@@ -7331,7 +7474,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//-B: STEP 0a: check if this source node has an already assigned BBU in one of the hotel nodes
-	if (pOXCsrc->m_nBBUNodeIdsAssigned == 1)
+	if (pOXCsrc->m_nBBUNodeIdsAssigned == 1) // -L: ???????? why ==1 should be != 1
 	{
 		//dst node of this connection will be the BBU hotel node already assigned to this source node
 		//	(independently of how many BBUs there are into it)
@@ -7349,6 +7492,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 			return src;
 		}
 		
+		//-L: ???? it's not doing anything, just a cout
 		//if the source node has only itself as bbu, i can change bbu and switch this off
 		if ((pOXCsrc->m_nBBUNodeIdsAssigned == src && pOXCsrc->m_nBBUs == 1)) {
 			cout << "\tNodo sorgente (" << src << ") ha solo se stessa come BBU"<< endl;
@@ -7463,14 +7607,14 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity&bwd, SimulationTime
 #endif // DEBUGB
 	
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (duCuSwitch ? DUPOLICY : CUPOLICY)
+			switch (BBUPOLICY)
 			{
 				case 0: //1st algorithm
 					//	(in this function the core CO is preferred over the others as BBU hotel node)
 					dst = placeBBUHigh(src, inactiveBBUs);
 					break;
 				case 1: //2nd algorithm
-					dst = (duCuSwitch ? placeBBUClose(src, inactiveBBUs) : placeCUClose(src, inactiveBBUs));
+					dst = placeBBUClose(src, inactiveBBUs);
 					break;
 				case 2: //3rd algorithm
 					dst = placeBBU_Metric (src, inactiveBBUs);

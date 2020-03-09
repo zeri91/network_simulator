@@ -115,12 +115,14 @@ public:
 	//	(the problem is that most of prints, related to the first meaning, don't have sense for INTER_BBUPOOLING)!!!!!!!!!!!!
 	int						m_nBBUs; // 0 for all nodes, both nodes that are not hotels and for hotel nodes
 									 // num of BBU actives in this hotel node (obviously, in case it is an hotel node)
+	int						m_nCUs; // -L: 0 for all nodes, numof CU actives in this hotel node
 
 	LINK_COST				m_nBBUReachCost;			//cost-distance from a node to THIS candiate hotel
 	LINK_COST				m_nNetStage;				//cost-distance of a node from core CO
 	int						m_nReachabilityDegree;		//-B: num of mobile nodes that can reach THIS OXC (hotel) node
 	list<AbstractLink*>		pPath;						//-B: needed while computing the best Hotel node -> path between a node and the core CO
 	UINT					m_nBBUNodeIdsAssigned;		//initialized = 0 for all nodes		// hotel node id selected to contain the BBU of a certain node
+	UINT					m_nCUNodeIdAssigned;		//-L: initialized = 0 for all nodes // hotel node id that cointain the CU of a certain node
 	UINT					m_nBBUNodeIdsAssignedLast;  //initialized = 0 for all nodes. it cointains the last BBU associated to the node when it associates more than one BBU
 	UINT					m_nProximityDegree;			//-B: similar principle to reachability degree --> OBSOLETE
 														//	(#times a hotel is seen as the closest one for each node of the network)
