@@ -1,15 +1,23 @@
 ﻿  cl : warning della riga di comando D9035 : l'opzione 'Gm' è deprecata e verrà rimossa in una futura versione
+  NetMan.cpp
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(977,20): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(5795,16): warning C4101: 'linkPath': variabile locale senza riferimenti
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10670,47): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10671,49): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10823,66): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(10824,68): warning C4244: '+=': conversione da 'NS_OCH::SimulationTime' a 'float'. Possibile perdita di dati.
+  Generazione del codice in corso...
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(7417): warning C4715: 'NS_OCH::NetMan::findBestCUHotel': non tutti i percorsi di controllo restituiscono un valore
+C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\NetMan.cpp(11006): warning C4715: 'NS_OCH::NetMan::isLastLinkFull': non tutti i percorsi di controllo restituiscono un valore
+  Omissione in corso... (nessuna modifica importante rilevata)
+  WDMNetwork.cpp
+  UniFiber.cpp
   Simulator.cpp
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(629,12): warning C4244: 'inizializzazione': conversione da 'double' a 'int'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(1852,36): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2504,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2552,18): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2561,25): warning C4244: 'inizializzazione': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2579,94): warning C4244: 'argomento': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2619,12): warning C4018: '<': errata corrispondenza tra signed e unsigned
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2621,41): warning C4244: '+=': conversione da 'double' a 'int'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2634,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2636,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2638,59): warning C4244: '=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
-C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\Simulator.cpp(2641,47): warning C4244: '+=': conversione da 'double' a 'NS_OCH::UINT'. Possibile perdita di dati.
+  Lightpath_Seg.cpp
+  LightpathDB.cpp
+  Lightpath.cpp
+  Graph.cpp
+  EventList.cpp
+  ConProvisionMain.cpp
+  Circuit.cpp
   CONPROV_TIME_LINK.vcxproj -> C:\Users\lorenzo\Desktop\maxC-new\network_simulator\C2\.\CONPROV_TIME_LINK___Win32_Debug\CONPROV_TIME_LINK.exe

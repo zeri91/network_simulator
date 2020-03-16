@@ -807,6 +807,7 @@ void EventList::updateOldList_Unprotected(SimulationTime now, SimulationTime int
 	}
 }
 
+// -L: cancella il primo elemento della lista
 void NS_OCH::EventList::updateFronthaulEventList(Event*pEvent)
 {
 #ifdef DEBUGC

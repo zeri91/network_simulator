@@ -29,9 +29,9 @@ OXCNode::OXCNode(UINT nNodeId, WConversionCapability eConversion,
 	AbstractNode(nNodeId, Nchan), m_eConversion(eConversion), m_eGrooming(eGrooming), m_dTrafficProcessed(0), m_dExtraLatency(0),
 	m_nTx(nTx), m_nRx(nRx), m_nMaxW(0), m_nBBUNodeIdsAssigned(0), m_nBBUNodeIdsAssignedLast(0), m_nNetStage(UNREACHABLE), m_nBetweennessCentrality(0),
 	m_nFreeTx(nTx), m_nFreeRx(nRx), m_nBBUReachCost(UNREACHABLE), m_nReachabilityDegree(0), m_nProximityDegree(0), m_uNumOfBBUSupported(0),
-	m_pStateWDM(NULL), m_bNewLP(false), m_DCFlag(nDCFlag), m_TimeZone(nTimeZone), m_dCostMetric(UNREACHABLE), m_dTrafficGen(0)
+	m_pStateWDM(NULL), m_bNewLP(false), m_DCFlag(nDCFlag), m_TimeZone(nTimeZone), m_dCostMetric(UNREACHABLE), m_dTrafficGen(0), m_nCUNodeIdAssigned(0), m_nCUs(0)
 {
-	
+	//-L: ???? no sense, in any case m_nBBUs = 0
 	if (nTimeZone == 1) //BBU hotel node
 	{
 		bbuHotel = true;
@@ -51,7 +51,7 @@ OXCNode::OXCNode(UINT nNodeId, WConversionCapability eConversion,
 	m_nFreeTx(nTx), m_nFreeRx(nRx), m_nBBUReachCost(UNREACHABLE), m_nReachabilityDegree(0), m_nProximityDegree(0),
 	m_pStateWDM(NULL), m_bNewLP(false), m_DCFlag(nDCFlag), m_TimeZone(nTimeZone), m_dCostMetric(UNREACHABLE),
 	m_nArea(nArea), m_fDistanceFromCoreCO(0), m_dTrafficGen(0), m_dTrafficProcessed(0), m_dActivityTime(0),
-	m_dExtraLatency(0), m_uNumOfBBUSupported(0), m_bBBUAlreadyChanged(false), m_nPreviousBBU(0), m_nCountBBUsChanged(0)
+	m_dExtraLatency(0), m_uNumOfBBUSupported(0), m_bBBUAlreadyChanged(false), m_nPreviousBBU(0), m_nCountBBUsChanged(0), m_nCUNodeIdAssigned(0), m_nCUs(0)
 {
 	if (cellFlag == 0)
 		m_dMaxTraffic = MAXTRAFFIC_MACROCELL;

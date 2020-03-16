@@ -212,67 +212,6 @@ void Simulator::run(SimulationTime delay)
     bool bDone = false;
     Event *pEvent;
 	bool transitory = false;
-	//double diff=1000;
-	//bool first=true;
-    
-    //mettere a 0 m_used,
-	//UniFiber *pUniFiber;
-	//list<AbstractLink*>::const_iterator itr;
-	//for (itr=m_pNetMan->m_hWDMNet.m_hLinkList.begin(); itr!=m_pNetMan->m_hWDMNet.m_hLinkList.end(); itr++) {
-	//	pUniFiber = (UniFiber*)(*itr);
-	//	(*itr)->m_used=0;
-	//	cout<<"init"<<(*itr)->getId()<<"  "<<(*itr)->m_used;	
-	//}
-	
-	/* //-B: NOT NEEDED FOR MY WORK
-	// inizializzazione a 0 dei vettori che contano le connessioni nei DC
-	int kk=0;
-	for (kk = 0; kk != m_pNetMan->m_hWDMNet.nDC; kk++)
-	{
-		m_pNetMan->m_hWDMNet.DCCount[kk]=0; 
-		m_pNetMan->m_hWDMNet.nconn[kk]=0;
-	}
-
-	double Total_Transport_Cost=0;
-    double Total_EDFA_Cost=0;
-	double Total_NodeProcessing_Cost=0;
-
-	double *gp = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *green_energy_DC = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *brown_energy_DC = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *gp_rest = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *gp_incr = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *diff_conn = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *g_en = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *DCprocessing = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *diff_DCprocessing = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *DCprocessing_old = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *g_en_residual = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *gptot = new double[m_pNetMan->m_hWDMNet.nDC];
-	double *nconn_old = new double[m_pNetMan->m_hWDMNet.nDC];
-
-	double green_energy_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double brown_energy_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double transport_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double CO2emissions_comp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };			//emissioni CO2 per computing
-	double CO2emissions_transport[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };		//emissioni CO2 per trasporto
-	double CO2emissions_tot[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };			//emissioni CO2 totali
-	double EDFA_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double processing_temp[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	double provi[] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
-	//std::ofstream fout("dump.txt",ios_base::app);
-	for (int k = 0; k != m_pNetMan->m_hWDMNet.nDC; k++) {
-	gp_rest[k]=0;
-	gp_incr[k]=0;
-	brown_energy_DC[k]=0;
-	green_energy_DC[k]=0;
-	diff_conn[k]=0;
-	nconn_old[k]=0;
-	m_pNetMan->m_hWDMNet.DCprocessing[k]=0;
-	DCprocessing_old[k]=0;
-	diff_DCprocessing[k]=0;
-	}
-	*/
 	
 	//-B:
 	double count = -1;
@@ -309,11 +248,6 @@ void Simulator::run(SimulationTime delay)
 	}
 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	//----------------------------------------------------------------------------------------------------------------------
-
-#ifdef DEBUGB
-	//UINT numGroomNodes = m_pNetMan->countGroomingNodes();
-	//cout << "Ci sono " << numGroomNodes << " grooming nodes" << endl;
-#endif // DEBUGB
 
 	//-B: pointer to NetMan object
 	m_hEventList.m_pNetMan = m_pNetMan;
@@ -637,70 +571,17 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 		m_dArrivalRate = m_dArrivalRate_var*((tassiarrivo[time]));
 		//----------------------------------------------------------------------------------------
 
-		/* //-B: NOT NEEDED FOR MY WORK
-			//inizializzazione a 0
-		 for (k = 0; k != m_pNetMan->m_hWDMNet.nDC; k++) {
-			gptot[k]=0;
-			gp[k]=0;
-		}
-
-		 for (k = 0; k != m_pNetMan->m_hWDMNet.nDC; k++)
-		 {
-			if (m_pNetMan->m_hWDMNet.DCvettALL[k] != 99)
-			{
-				for (j = start_time; j != (time + 1); j++)
-				{
-				   j=j%24;
-				   gp_incr[k]=m_pNetMan->m_hWDMNet.EstimateGreenPower(m_pNetMan->m_hWDMNet.DCvettALL[k],m_pNetMan->m_hWDMNet.TZvett[k],j);  //gp[k] contiente l'energia Green di partenza nel DC k-esimo all'istante j, con il proprio TimeZone
-				   gptot[k]=gptot[k]+gp_incr[k];				//gptot[k] è la somma di tutta l'energia Green del k-esimo DC
-				}
-				gp[k]=gp_incr[k]+gp_rest[k];
-				m_pNetMan->m_hWDMNet.gp[k]=gp[k];
-				DCprocessing[k]=m_pNetMan->m_hWDMNet.DCprocessing[k];
-				g_en_residual[k]=gptot[k]-DCprocessing[k];  //somma di tutti gli incrementi fino a quest'ora + energia avanzata (se c'è) - potenza necessaria per le connessioni di quel nodo fino a quel momento
-				m_pNetMan->m_hWDMNet.g_en_residual[k]=g_en_residual[k];
-				//cout<<"\nresidual: "<<g_en_residual[k]<<" DC proc: "<<DCprocessing[k];
-				//cin.get();
-			}
-		}
-		//trova il nodo con la massima disponibilità di energia
-		int i,MaxNodo;
-		double max=-32000;
-		for (i = 0; i < m_pNetMan->m_hWDMNet.nDC; i++) {
-			if (g_en_residual[i]>max) {
-				max=g_en_residual[i];
-				MaxNodo=m_pNetMan->m_hWDMNet.DCvettALL[i];
-				m_pNetMan->m_hWDMNet.BestGreenNode = MaxNodo;
-		   }
-		}
-	//cout<<"\nMaggiore disponibilita' di energia (" <<max<<" Watt) nel nodo "<<MaxNodo<<"\n";
-	//cin.get();
-
-	//Quando max è minore di 0 si usa energia NON rinnovabile
-
-				// compute route, and set up if successful
-
-			  // Make a service copy of event_List
-			  // to be decremented of departure events
-		*/
-
-
 		list<Event*> hDepEventList;
 		m_hEventList.ExtractDepEvents(hDepEventList);//FABIO: DA RIFARE
 														//QUANDO CONSIDERERO' I TEMPI
 														//DI CHIAMATA
-		//m_hEventList.dump2(cout);
-
-
-//		pCon->m_nSrc=0;
-//		pCon->m_nDst=4;
-//if(pCon->m_nSequenceNo>500)
 
 		//-L: ??? perchè? 
 		//-B: non incremento il num di arrivi solo nel caso in cui l'evento corrente sia un mobile/fixed-mobile backhaul event
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_FRONTHAUL
-			|| pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
+			|| pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL
+			|| pCon->m_eConnType == Connection::FIXED_MIDHAUL)
 		{
 			//-B: increase the number of arrivals (fronthaul and its corresponding backhaul are considered as a single connection)
 			m_hEventList.increaseArr();
@@ -723,9 +604,11 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			cout << "\n\tNODO SORGENTE = NODO DESTINAZIONE" << endl;
 #endif // DEBUG
 
-			if (pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL || pCon->m_eConnType == Connection::MOBILE_FRONTHAUL) 
+			if (pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL || pCon->m_eConnType == Connection::MOBILE_FRONTHAUL || Connection::FIXED_MIDHAUL) 
 			{
 				m_pNetMan->m_hGraph.resetLinks();
+
+				//-L: ??? no sense
 				if (!isBBUNode(pCon->m_nDst)) {
 #ifdef DEBUG
 					cout << "LINKS HAVE BEEN RESET" << endl;
@@ -2198,7 +2081,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		//-B: ONLY BBUSTACKING IS ACCEPTED (RRH-BBU --> 1:1 ASSOCIATION)
 		if (BBUSTACKING == true && INTRA_BBUPOOLING == false && INTER_BBUPOOLING == false)
 		{
-			nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime, true);
+			nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime);
 
 			if (pEvent->m_pSource->m_nBBUNodeIdsAssignedLast > 0 && pEvent->m_pSource->m_nBBUNodeIdsAssigned > 0) {
 				updateBBUforallConnections(nDst, nSrc, pEvent);
@@ -2217,8 +2100,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	{
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		//nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime, false); // -L: CPRIbwd to be changed with midhaul bwd
-		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
+		nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
+		//nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
 		eBandwidth = pEvent->fronthaulEvent->m_pConnection->m_eBandwidth;

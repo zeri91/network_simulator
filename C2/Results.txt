@@ -20,38 +20,38 @@ Channel capacity [OC1]: 1944
 Fronthaul latency budget: 0.000100
 Transitory phase duration: 5000
 Running phase duration: 10000
-Max tot num of connections to be simulated: 5000
+Max tot num of connections to be simulated: 2000
 Confidence percentage: 0.950000
 
 RESULTS:
-Simulation Time: 1.387626 + transitory time: 0.000000 - # connections: 5000.000000
+Simulation Time: 0.271278 + transitory time: 0.000000 - # connections: 2000.000000
 Policy BBU placement: placeBBUClose
 Errore percentuale: 100.000000
 
 CARRIED LOAD [bh prov conn*time] = 0.000000
-AVERAGE latency = 0.000012
-Number of active (hotel) nodes: 14 (PEAK) - 13.933664 (AVERAGE)
-Number of active BBUs: 80 (PEAK) - 78.702325 (AVERAGE)
-Number of active small cells: 1 (PEAK) - 0.025355 (AVERAGE)
-Number of active lightpaths: 109 (PEAK) - 92.040771 (AVERAGE)
-Network cost: 1509 (PEAK) - 1485.405666 (AVERAGE) [costo rete * time]
-Network cost per OC1 (<--> cost per connection OR cost per bit): costo rete / provisioned backhaul bwd = 1485.405666 / 29994 = 0.049523
+AVERAGE latency = 0.000011
+Number of active (hotel) nodes: 14 (PEAK) - 13.539643 (AVERAGE)
+Number of active BBUs: 80 (PEAK) - 73.733059 (AVERAGE)
+Number of active small cells: 0 (PEAK) - 0.000000 (AVERAGE)
+Number of active lightpaths: 79 (PEAK) - 72.750707 (AVERAGE)
+Network cost: 1479 (PEAK) - 1426.714070 (AVERAGE) [costo rete * time]
+Network cost per OC1 (<--> cost per connection OR cost per bit): costo rete / provisioned backhaul bwd = 1426.714070 / 6000 = 0.237786
 
-Number of provisioned connections: 4999
+Number of provisioned connections: 1000
 Number of blocked connections: 0
 Number of blocked fronthaul connections (mob + fixmob): 0 + 0 = 0
 Number of blocked backhaul connections (mob + fixmob + fixed): 0 + 0 + 0 = 0
 
-BWD of provisioned connections (FH + BH): 174965
-BWD of blocked connections (FH + BH): 0
+BWD of provisioned connections (FH + MH + BH): 35000
+BWD of blocked connections (FH + MH + BH): 0
 BWD of blocked fronthaul connections (mob + fixmob): 0 + 0 = 0
 BWD of blocked backhaul connections (mob + fixmob + fix): 0 + 0 + 0 = 0
-BWD of provisioned fronthaul connections (mob + fixmob): 144971 + 0 = 144971
-BWD of provisioned backhaul connections (mob + fixmob + fix): 29994 + 0 + 0 = 29994
+BWD of provisioned fronthaul connections (mob + fixmob): 29000 + 0 = 29000
+BWD of provisioned backhaul connections (mob + fixmob + fix): 6000 + 0 + 0 = 6000
 Blocked BH BWD for blocked bh connections: 0
 Blocked FH BWD for blocked fh connections: 0
 
-Blocking probability - BACKHAUL (Overall; BWD) = Blocked backhaul bwd / total backhaul bwd = 0 / 29994 = 0.000000
+Blocking probability - BACKHAUL (Overall; BWD) = Blocked backhaul bwd / total backhaul bwd = 0 / 6000 = 0.000000
 
 Blocking probability because of latency: 0 / 0
 Blocking probability because of fity: 0 / 0
@@ -74,22 +74,22 @@ BLOCKING PROBABILITY BACKHAUL (BWD; overall):
 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
 AVG NETWORK COST (weighted on time; overall):
 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
-Activity time of each node (simulation time  = 1.387626):
-Node #80 - activity time: 1.385833
-Node #75 - activity time: 1.383910
-Node #70 - activity time: 1.385570
-Node #58 - activity time: 1.367890
-Node #56 - activity time: 1.382105
-Node #46 - activity time: 1.386235
-Node #43 - activity time: 1.386462
-Node #38 - activity time: 1.384186
-Node #34 - activity time: 1.381046
-Node #31 - activity time: 1.387582
-Node #25 - activity time: 1.383100
-Node #14 - activity time: 1.355824
-Node #10 - activity time: 1.386887
-Node #5 - activity time: 1.377574
-Node #4 - activity time: 1.386744
+Activity time of each node (simulation time  = 0.271278):
+Node #80 - activity time: 0.268527
+Node #75 - activity time: 0.270587
+Node #70 - activity time: 0.266361
+Node #58 - activity time: 0.247128
+Node #56 - activity time: 0.271026
+Node #46 - activity time: 0.268388
+Node #43 - activity time: 0.265795
+Node #38 - activity time: 0.262641
+Node #34 - activity time: 0.263830
+Node #31 - activity time: 0.245736
+Node #25 - activity time: 0.267973
+Node #14 - activity time: 0.262099
+Node #10 - activity time: 0.265675
+Node #5 - activity time: 0.254602
+Node #4 - activity time: 0.261030
 
 Hotels node of each node:
 Node #80 - hotels logged: 80 
@@ -174,15 +174,15 @@ Node #2 - hotels logged: 80
 Node #1 - hotels logged: 56 
 
 BACKHAUL (provisioned) carried load MONICA[BH BWD * time] = 0.000000 (coincides with: bh provisioned conn * holding time)
-Total number of lightpaths activated during the simulation: 110
-Sum lightpath holding time(?) [SUM(lightpaths lifetime)]: 127.718166
-Sum lightpath load(?) [used lp cap / tot lp cap ; (weighted on time)]: 44.910028
-Sum link load(?) [lifetime * hops * capacity]: 35481.034417
-Total used OC1 time(?) [SUM(busyTime) = SUM(used lp cap * time)]: 103344.081663
+Total number of lightpaths activated during the simulation: 81
+Sum lightpath holding time(?) [SUM(lightpaths lifetime)]: 19.735681
+Sum lightpath load(?) [used lp cap / tot lp cap ; (weighted on time)]: 9.258469
+Sum link load(?) [lifetime * hops * capacity]: 8046.874254
+Total used OC1 time(?) [SUM(busyTime) = SUM(used lp cap * time)]: 4520.832958
 
 Carico(???):
 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
-Real avg arrival rate PER SECOND, PER NETWORK [#connections simulated / simulation time]: 3603.276427
-Real avg arrival rate PER SECOND, PER NODE: 45.040955
-Average amount of traffic generated per second, per network [OC1]: 21619.658564
-Average amount of traffic generated per second, per node [OC1]: 270.245732
+Real avg arrival rate PER SECOND, PER NETWORK [#connections simulated / simulation time]: 7372.505169
+Real avg arrival rate PER SECOND, PER NODE: 92.156315
+Average amount of traffic generated per second, per network [OC1]: 44235.031016
+Average amount of traffic generated per second, per node [OC1]: 552.937888
