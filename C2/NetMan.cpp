@@ -9185,10 +9185,7 @@ UINT NetMan::placeCUClose(UINT src, vector<OXCNode*>& BBUsList)
 	Vertex* pSrc = m_hGraph.lookUpVertex(src, Vertex::VT_Access_Out, -1);
 
 	for (int j = 0; j < BBUsList.size(); j++)
-	{
-		// reset boolean var because we are considering another node
-		m_bCUNotFoundBecauseOfLatency = false;
-
+	{ 
 		id = BBUsList[j]->getId();
 		pOXCdst = (OXCNode*)m_hWDMNet.lookUpNodeById(id);
 		
@@ -9215,10 +9212,6 @@ UINT NetMan::placeCUClose(UINT src, vector<OXCNode*>& BBUsList)
 					minCost = pathCost;
 					bestBBU = id;
 				}
-			}
-			else
-			{
-				; // m_bCUNotFoundBecauseOfLatency = true;
 			}
 		}
 	}
@@ -9480,7 +9473,6 @@ void NetMan::buildNotActiveBBUsList(vector<OXCNode*>&inactiveBBUs)
 
 }
 
-
 void NetMan::buildNotActivePoolsList(vector<OXCNode*>&inactiveBBUs)
 {
 #ifdef DEBUGB
@@ -9516,7 +9508,6 @@ void NetMan::buildNotActivePoolsList(vector<OXCNode*>&inactiveBBUs)
 
 }
 
-
 //-B
 void NS_OCH::NetMan::connDBDump()
 {
@@ -9524,7 +9515,6 @@ void NS_OCH::NetMan::connDBDump()
 	cout << endl;
 	return;
 }
-
 
 //-B: my cost function based on lightpath given by dijkstra's algorithm
 LINK_COST NS_OCH::NetMan::calculateCost(list<AbstractLink*>hPrimaryPath)
@@ -9544,7 +9534,6 @@ LINK_COST NS_OCH::NetMan::calculateCost(list<AbstractLink*>hPrimaryPath)
 	}
 	return pathCost;
 }
-
 
 bool NetMan::WP_BBU_ProvisionHelper_Unprotected(Connection*pCon, Circuit*pCircuit, OXCNode*pSrc, OXCNode*pDst)
 {
