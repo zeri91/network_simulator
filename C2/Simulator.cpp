@@ -785,13 +785,6 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			else if (pCon->m_eConnType == Connection::MOBILE_FRONTHAUL
 				|| pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
 			{
-				//-B: il num di provisioned connections era stato aumentato nel metodo di provisioning
-				//	ma è giusto aumentarlo solo se la connessione nella sua interezza (fronthaul+backhaul)
-				//	viene instradata correttamente, quindi non possiamo ancora dirlo
-				//m_pNetMan->m_hLog.m_nProvisionedCon--;
-				//m_pNetMan->m_runLog.m_nProvisionedCon--;
-				//-B: HO MODIFICATO L'INCREMENTO NEL METODO DI PROVISIONING: ORA VIENE FATTO SOLO PER BACKHAUL CONNECTIONS -> COMMENTO QUESTO DECREMENTO
-
 				//-B: STEP 1 - create a new event corresponding to connection served in this iteration
 				//	and insert it in the fronthaul events' list
 				Event*nEvFront = new Event((pEvent->m_hTime), Event::EVT_ARRIVAL, pCon);
@@ -882,17 +875,6 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				}
 
 			}
-
-			/* //-B: NOT NEEDED FOR MY WORK
-			// calcolo costo totale percorso
-			Total_Transport_Cost = Total_Transport_Cost + m_pNetMan->transport_cost;
-			Total_EDFA_Cost = Total_EDFA_Cost + m_pNetMan->PEDFA_parz;
-			Total_NodeProcessing_Cost = Total_NodeProcessing_Cost + m_pNetMan->PProc_parz;
-			//cout<<"\nTotalTransportCost(parziale): "<<Total_Transport_Cost;
-			//cout<<"\nTotalEDFCost(parziale): "<<Total_EDFA_Cost;
-			//cout<<"\nTotalNodeProcessingCost(parziale): "<<Total_NodeProcessing_Cost;
-			//cin.get();
-			*/
 
 		} //END else if bSuccess
 		break;
@@ -2098,9 +2080,11 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	// -L: if midhaul is NULL, midhaul is not been routed yet, so it's a midhaul 
 	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL)    
 	{
+		eBandwidth = BWDGRANULARITY;
+		CPRIBwd = genMidhaulBwd(eBandwidth);
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
+		nDst = m_pNetMan->findBestCUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
 		//nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH

@@ -306,6 +306,7 @@ protected:
 	bool WP_BBU_ProvisionHelper_Unprotected(Connection * pCon, Circuit * pCircuit, OXCNode*pSrc, OXCNode*pDst);
 	//-B
 	float calculateLatency(list<AbstractLink*>& hLinkList); //-B: routing time
+	void genAuxCUsList(int srcId, vector<OXCNode*>& auxBBUsList);
 	void genAuxBBUsList(vector<OXCNode*>& auxBBUsList);
 	void genAuxBBUsList_BBUPooling(vector<OXCNode*>& auxBBUsList, BandwidthGranularity backBwd);
 	bool isAlreadyActive(OXCNode * pOXCsrc);

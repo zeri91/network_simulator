@@ -7293,7 +7293,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 
 	//-B: build a list with all bbu hotel node already active (BBUs > 0) with enough "space" to host a new BBU (BBUs < MAXNUMBBU)
 	vector<OXCNode*>auxBBUsList;
-	genAuxBBUsList(auxBBUsList); // -L: list with already active BBUs
+	genAuxCUsList(pOXCsrc->getId(), auxBBUsList); // -L: list with already active BBUs
 
 	if (auxBBUsList.size() > 0)
 	{
@@ -10088,6 +10088,25 @@ void NetMan:: genAuxBBUsList(vector<OXCNode*>&auxBBUsList)
 	//cin.get();
 #endif // DEBUGB
 
+}
+
+//-L: costruisce la lista delle BBU già attive non piene, escludendo il nodo srcId
+void NetMan::genAuxCUsList(int srcId, vector<OXCNode*>& auxBBUsList)
+{
+	//per scrupolo (per fare un assert alla fine)
+	auxBBUsList.clear();
+	int i;
+
+	//scorro la lista ordinata di tutti i candidate bbu hotel nodes (sorted in base al costo di reachability del core co)
+	for (i = 0; i < m_hWDMNet.hotelsList.size(); i++)
+	{
+		if (m_hWDMNet.hotelsList[i]->m_nBBUs > 0 && m_hWDMNet.hotelsList[i]->m_nBBUs < MAXNUMBBU)
+		{
+			if(m_hWDMNet.hotelsList[i]->getId() != srcId)
+			//lo inserisco nella lista dei nodi attivi non pieni
+			auxBBUsList.push_back(m_hWDMNet.hotelsList[i]);
+		}
+	}
 }
 
 //-B: costruisce la lista delle BBU già attive non piene, ordinata secondo il costo di reachability rispetto al core co
