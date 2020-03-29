@@ -7918,8 +7918,6 @@ void WDMNetwork::sortHotelsList(Graph&m_hGraph)
 		cout << pNode->getId() << " (" << pNode->m_nNetStage << "s, " << pNode->m_nReachabilityDegree << "r, " 
 			<< pNode->m_fDistanceFromCoreCO << "km)" << endl;
 	}
-	cin.get();
-
 }
 
 //-B: sort the candidate hotel nodes by cost and, for those having the same cost, by proximity degree
