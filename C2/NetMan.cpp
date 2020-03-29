@@ -7304,7 +7304,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
 		case 0:
-			bestCU = placeBBUHigh(src, auxBBUsList);
+			bestCU = placeCUHigh(src, auxBBUsList);
 			break;
 		case 1:
 			bestCU = placeCUClose(src, auxBBUsList);
@@ -7339,7 +7339,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 			{
 			case 0: //1st algorithm
 				//	(in this function the core CO is preferred over the others as BBU hotel node)
-				dst = placeBBUHigh(src, inactiveBBUs);
+				dst = placeCUHigh(src, inactiveBBUs);
 				break;
 			case 1: //2nd algorithm
 				dst = placeCUClose(src, inactiveBBUs);
@@ -9060,7 +9060,8 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
 		id = BBUsList[j]->getId();
-
+		if (src == id)
+			return id;
 		pOXCdst = (OXCNode*)m_hWDMNet.lookUpNodeById(id);
 		pOXCsrc = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
 		Vertex* pDst = m_hGraph.lookUpVertex(id, Vertex::VT_Access_In, -1);	//-B: ATTENTION!!! VT_Access_In
@@ -10090,7 +10091,7 @@ void NetMan:: genAuxBBUsList(vector<OXCNode*>&auxBBUsList)
 
 }
 
-//-L: costruisce la lista delle BBU già attive non piene, escludendo il nodo srcId
+//-L: costruisce la lista delle BBU già attive non piene, escludendo il nodo srcId se non è il CoreCO
 void NetMan::genAuxCUsList(int srcId, vector<OXCNode*>& auxBBUsList)
 {
 	//per scrupolo (per fare un assert alla fine)
@@ -10102,7 +10103,7 @@ void NetMan::genAuxCUsList(int srcId, vector<OXCNode*>& auxBBUsList)
 	{
 		if (m_hWDMNet.hotelsList[i]->m_nBBUs > 0 && m_hWDMNet.hotelsList[i]->m_nBBUs < MAXNUMBBU)
 		{
-			if(m_hWDMNet.hotelsList[i]->getId() != srcId)
+			if(m_hWDMNet.hotelsList[i]->getId() != srcId || srcId == 46)
 			//lo inserisco nella lista dei nodi attivi non pieni
 			auxBBUsList.push_back(m_hWDMNet.hotelsList[i]);
 		}
@@ -10246,7 +10247,8 @@ void NetMan::buildBestHotelsList()
 			//this->m_hWDMNet.sortHotelsList_Evolved(m_hGraph); //sort by a "close" reachability/proximity
 			break;
 		case 1:
-			NULL; //no need to sort hotel nodes for this policy
+			this->m_hWDMNet.sortHotelsList(m_hGraph);
+			//NULL; //no need to sort hotel nodes for this policy
 			break;
 		case 2:
 			//this->m_hWDMNet.computeShortestPaths(m_hGraph); //USELESS because it cannot be exploited
