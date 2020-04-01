@@ -21,10 +21,10 @@ static char THIS_FILE[] = __FILE__;
 using namespace NS_OCH;
 
 Log::Log() : m_hSimTimeSpan(0),
-m_nProvisionedCon(0), m_nBlockedCon(0), m_nProvisionedMobileFrontConn(0), m_nProvisionedFixMobFrontConn(0),
+m_nProvisionedCon(0), m_nBlockedCon(0), m_nProvisionedMobileFrontConn(0), m_nProvisionedFixMobFrontConn(0), m_nProvisionedFixMidConn(0),
 m_nProvisionedFixedBackConn(0), m_nProvisionedMobileBackConn(0), m_nProvisionedFixMobBackConn(0),
 m_nBlockedConDueToUnreach(0), m_nBlockedConDueToLatency(0), m_nProvisionedBW(0), m_nBlockedBW(0), m_nProvisionedMobileFrontBW(0),
-m_nProvisionedFixMobFrontBW(0), m_nProvisionedFixedBackBW(0), m_nProvisionedMobileBackBW(0), m_nProvisionedFixMobBackBW(0),
+m_nProvisionedFixMobFrontBW(0), m_nProvisionedFixedBackBW(0), m_nProvisionedMobileBackBW(0), m_nProvisionedFixMobBackBW(0), m_nProvisionedFixedMidBW(0),
 m_nBlockedMobileFrontBW(0), m_nBlockedFixMobFrontBW(0), m_nBlockedFixedBackBW(0), m_nBlockedMobileBackBW(0), m_nBlockedFixMobBackBW(0), 
 m_nBlockedFixMidBW(0), m_nBlockedBWDueToUnreach(0), m_nBlockedMobileFrontConn(0), m_nBlockedFixMobFrontConn(0), m_nBlockedFixedBackConn(0),
 m_nBlockedMobileBackConn(0), m_nBlockedFixMobBackConn(0), m_nBlockedFixMidConn(0), m_nBlockedBHForBHBlock(0), m_nBlockedFHForFHBlock(0),

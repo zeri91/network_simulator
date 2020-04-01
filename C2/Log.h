@@ -23,6 +23,7 @@ public:
 	UINT	m_nProvisionedFixedBackConn;
 	UINT	m_nProvisionedMobileBackConn;
 	UINT	m_nProvisionedFixMobBackConn;
+	UINT	m_nProvisionedFixMidConn; //-L
 	// segment performance gain, connections blocked by path but not segment
 	UINT	m_nBlockedConDueToPath;	
 	UINT	m_nBlockedConDueToUnreach;
@@ -49,14 +50,14 @@ public:
 	UINT	m_nProvisionedFixedBackBW;
 	UINT	m_nProvisionedFixMobBackBW;
 	UINT	m_nProvisionedMobileBackBW;
+	UINT	m_nProvisionedFixedMidBW; //-L
 	//-B:
 	UINT	m_nBlockedMobileFrontBW;
 	UINT	m_nBlockedFixMobFrontBW;
 	UINT	m_nBlockedFixedBackBW;
 	UINT	m_nBlockedFixMobBackBW;
 	UINT	m_nBlockedMobileBackBW;
-	//-L:
-	UINT	m_nBlockedFixMidBW;
+	UINT	m_nBlockedFixMidBW; 	//-L
 
 	// b/w distribution of provisioned/blocked connections
 	UINT	m_pProvisionedConPerBW[NumberOfBWGranularity];
