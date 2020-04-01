@@ -1208,12 +1208,15 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			 << "FINE WHILE:\t" << m_pNetMan->m_hLog.m_nProvisionedCon << " prov ("
 			 << m_pNetMan->m_hLog.m_nProvisionedMobileFrontConn << " M-F + "
 			 << m_pNetMan->m_hLog.m_nProvisionedFixMobFrontConn << " FM-F + "
+			 << m_pNetMan->m_hLog.m_nProvisionedFixMidConn << " F-M + "
 			 << m_pNetMan->m_hLog.m_nProvisionedFixedBackConn << " F-B + "
-			 << m_pNetMan->m_hLog.m_nProvisionedMobileBackConn << " M-B + "
-			 << m_pNetMan->m_hLog.m_nProvisionedFixMobBackConn << " FM-B"
+			 << m_pNetMan->m_hLog.m_nProvisionedMobileBackConn << " M-B "
+
+
 			 << ") connections\n\t\t" << m_pNetMan->m_hLog.m_nBlockedCon << " bloc ("
 			 << m_pNetMan->m_hLog.m_nBlockedMobileFrontConn << " M-F + "
 			 << m_pNetMan->m_hLog.m_nBlockedFixMobFrontConn << " FM-F + "
+			 << m_pNetMan->m_hLog.m_nBlockedFixMidConn << " F-M + "
 			 << m_pNetMan->m_hLog.m_nBlockedFixedBackConn << " F-B + "
 			 << m_pNetMan->m_hLog.m_nBlockedMobileBackConn << " M-B + "
 			 << m_pNetMan->m_hLog.m_nBlockedFixMobBackConn << " FM-B) ("

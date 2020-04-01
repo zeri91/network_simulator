@@ -258,17 +258,11 @@ void Connection::log(Log &hLog)
 		{
 		case MOBILE_FRONTHAUL:
 		{
-			//hLog.m_nProvisionedMobileFrontConn++;
-			//hLog.m_nProvisionedMobileFrontBW += this->m_eCPRIBandwidth;
-			//hLog.m_nProvisionedBW += this->m_eCPRIBandwidth;
 			break;
 		}
 
 		case FIXEDMOBILE_FRONTHAUL:
 		{
-			//hLog.m_nProvisionedFixMobFrontConn++;
-			//hLog.m_nProvisionedFixMobFrontBW += this->m_eCPRIBandwidth;
-			//hLog.m_nProvisionedBW += this->m_eCPRIBandwidth;
 			break;
 		}
 
@@ -292,6 +286,9 @@ void Connection::log(Log &hLog)
 			hLog.m_nProvisionedMobileBackBW += this->m_eBandwidth;
 			hLog.m_nProvisionedBW += this->m_eBandwidth;
 			hLog.m_nProvisionedCon++;
+			//-L: update midhaul stats: 
+			hLog.m_nProvisionedFixMidConn++;
+			hLog.m_nProvisionedFixedMidBW += this->m_eBandwidth;
 			break;
 		}
 
@@ -336,9 +333,11 @@ void Connection::log(Log &hLog)
 			{
 				hLog.m_nBlockedMobileFrontConn++;
 				hLog.m_nBlockedBW += this->m_eCPRIBandwidth;
+				hLog.m_nBlockedBW += this->m_eBandwidth; // -L: for the midhaul
 				hLog.m_nBlockedBW += this->m_eBandwidth;
 				hLog.m_nBlockedMobileFrontBW += this->m_eCPRIBandwidth;
 				hLog.m_nBlockedMobileBackBW += this->m_eBandwidth;
+				hLog.m_nBlockedFixMidBW += this->m_eBandwidth; // -L
 				hLog.m_nBlockedFHForFHBlock += this->m_eCPRIBandwidth;
 				break;
 			}
@@ -347,9 +346,11 @@ void Connection::log(Log &hLog)
 			{
 				hLog.m_nBlockedFixMobFrontConn++;
 				hLog.m_nBlockedBW += this->m_eCPRIBandwidth;
+				hLog.m_nBlockedBW += this->m_eBandwidth; // -L: for the midhaul
 				hLog.m_nBlockedBW += this->m_eBandwidth;
 				hLog.m_nBlockedFixMobFrontBW += this->m_eCPRIBandwidth;
 				hLog.m_nBlockedFixMobBackBW += this->m_eBandwidth;
+				hLog.m_nBlockedFixMidBW += this->m_eBandwidth; // -L
 				hLog.m_nBlockedFHForFHBlock += this->m_eCPRIBandwidth;
 				break;
 			}
@@ -387,6 +388,8 @@ void Connection::log(Log &hLog)
 				hLog.m_nBlockedFixMidConn++;
 				hLog.m_nBlockedBW += this->m_eBandwidth;
 				hLog.m_nBlockedFixMidBW += this->m_eBandwidth;
+				hLog.m_nBlockedBW += this->m_eBandwidth;
+				hLog.m_nBlockedMobileBackBW += this->m_eBandwidth;
 				break;
 			}
 

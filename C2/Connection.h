@@ -47,8 +47,8 @@ public:
 	UINT					m_nSequenceNo;		// sequence number
 	UINT					m_nSrc;				// src node
 	UINT					m_nDst;				// dst node
-	BandwidthGranularity    m_eBandwidth;		// bandwidth granularity (-B: bandwidth requested)
-	BandwidthGranularity	m_eCPRIBandwidth;	// -B: CPRI bandwidth requested by mobile or fixed-mobile nodes
+	BandwidthGranularity    m_eBandwidth;		// bandwidth granularity (-B: bandwidth requested) -L: backhaul BW
+	BandwidthGranularity	m_eCPRIBandwidth;	// -B: CPRI bandwidth requested by mobile or fixed-mobile nodes  -L: fronthaul BW
 	ProtectionClass			m_eProtectionClass;	// type of protection
 	ConnectionState			m_eStatus;			// status
 

@@ -292,15 +292,16 @@ else if (0 == strcmp(argv[10], "BBU"))
 		<< ((hNetMan.m_hLog.networkCost / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime)) /
 		((float)hNetMan.m_hLog.m_nProvisionedMobileBackBW + (float)hNetMan.m_hLog.m_nProvisionedFixMobBackBW + (float)hNetMan.m_hLog.m_nProvisionedFixedBackBW)) << endl;
 	
-	cout <<  "\nNumber of provisioned connections (FH+BH): "<< hNetMan.m_hLog.m_nProvisionedCon;
-	cout << "\nNumber of blocked connections (FH+BH): " << hNetMan.m_hLog.m_nBlockedCon << endl;
+	cout <<  "\nNumber of provisioned connections (FH+MH+BH): "<< hNetMan.m_hLog.m_nProvisionedCon;
+	cout << "\nNumber of blocked connections (FH+MH+BH): " << hNetMan.m_hLog.m_nBlockedCon << endl;
 	cout << "Number of blocked fronthaul connections (mob + fixmob): " << hNetMan.m_hLog.m_nBlockedMobileFrontConn << " + "
 		<< hNetMan.m_hLog.m_nBlockedFixMobFrontConn << " = " << (hNetMan.m_hLog.m_nBlockedMobileFrontConn + hNetMan.m_hLog.m_nBlockedFixMobFrontConn) << endl;
+	cout << "Number of blocked midhaul connections: " << hNetMan.m_hLog.m_nBlockedFixMidConn << " = " << (hNetMan.m_hLog.m_nBlockedFixMidConn) << endl;
 	cout << "Number of blocked backhaul connections (mob + fixmob + fixed): " << hNetMan.m_hLog.m_nBlockedMobileBackConn << " + "
 		<< hNetMan.m_hLog.m_nBlockedFixMobBackConn << " + " <<  hNetMan.m_hLog.m_nBlockedFixedBackConn << " = " 
 		<< (hNetMan.m_hLog.m_nBlockedMobileBackConn + hNetMan.m_hLog.m_nBlockedFixMobBackConn + hNetMan.m_hLog.m_nBlockedFixedBackConn) << endl;
 	cout << "\nBWD of provisioned connections (FH+BH): " << hNetMan.m_hLog.m_nProvisionedBW;
-	cout << "\nBWD of blocked connections (FH+BH): " << hNetMan.m_hLog.m_nBlockedBW;
+	cout << "\nBWD of blocked connections (FH+MH+BH): " << hNetMan.m_hLog.m_nBlockedBW;
 	cout << "\nBWD of blocked fronthaul connections (mob + fixmob): " << hNetMan.m_hLog.m_nBlockedMobileFrontBW << " + "
  		<< hNetMan.m_hLog.m_nBlockedFixMobFrontBW << " = " << (hNetMan.m_hLog.m_nBlockedMobileFrontBW + hNetMan.m_hLog.m_nBlockedFixMobFrontBW);
 	cout << "\nBWD of blocked backhaul connections (mob + fixmob + fix): " << hNetMan.m_hLog.m_nBlockedMobileBackBW<< " + "
@@ -308,6 +309,7 @@ else if (0 == strcmp(argv[10], "BBU"))
 		<< (hNetMan.m_hLog.m_nBlockedFixedBackBW + hNetMan.m_hLog.m_nBlockedFixMobBackBW + hNetMan.m_hLog.m_nBlockedMobileBackBW);
 	cout << "\nBWD of provisioned fronthaul connections (mob + fixmob): " << hNetMan.m_hLog.m_nProvisionedMobileFrontBW << " + "
 		<< hNetMan.m_hLog.m_nProvisionedFixMobFrontBW << " = " << (hNetMan.m_hLog.m_nProvisionedFixMobFrontBW + hNetMan.m_hLog.m_nProvisionedMobileFrontBW);
+	cout << "\nBWD of provisioned midhaul connections: " << hNetMan.m_hLog.m_nProvisionedFixedMidBW << " = " << (hNetMan.m_hLog.m_nProvisionedFixedMidBW);
 	cout << "\nBWD of provisioned backhaul connections (mob + fixmob + fix): " << hNetMan.m_hLog.m_nProvisionedMobileBackBW << " + "
 		<< hNetMan.m_hLog.m_nProvisionedFixMobBackBW << " + " << hNetMan.m_hLog.m_nProvisionedFixedBackBW << " = "
 		<< (hNetMan.m_hLog.m_nProvisionedMobileBackBW + hNetMan.m_hLog.m_nProvisionedFixMobBackBW + hNetMan.m_hLog.m_nProvisionedFixedBackBW);
