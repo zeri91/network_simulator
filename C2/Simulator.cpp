@@ -580,8 +580,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 		//-B: non incremento il num di arrivi solo nel caso in cui l'evento corrente sia un mobile/fixed-mobile backhaul event
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_FRONTHAUL
-			|| pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL
-			|| pCon->m_eConnType == Connection::FIXED_MIDHAUL)
+			|| pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
 		{
 			//-B: increase the number of arrivals (fronthaul and its corresponding backhaul are considered as a single connection)
 			m_hEventList.increaseArr();
@@ -2087,8 +2086,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		CPRIBwd = genMidhaulBwd(eBandwidth);
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		nDst = m_pNetMan->findBestCUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
-		//nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
+		//nDst = m_pNetMan->findBestCUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
+		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
 		eBandwidth = pEvent->fronthaulEvent->m_pConnection->m_eBandwidth;
