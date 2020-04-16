@@ -2082,12 +2082,13 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	// -L: if midhaul is NULL, midhaul is not been routed yet, so it's a midhaul 
 	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL)    
 	{
+		// -L: sbagliato ??? 
 		eBandwidth = BWDGRANULARITY;
 		CPRIBwd = genMidhaulBwd(eBandwidth);
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		//nDst = m_pNetMan->findBestCUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
-		nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
+		nDst = m_pNetMan->findBestCUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
+		//nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
 		eBandwidth = pEvent->fronthaulEvent->m_pConnection->m_eBandwidth;

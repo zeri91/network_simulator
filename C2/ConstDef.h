@@ -9,7 +9,7 @@
 									//	in which office hours end and residential hours start
 									//-B: for Ahmed
 
-#define CHANNEL_CAPACITY 1944		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
+#define CHANNEL_CAPACITY 582		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
 									// to get the real channel capacity, multiply it by OC1 = 51.48 Mbps
 #define BWDGRANULARITY OC6			//-B: bandwidth granularity -> amount of bandwidth requested by each mobile connection
 									//-> needed for BBUReadTopoHelper to set channel capacity and to set backhaul bwd of macro 
