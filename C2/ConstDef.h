@@ -24,7 +24,7 @@
 #define DISTANCE_SC_MC 2			//-B: define the distance between a macro cell and a small cell
 #define	PROPAGATIONLATENCY 0.000005 //-B: propagation latency per km
 #define ELSWITCHLATENCY 0.00002		//-B: electronic switch latency 0.00002
-#define LATENCYBUDGET 0.0001		//-B: max fronthaul latency
+#define LATENCYBUDGET 0.0005		//-B: max fronthaul latency
 #define LATENCY_MH 0.001			//-L: max midhaul latency
 #define LATENCY_BH 0.04				//-L: max backhaul latency
 #define MAXNUMBBU 2000				//-B: max num of active BBU in the same hotel node (to not limit: > num of nodes in the network)
@@ -54,7 +54,6 @@
 
 namespace NS_OCH {
 #include <limits.h>
-
 
 typedef enum {
 	PC_NoProtection = 0,
@@ -104,6 +103,16 @@ const LINK_COST UNREACHABLE = INT_MAX;		// 2147483647
 const LINK_COST LARGE_COST = 1000000;
 const LINK_COST SMALL_COST = 0.000001;
 const LINK_CAPACITY INFINITE_CAP = INT_MAX;	// 2147483647
+
+const UINT RUpower = 134;
+const UINT DUpower = 65.7;
+const UINT CUpower = 7;
+const UINT FXpower = 18.2;
+const UINT F1power = 10;
+const UINT BHpower = 1;
+const UINT CSIpower = 2100;
+const UINT CSIidlePower = 315;
+
 const int MAX_DC_NUMBER = 6;      // massimo numero di DataCenter nella rete
 const double EDFAspan=80;         // [km] ogni quanto serve un amplificatore
 const double EDFApower=8;         // [Watt] potenza media consumata da un EDFA

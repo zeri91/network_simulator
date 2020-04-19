@@ -360,7 +360,7 @@ bool AbstractNode::valid() const
 AbstractLink::AbstractLink(): m_pSrc(NULL), m_pDst(NULL), m_bValid(true),
 	m_hCost(UNREACHABLE), m_nLength(0), m_bCostSaved(false),
 	m_nBackupVHops(0), m_pBackupCost(NULL), m_dLinkLoad(0),
-	m_pCSet(NULL), m_nCSetSize(0), m_nBChannels(0)
+	m_pCSet(NULL), m_nCSetSize(0), m_nBChannels(0), m_used(0)
 {
 	m_latency = m_nLength * (float)PROPAGATIONLATENCY;
 }
@@ -370,7 +370,7 @@ AbstractLink::AbstractLink(int nId, AbstractNode* pSrc, AbstractNode* pDst,
 			 m_pSrc(pSrc), m_pDst(pDst), m_hCost(hCost), m_nLength(nLength),
 			 m_bValid(true), m_bCostSaved(false), m_dLinkLoad(0),
 			 m_nBackupVHops(0), m_pBackupCost(NULL),
-			 m_pCSet(NULL), m_nCSetSize(0), m_nBChannels(0)
+			 m_pCSet(NULL), m_nCSetSize(0), m_nBChannels(0), m_used(0)
 {
 	m_latency = m_nLength * (float)PROPAGATIONLATENCY;
 }									

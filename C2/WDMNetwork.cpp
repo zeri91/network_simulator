@@ -8914,6 +8914,8 @@ void WDMNetwork::updateTrafficPerNode(Event*pEvent)
 	{
 		if (pSrc->m_dTrafficGen < 0 || pSrc->m_dTrafficGen > (MAXTRAFFIC_MACROCELL + (SMALLCELLS_PER_MC * MAXTRAFFIC_SMALLCELL)))
 			cout << "\tATTENTION! Traffico generato dalla MACRO cell #" << pSrc->getId() << " = " << pSrc->m_dTrafficGen << endl;
+		if (pSrc->m_dTrafficGen < 0)
+			cin.get();
 		assert(pSrc->m_dTrafficGen >= 0);
 		assert(pSrc->m_dTrafficGen <= (MAXTRAFFIC_MACROCELL + (SMALLCELLS_PER_MC * MAXTRAFFIC_SMALLCELL)));
 	}

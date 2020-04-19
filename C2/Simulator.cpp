@@ -142,6 +142,7 @@ bool Simulator::initialize(UINT nCon, double dArrival,
 	for (itr = this->m_pNetMan->m_hWDMNet.m_hNodeList.begin(); itr != this->m_pNetMan->m_hWDMNet.m_hNodeList.end(); itr++)
 	{
 		pOXCNode = (OXCNode*)(*itr);
+
 		this->genNextPoissonEvent(pOXCNode, 0);
 	}
 
@@ -575,8 +576,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 		m_hEventList.ExtractDepEvents(hDepEventList);//FABIO: DA RIFARE
 														//QUANDO CONSIDERERO' I TEMPI
 														//DI CHIAMATA
-
-		//-L: ??? perchè? 
+ 
 		//-B: non incremento il num di arrivi solo nel caso in cui l'evento corrente sia un mobile/fixed-mobile backhaul event
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_FRONTHAUL
@@ -605,7 +605,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 
 			if (pCon->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL || pCon->m_eConnType == Connection::MOBILE_FRONTHAUL || Connection::FIXED_MIDHAUL) 
 			{
-				m_pNetMan->m_hGraph.resetLinks();
+				//m_pNetMan->m_hGraph.resetLinks();
 
 				//-L: ??? no sense
 				if (!isBBUNode(pCon->m_nDst)) {
@@ -629,7 +629,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 		if (!bSuccess) //-B: CONNECTION BLOCKED
 		{
 #ifdef DEBUGF
-			cout << "\n++++++++++++++++++++ BLOCKED!" << endl << endl;
+			std::cout << "\n++++++++++++++++++++ BLOCKED!" << endl << endl;
 			//cin.get();
 #endif // DEBUGB
 		
@@ -641,16 +641,18 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				//-L: create and insert a departure event, for the midhaul connection already provided, to be executed immediately!
 				// Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
 				Event*nEv_DepMid = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->midhaulEvent->m_pConnection);
-				// nEv_DepFront->arrTimeAs = hPrevLogTime;
-				// nEv_DepFront->backhaulBlocked = true; 
-				// m_hEventList.insertEvent(nEv_DepFront);
 				nEv_DepMid->arrTimeAs = hPrevLogTime;
 				nEv_DepMid->backhaulBlocked = true; 
 				m_hEventList.insertEvent(nEv_DepMid);
 
-				//-L: da controllare
+				//-B: create and insert a departure event, for the fronthaul connection already provided, to be executed immediately!
+				Event* nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
+				nEv_DepFront->arrTimeAs = hPrevLogTime;
+				nEv_DepFront->backhaulBlocked = true;
+				m_hEventList.insertEvent(nEv_DepFront);
+
 				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
-				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->midhaulEvent->m_pConnection->m_nSrc));
+				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->fronthaulEvent->m_pConnection->m_nSrc));
 
 #ifdef DEBUGC
 				cout << "\tE' un backhaul event -> Visto che la connessione e' stata bloccata, "
@@ -663,7 +665,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				//-B: create and insert a departure event, for the fronthaul connection already provided, to be executed immediately!
 				Event*nEv_DepFront = new Event(pEvent->m_hTime, Event::EVT_DEPARTURE, pEvent->fronthaulEvent->m_pConnection);
 				nEv_DepFront->arrTimeAs = hPrevLogTime;
-				nEv_DepFront->backhaulBlocked = true; //-L: cambiare con midhaulblocked (da dichiarare)
+				nEv_DepFront->midhaulBlocked = true; //-L
 				m_hEventList.insertEvent(nEv_DepFront);
 
 				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
@@ -724,7 +726,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				if (pSrc->isMacroCell() && this->m_pNetMan->m_hWDMNet.isMobileNode(pSrc->getId()))
 				{
 					if (pSrc->m_dTrafficGen < 0 || pSrc->m_dTrafficGen >(MAXTRAFFIC_MACROCELL + (SMALLCELLS_PER_MC * MAXTRAFFIC_SMALLCELL)))
-						cout << "\tATTENTION! Traffico generato dalla MACRO cell #" << pSrc->getId() << " = " << pSrc->m_dTrafficGen << endl;
+						std::cout << "\tATTENTION! Traffico generato dalla MACRO cell #" << pSrc->getId() << " = " << pSrc->m_dTrafficGen << endl;
 					assert(pSrc->m_dTrafficGen >= 0);
 					assert(pSrc->m_dTrafficGen <= (MAXTRAFFIC_MACROCELL + (SMALLCELLS_PER_MC * MAXTRAFFIC_SMALLCELL)));
 				}
@@ -948,7 +950,8 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			m_hEventList.increaseDep();
 		}
 		else if (pEvent->m_pConnection->m_eConnType == Connection::MOBILE_FRONTHAUL
-			|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
+			|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL
+			|| pEvent->m_pConnection->m_eConnType == Connection::FIXED_MIDHAUL)
 		{ 
 			//-B: else, se è il departure event di una mobile/fixed-mobile fronthaul connection
 			//	non devo incrementare il num di departure perchè la connessione è considerata nella sua totalità
@@ -984,7 +987,8 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			{
 				OXCNode*pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->m_pConnection->m_nSrc));
 
-				if (pEvent->m_pConnection->m_bTrafficToBeUpdatedForDep == true) {
+				//-L
+				if (pEvent->m_pConnection->m_bTrafficToBeUpdatedForDep == true && pEvent->m_pConnection->m_eConnType != Connection::FIXED_MIDHAUL) {
 					//-B: update amount of traffic currently generated by source node
 					//	(this kind of update must be done here, with the fronthaul departure event, because the connection
 					//	has its original source node in the fronthaul connection's source node)
@@ -1091,89 +1095,6 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				pUniFiber->m_dLinkLoad = 0;
 			}
 			m_pNetMan->m_hLog.UniFiberLoad_hour.insert(pair<UINT, vector<double> >(ind, (UniFiberLoad)));
-			//cin.get();
-			//cout << "..." << endl;
-
-			/* -B:########################### NOT NEEDED FOR MY WORK ###############################
-						////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			//double conn_block=(m_pNetMan->m_hLog.m_nBlockedCon);        // # connessioni bloccate (fino a questo istante)
-			//double conn_prov=(m_pNetMan->m_hLog.m_nProvisionedCon);     // # connessioni instaurate
-			//double tot_conn = conn_block+conn_prov;                       // # connessioni totali
-			//double Pblock=conn_block/tot_conn;
-			double sum_E=0;
-			double sum_T=0;
-			double sum_P=0;
-			double green_energy1=0;
-			double green_energy2=0;
-			double brown_energy=0;
-		
-			int k = 0;
-			//Pblock_hour[(start_time+m-1)%24]=Pblock;
-
-					for (k=0;k!=m_pNetMan->m_hWDMNet.nDC;k++) 
-					  {  
-						 gp[k]=gp_incr[k]+gp_rest[k];								    //energia disponibile in ogni DC (compresa la rimanente da ora prec.)
-					  // gp[k]=gp_incr[k];												//senza sommare quella avanzata
-						 diff_DCprocessing[k]=DCprocessing[k]-DCprocessing_old[k];		// potenza usata dal DC k in ques'ora, introdotta la dipendenza dall'HT
-						 diff_conn[k]=m_pNetMan->m_hWDMNet.nconn[k]-nconn_old[k];       // differenza del numero di connessioni instaurate nel DC k	
-						 nconn_old[k]=m_pNetMan->m_hWDMNet.nconn[k];
-						 DCprocessing_old[k]=DCprocessing[k];	
-					   }
-
-					if (m_pNetMan->m_eProvisionType==NetMan::PT_UNPROTECTED_GREEN) {
-						for (k=0;k!=m_pNetMan->m_hWDMNet.nDC;k++)  { 
-							  g_en[k]=gp[k]-diff_DCprocessing[k];				   // differenza tra energia Green disponibile in quest'ora e l'energia richiesta dalle connessioni arrivate in quest'ora -->energia residua
-						
-							if (g_en[k]<0) {										// se la differenza è negativa, utilizzo energia Green + energia Brown
-								 brown_energy_DC[k]=(-1)*g_en[k];					//quella brown è data dal valore negativo di green
-								 green_energy_DC[k]=gp[k];							// uso tutta quella che ho green (compresa la rimanente da ora prec.)
-								 green_energy1=green_energy1+green_energy_DC[k];	// sommo su tutti i DC per ottenere l'energia green totale (1) consumata in quest'ora
-								 brown_energy=brown_energy+brown_energy_DC[k];		// sommo su tutti i DC per ottenere l'energia brown totale consumata in quest'ora
-								 gp_rest[k]=0;										// energia green non usata è in questo caso 0
-								}
-							else {													// se la differenza è positiva, utilizzo solo energia Green!!
-								 green_energy_DC[k]=diff_DCprocessing[k];			// energia green è data dalla differenza tra quella totale e quella usata
-								 gp_rest[k]=gp[k]-diff_DCprocessing[k];			    // energia green non usata è la differenza tra quella green disp nell'ora e quella usata nell'ora
-								 green_energy2=green_energy2+green_energy_DC[k];	// sommo su tutti i DC per ottenere l'energia green totale (2) consumata in quest'ora
-								}
-						}
-					 }
-					else { 
-						double conn_prov2 = m_pNetMan->m_hLog.m_nProvisionedCon;
-						brown_energy_temp[ind]=ComputingCost*conn_prov2-brown_energy_temp[ind-1];	// caso in cui non ci sono green DC--> solo Brown 
-						green_energy_temp[ind]=0;	
-					}  
-			
-				if (m==24) {
-				for (int jj=start_time;jj!=ind;jj++) {
-						jj=jj%24;
-					   sum_E=sum_E+EDFA_temp[jj];
-					   sum_T=sum_T+transport_temp[jj];
-					   sum_P=sum_P+processing_temp[jj];}
-				}
-				else {
-				for (int jj=start_time;jj!=ind+1;jj++) {
-					   jj=jj%24;
-					   sum_E=sum_E+EDFA_temp[jj];
-					   sum_T=sum_T+transport_temp[jj];
-					   sum_P=sum_P+processing_temp[jj];}
-				}
-
-			brown_energy_temp[ind]=brown_energy;
-			green_energy_temp[ind]=green_energy1+green_energy2;					         	//sommo i 2 contributi di green energy
-			EDFA_temp[ind]=Total_EDFA_Cost-sum_E;
-			processing_temp[ind]=Total_NodeProcessing_Cost-sum_P;
-			transport_temp[ind]=Total_Transport_Cost-sum_T;   	    
-			CO2emissions_comp[ind]=gCO2perKWh*brown_energy_temp[ind]/1000;                 // in [(grammi/kwh )* kilowatt(in un'ora)]== grammi, poi nell'output divido per 1000 -->kilogrammi 
-			CO2emissions_transport[ind]=gCO2perKWh*transport_temp[ind]/1000;  
-			CO2emissions_tot[ind]=CO2emissions_comp[ind]+CO2emissions_transport[ind];    
-			//provi[ind]=conn_prov;															//connessioni instaurate in quest'ora
-			m++;
-			//    cout<<"\nTotalEDFACost(parziale): "<<Total_EDFA_Cost;	
-			//    cout<<"\nTotalNodeProcessingCost(parziale): "<<Total_NodeProcessing_Cost;
-			// 	  cout<<"\nTotalTransportCost(parziale): "<<Total_Transport_Cost;
-			// 	  cin.get();
-			*/
 	
 		} //end IF !RUNNING_STATS
 
@@ -2084,10 +2005,9 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	{
 		// -L: sbagliato ??? 
 		eBandwidth = BWDGRANULARITY;
-		CPRIBwd = genMidhaulBwd(eBandwidth);
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
-		nDst = m_pNetMan->findBestCUHotel(nSrc, CPRIBwd, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
+		nDst = m_pNetMan->findBestCUHotel(nSrc, eBandwidth, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
 		//nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
@@ -2486,7 +2406,7 @@ void Simulator::computeNumOfActiveHotels()
 	this->m_nNumOfActiveHotels = 0;
 	int count = 0;
 	for (itrN = m_pNetMan->m_hWDMNet.hotelsList.begin(); itrN != m_pNetMan->m_hWDMNet.hotelsList.end()
-		&& count < m_pNetMan->m_hWDMNet.numberOfNodes; itrN++)
+		&& count < m_pNetMan->m_hWDMNet.hotelsList.size(); itrN++)
 	{
 		count += (*itrN)->m_uNumOfBBUSupported;
 #ifdef DEBUGB

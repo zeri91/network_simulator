@@ -548,7 +548,7 @@ void Lightpath_Seg::WPsetUp(NetMan* pNetMan, Circuit* pCircuit)
 		m_pDst = m_hPRoute.back()->getDst();
 	//-B: sottraggo dalla capacità disponibile invece che da OCLightpath.
 	//	Tanto essendo un nuovo Lightpath, la cap disponibile corrisponde a quella totale
-	m_nFreeCapacity = m_nFreeCapacity - pCircuit->m_eBW;
+	m_nFreeCapacity = m_nFreeCapacity - pCircuit->m_eBW; //-L: ??? to change
 	//m_nFreeCapacity = OCLightpath - pCircuit->m_eBW;
 
 	// Update wavelength usage along the primary

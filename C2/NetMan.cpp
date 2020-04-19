@@ -5552,17 +5552,10 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 		//-B: check if it is NULL because it wasn't possible to find a hotel node respecting the latency budget or not
 		//	(m_bHotelNotFoundBeacauseOfLatency is set/modified in placeBBUHigh method)
 		if (m_bHotelNotFoundBecauseOfLatency) {
-#ifdef DEBUG
-			cin.get();
-#endif
 			pCon->m_bBlockedDueToLatency = true;
 		}
 		else {
 			pCon->m_bBlockedDueToUnreach = true;
-#ifdef DEBUG
-			cout << "Connection blocked due to unreach" << endl;
-			cin.get();
-#endif
 		}
 		bSuccess = false;
 		pCon->m_eStatus = Connection::DROPPED;
@@ -5594,6 +5587,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 	if (bwd > OCLightpath)
 	{
 		cout << "Bwd: " << bwd << endl;
+		cin.get();
 		bSuccess = BBU_ProvisionHelper_Unprotected_BIG(pCon, bwd);
 		return bSuccess;
 	}
@@ -5614,7 +5608,8 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_BACKHAUL
 			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL
-			|| pCon->m_eConnType == Connection::FIXED_MIDHAUL)
+			|| pCon->m_eConnType == Connection::FIXED_MIDHAUL
+			|| pCon->m_eConnType == Connection::MOBILE_FRONTHAUL)
 		{
 			// -L: VA MODIFICATO ???? ERRORE
 			// *************** PRE-PROCESSING ******************
@@ -5770,8 +5765,8 @@ inline bool NetMan::BBU_ProvisionHelper_Unprotected(Connection *pCon, Circuit& h
 	list<AbstractLink*> hPrimaryPath;
 	list<AbsPath*>hPPaths;
 	LINK_COST hPrimaryCost = UNREACHABLE;
-	UINT channel;
-	channel = -1;
+	UINT channel; //-L: ??? no sense
+	channel = -1; //-L: ??? no sense
 
 	//-B: since not initialized
 	m_hGraph.numberOfChannels = m_hWDMNet.numberOfChannels;
@@ -5843,7 +5838,7 @@ inline bool NetMan::BBU_ProvisionHelper_Unprotected(Connection *pCon, Circuit& h
 	{
 #ifdef DEBUGF
 		cout << " -> Blocked connection due to unreachability" << endl;
-		cin.get();
+//		cin.get();
 #endif // DEBUGB
 		//pCon->m_eStatus = Connection::DROPPED; //-B: fatto nel chiamante BBU_ProvisionNew
 		pCon->m_bBlockedDueToUnreach = true;
@@ -5874,7 +5869,7 @@ inline bool NetMan::BBU_ProvisionHelper_Unprotected(Connection *pCon, Circuit& h
 			pCon->m_bBlockedDueToLatency = true;
 #ifdef DEBUGF
 			cout << "-> Blocked connection due to latency (latency budget = " << LATENCYBUDGET << ")" << endl;
-			cin.get();
+		//	cin.get();
 #endif // DEBUGB
 		}
 		
@@ -7271,6 +7266,29 @@ LINK_CAPACITY NS_OCH::NetMan::getUniFiberCap(UniFiber*fiber)
 	return cap;
 }
 
+// return the power consumption of an hotel site
+UINT NetMan::computePowerConsumption(UINT hotelId) {
+	
+	OXCNode* hotelNode = (OXCNode*)m_hWDMNet.lookUpNodeById(hotelId);
+
+	// check that the node exists and that it is a CU/DU Hotel
+	assert(hotelNode);
+	assert(hotelNode->getBBUHotel());
+
+	// get the number of CU and DU hosted
+	UINT nDUs = hotelNode->m_nBBUs;
+	UINT nCUs = hotelNode->m_nCUs;
+
+	// if the hotel is not active return the idle power consumption
+	if (nDUs == 0 && nCUs == 0)
+		return CSIidlePower;
+
+	UINT DUsConsumption = (nDUs * DUpower) + F1power;
+	UINT CUsConsumption = (nCUs * CUpower) + BHpower;
+
+	return (DUsConsumption + CUsConsumption + CSIpower);
+}
+
 UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime hTime) {
 	OXCNode* pOXCsrc = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
 	OXCNode* pOXCdst = NULL; //-L: best active CU(I use an already active CU)
@@ -7279,7 +7297,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	UINT dst = 0, bestCU = 0;
 
 	m_hGraph.preferWavelPath();
-	invalidateSimplexLinkDueToCapOrStatus(bwd, 1);
+	invalidateSimplexLinkDueToCapOrStatus(bwd, 5);
 
 	// -L: a CU is already assigned to this node
 	if (pOXCsrc->m_nCUNodeIdAssigned != 0)
@@ -7369,7 +7387,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 		if (bestCU == pOXCsrc->m_nCUNodeIdAssigned)
 			return bestCU;
 
-		//-B: increase the number of active BBUs in the hotel node (the value will be more than 1 since it was already activated)
+		//-B: increase the number of active CUs in the hotel node (the value will be more than 1 since it was already activated)
 		pOXCdst->m_nCUs++;
 
 		//-B: assign, to the source node of the connection, the hotel node hosting its BBU
@@ -7399,7 +7417,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 			//-B: assign, to the source node of the connection, the hotel node hosting its CU
 			pOXCsrc->m_nCUNodeIdAssigned = dst;
 
-			//-B: increase the number of active BBUs in the thotel node (the value will be more than 1 since it was already activated)
+			//-B: increase the number of active CUs in the hotel node (the value will be more than 1 since it was already activated)
 			pOXCdst2->m_nCUs++;
 
 			return dst;
@@ -7476,67 +7494,11 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//-B: STEP 0a: check if this source node has an already assigned BBU in one of the hotel nodes
-	if (pOXCsrc->m_nBBUNodeIdsAssigned == 1) // -L: ???????? why ==1 should be >= 1
+	if (pOXCsrc->m_nBBUNodeIdsAssigned != 0) // -L: ???????? why ==1 should be >= 1
 	{
 		//dst node of this connection will be the BBU hotel node already assigned to this source node
 		//	(independently of how many BBUs there are into it)
 		return pOXCsrc->m_nBBUNodeIdsAssigned; //-----------------------------------------------------------------------------------------
-	}
-
-	//  If source node is a bbu hotel node...
-	//	(but, clearly, it's the first time this node has to route a fronthaul connection.
-	//	Otherwise, it should have stopped at the previous step)
-	if (pOXCsrc->getBBUHotel()) // -L: if the node is a BBUHotel, then getBBUHotel() returns true
-	{
-		//if the source node has already its bbu there and the source has other bbu than itself
-		if (pOXCsrc->m_nBBUNodeIdsAssigned == src && pOXCsrc->m_nBBUs > 1) { //-L: ??? impossible, if we are here for sure m_nBBUNodeIdsAssigned == 0             
-			cout << "\tNodo sorgente (" << src << ") è un hotel node quindi lascio qui la sua bbu" << endl;
-			return src;
-		}
-
-		//-L: ???? it's not doing anything, just a cout
-		//if the source node has only itself as bbu, i can change bbu and switch this off
-		if ((pOXCsrc->m_nBBUNodeIdsAssigned == src && pOXCsrc->m_nBBUs == 1)) {
-			cout << "\tNodo sorgente (" << src << ") ha solo se stessa come BBU" << endl;
-		}
-		else {
-			//if the source does not have an already assigned bbu
-			// but it is already active, there is no need to look for best bbu hotel node
-			if (isAlreadyActive(pOXCsrc))
-			{
-#ifdef DEBUG
-				cout << "\tNodo sorgente (" << src << ") e' gia' un hotel node";
-#endif // DEBUGB
-				//-B: check availability in terms of max num of active BBUs
-				if (checkAvailabilityHotelNode(pOXCsrc))
-				{
-#ifdef DEBUG
-					cout << " -> puo' attivare ancora BBUs" << endl;
-#endif // DEBUGB
-					pOXCsrc->m_nBBUs++; //-L: increase num of active BBU in this node
-
-					//if the source was asssigned another bbu but now it can place it at itself
-					if (pOXCsrc->m_nBBUNodeIdsAssigned > 0 && pOXCsrc->m_nBBUNodeIdsAssigned != src) {
-						pOXCsrc->m_nBBUNodeIdsAssignedLast = src;
-						pOXCsrc->m_bBBUAlreadyChanged = true;
-						pOXCsrc->m_hChangeBBUTime = hTime;
-						pOXCsrc->m_nCountBBUsChanged++;
-						return src;
-					}
-					else {
-						pOXCsrc->m_nBBUNodeIdsAssigned = src;
-						return src; //-----------------------------------------------------------------------------------------------------------
-					}
-		}
-				else
-				{
-					;
-#ifdef DEBUG
-					cout << " -> NON HA PIU' SPAZIO PER ALTRE BBU!" << endl;
-#endif // DEBUGB
-				}
-	}
-}
 	}
 
 	//ELSE IF this candidate hotel node is still inactive (does not have any BBU in it)
@@ -7632,11 +7594,14 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 			//if a valid bbu hotel node has been selected
 			if (dst > 0)
 				pOXCdst2 = (OXCNode*)this->m_hWDMNet.lookUpNodeById(dst);
-
-	}
+		}
 	}
 
 	OXCNode* bbuNode = NULL;
+
+	//-L: - if no destination has been found
+	if (pOXCdst == NULL && pOXCdst2 == NULL)
+		return 0;
 
 	//CASE 1 - use an already active BBU
 	if (pOXCdst && pOXCdst2 == NULL)
@@ -7891,7 +7856,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 		cout << "\tNo hotel chosen as destination!!! I'm gonna choose the CS itself: " << src << endl;
 		cin.get();
 #endif // DEBUGB
-		} //END if
+	} //END if
 
 		//-B: STEP 5 - POST-PROCESS: validate those links that have been invalidated temporarily
 		//m_hGraph.validateAllLinks();
@@ -9866,6 +9831,7 @@ void NS_OCH::NetMan::invalidateSimplexLinkDueToCapOrStatus(UINT bwd, UINT connTy
 		//-L: DEBUG
 		//SimplexLink::SimplexLinkType LT = pLink->getSimplexLinkType();
 
+		//-L: ??????? perchè?
 		//-B: *********** INVALIDATE SIMPLEX LINK DUE TO FREE STATUS *************
 		//-B: don't know if the following part is really useful
 		//-B: se il simplex link LT_Channel considerato ha un pointer valido alla fibra => if (pLink->m_pUniFiber) 
@@ -10439,7 +10405,11 @@ void NetMan::consumeBandwOnSimplexLink(Lightpath*pLightpath, UINT BWToBeAllocate
 		if (pLink->m_pLightpath == pLightpath)
 		{
 			pLink->m_hFreeCap -= BWToBeAllocated;
-			assert(pLightpath->getFreeCapacity() == pLink->m_hFreeCap);
+			if (pLightpath->getFreeCapacity() != pLink->m_hFreeCap) {
+				std::cout << "NETMAN 10440......................" << endl;
+				cin.get();
+			}
+			//assert(pLightpath->getFreeCapacity() == pLink->m_hFreeCap);
 			break;
 		}
 	}
@@ -10828,7 +10798,8 @@ void NetMan::checkGrooming(Connection*pCon)
 void NetMan::computeAvgLatency(Event*pEvent)
 {
 	assert(pEvent->m_pConnection->m_eConnType == Connection::MOBILE_FRONTHAUL
-		|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL);
+		|| pEvent->m_pConnection->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL
+		|| pEvent->m_pConnection->m_eConnType == Connection::FIXED_MIDHAUL);
 
 	this->m_hLog.avgLatency += pEvent->m_pConnection->m_dRoutingTime;
 	this->m_runLog.avgLatency += pEvent->m_pConnection->m_dRoutingTime;

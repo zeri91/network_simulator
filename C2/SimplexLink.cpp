@@ -142,7 +142,11 @@ SimplexLink::SimplexLinkType SimplexLink::getSimplexLinkType() const
 
 void SimplexLink::consumeBandwidth(UINT nBW)
 {
-	assert(m_hFreeCap >= nBW);
+	if (m_hFreeCap < nBW) {
+		std::cout << "consumeBW............................" << endl;
+		cin.get();
+	}
+//	assert(m_hFreeCap >= nBW);
 	consumeBandwidthHelper(0 - (int)nBW);
 }
 

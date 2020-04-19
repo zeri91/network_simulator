@@ -986,7 +986,11 @@ void Lightpath::Unprotected_setUpLightpath(NetMan* pNetMan, Circuit *pCircuit)
 	
 	//---------------- UPDATE LIGHTPATH FREE_CAPACITY ----------------
 	//-B: m_nBWToBeAllocated's value set in BBU_NewCircuit equal to pCircuit->m_eBW
-	assert(m_nFreeCapacity >= m_nBWToBeAllocated);
+	if (m_nFreeCapacity < m_nBWToBeAllocated) {
+		std::cout << "989 lightpath..................." << endl;
+		cin.get();
+	}
+	//assert(m_nFreeCapacity >= m_nBWToBeAllocated);
 	//-B: find the smallest free capacity among the links that the lightpath is made of
 	//LINK_CAPACITY minCap = this->findLeastCapacityLinkInLightpath(pNetMan);
 #ifdef DEBUG

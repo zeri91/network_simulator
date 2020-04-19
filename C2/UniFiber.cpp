@@ -481,7 +481,9 @@ void UniFiber::muxReleaseChannel(Lightpath* pLightpath, NetMan*pNetMan)
 	if (m_pChannel[w].m_pLightpath)
 	{
 		//-B: if the channel w points to the selected lightpath
-		assert(m_pChannel[w].m_pLightpath == pLightpath);
+		if (m_pChannel[w].m_pLightpath != pLightpath)
+			cin.get();
+	//	assert(m_pChannel[w].m_pLightpath == pLightpath);
 
 #ifdef DEBUGC
 		cout << "\t---> CANALE " << w << endl;

@@ -165,6 +165,9 @@ public:
 	ConflictType wpverifyCircuitDED(Circuit*);
 
 protected:
+	//-L: compute the power consumption of an Hotel
+	UINT computePowerConsumption(UINT hotelId);
+
 	bool provisionConnectionHelper(Connection*);
 	//bool provisionConnectionHelperxTime(Connection*, list<Event*>&);//-M
 	void genInitialStateGraph();
