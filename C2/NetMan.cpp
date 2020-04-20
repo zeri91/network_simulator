@@ -8629,7 +8629,7 @@ UINT NetMan::placeBBUHigh(UINT src, vector<OXCNode*>&BBUsList)
 	bool pathAlreadyFound = false;
 	UINT bestBBUFound = 0;
 
-	if (pSrc->getId() == 46)
+	if (src == 46)
 		return 46;
 
 	for (int j = 0; j < BBUsList.size(); j++)
@@ -9083,7 +9083,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 	bool pathAlreadyFound = false;
 	UINT bestCUFound = 0;
 
-	if (pSrc->getId() == 46)
+	if (src == 46)
 		return 46;
 
 	for (int j = 0; j < BBUsList.size(); j++)
