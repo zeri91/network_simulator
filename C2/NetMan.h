@@ -171,6 +171,9 @@ protected:
 	//-L: compute the overall power consumption of all the hotels in the network
 	UINT computeTotalPowerConsumption();
 
+	//-L: smart placement of both CU and DU
+	UINT chooseBestPlacement();
+
 	bool provisionConnectionHelper(Connection*);
 	//bool provisionConnectionHelperxTime(Connection*, list<Event*>&);//-M
 	void genInitialStateGraph();

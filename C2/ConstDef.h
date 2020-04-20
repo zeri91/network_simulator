@@ -11,6 +11,7 @@
 
 #define CHANNEL_CAPACITY 582		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
 									// to get the real channel capacity, multiply it by OC1 = 51.48 Mbps
+#define FH_BWD_FX OC29				//-L: BW required for a FH connection at split 7
 #define BWDGRANULARITY OC6			//-B: bandwidth granularity -> amount of bandwidth requested by each mobile connection
 									//-> needed for BBUReadTopoHelper to set channel capacity and to set backhaul bwd of macro 
 #define FIXED_TRAFFIC OC192			//-B: bandwidth requested by fixed requests
@@ -81,6 +82,7 @@ typedef enum {
 	OC14   = 14,		// 720.72 Mb/s
 	OC15   = 15,		// 777.6 Mb/s
 	OC20   = 20,		// 1 Gb/s (1029.6 Mb/s)
+	OC29   = 29,
 	OC36   = 36,		// 1.8 Gb/s
 	OC40   = 40,		// 2 Gb/s (2059.2 Mb/s)
 	OC42   = 42,		// 2 Gb/s (2162.16 Mb/s)

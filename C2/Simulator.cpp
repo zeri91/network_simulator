@@ -1972,7 +1972,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		//-B: ASSIGN X-HAUL BANDWIDTH
 		if (MIDHAUL)
 		{
-			CPRIBwd = genMidhaulBwd(eBandwidth);
+			CPRIBwd = FH_BWD_FX;
 		}
 		else //FRONTHAUL
 		{
@@ -2567,7 +2567,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli_NewBBU(Connection* pConTobeSw
 	//-B: ASSIGN X-HAUL BANDWIDTH
 	if (MIDHAUL)
 	{
-		CPRIBwd = genMidhaulBwd(eBandwidth);
+		CPRIBwd = FH_BWD_FX;
 	}
 	else //FRONTHAUL
 	{
