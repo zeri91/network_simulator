@@ -1989,7 +1989,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 			nDst = m_pNetMan->findBestBBUHotel(nSrc, CPRIBwd, pEvent->m_hTime);
 
 			if (pEvent->m_pSource->m_nBBUNodeIdsAssignedLast > 0 && pEvent->m_pSource->m_nBBUNodeIdsAssigned > 0) {
-				updateBBUforallConnections(nDst, nSrc, pEvent);
+				;//updateBBUforallConnections(nDst, nSrc, pEvent);
 			}
 		}
 		else

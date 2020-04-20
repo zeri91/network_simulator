@@ -7309,32 +7309,33 @@ UINT NetMan::chooseBestPlacement() {
 
 	// compute status of the network
 	ltChannelStatistics();
-
-	int activeLinks = LT_LINKS - m_hGraph.inactiveLinks.size();
+	
+	int inactiveLinks  = m_hGraph.inactiveLinks.size();
+	int activeLinks = LT_LINKS - inactiveLinks;
 
 	// -L: percentage of links disabled due to not enough capacity
-	int occupacyPercentage = (m_hGraph.inactiveLinks.size()/ LT_LINKS) * 100;
+	float occupacyPercentage = ((float)inactiveLinks / (float)LT_LINKS) * 100;
 	
 	//-L: percentage of links with enough residual capacity 
-	int freeLinkPercentage = 100 - occupacyPercentage;
+	float freeLinkPercentage = 100 - occupacyPercentage;
 	
 	assert(occupacyPercentage >= 0 && occupacyPercentage <= 100);
 	assert(freeLinkPercentage >= 0 && freeLinkPercentage <= 100);
 
-	if (occupacyPercentage == 0)
+	if (occupacyPercentage > 1)
 		return 0; // 0 means centralize -> I will place the CU/DU as closest as possible to the core network
 
 	//-L: links that have free capatity only for one more FH connnection
-	int lowCapacityLinkPercentage = (m_hGraph.fewCapacityLinks.size()/activeLinks) * 100;
+	float lowCapacityLinkPercentage = ((float)(m_hGraph.fewCapacityLinks.size()) / (float)activeLinks) * 100;
 	assert(lowCapacityLinkPercentage >= 0 && lowCapacityLinkPercentage <= 100);
 
 	//-L: percentage of active links with not enough capacity for a new FH connection
 	// only midhaul and backhaul can be assigned to these links
-	int fhBlockedLinkPercentage = (m_hGraph.blockedToFronthaulLinks.size() / activeLinks) * 100;
+	float fhBlockedLinkPercentage = ((float)(m_hGraph.blockedToFronthaulLinks.size()) / (float)activeLinks) * 100;
 	assert(fhBlockedLinkPercentage >= 0 && fhBlockedLinkPercentage <= 100);
 
 	// get total power consumption of the network
-	int powerCons = computeTotalPowerConsumption();
+	float powerCons = computeTotalPowerConsumption();
 
 	return 1; // 1 means distribute
 
