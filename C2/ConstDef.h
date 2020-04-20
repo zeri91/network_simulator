@@ -8,7 +8,7 @@
 #define END_OFFICE_HOURS 5			//-B: "phase number" (could be time (hour) or running phase, it depends on RUNNING_STATS value)
 									//	in which office hours end and residential hours start
 									//-B: for Ahmed
-
+#define LT_LINKS 960
 #define CHANNEL_CAPACITY 582		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
 									// to get the real channel capacity, multiply it by OC1 = 51.48 Mbps
 #define FH_BWD_FX OC29				//-L: BW required for a FH connection at split 7

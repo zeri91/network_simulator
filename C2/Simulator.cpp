@@ -1140,7 +1140,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			 << m_pNetMan->m_hLog.m_nBlockedFixedBackConn << " F-B + "
 			 << m_pNetMan->m_hLog.m_nBlockedMobileBackConn << " M-B + "
 			 << m_pNetMan->m_hLog.m_nBlockedFixMobBackConn << " FM-B) ("
-			 << m_pNetMan->m_hLog.m_nBlockedBWDueToUnreach << " unreach + "
+			 << m_pNetMan->m_hLog.m_nBlockedConDueToUnreach << " unreach + "
 			 << m_pNetMan->m_hLog.m_nBlockedConDueToLatency << " lat"
 			 << ") connections\n\t\t" << (m_hEventList.getNumArr() + m_hEventList.getNumDep())
 			 << " (" << m_hEventList.getNumArr() - m_pNetMan->m_hLog.m_nNumConnectionsChangingBBU << " arr + " << m_hEventList.getNumDep()

@@ -360,6 +360,13 @@ public:
 	// immutable attributes
 	MappedLinkList<UINT, AbstractLink*> m_hLinkList;
 	MappedLinkList<UINT, AbstractNode*> m_hNodeList;
+
+	// -L
+	MappedLinkList<UINT, AbstractLink*> inactiveLinks;
+	MappedLinkList<UINT, AbstractLink*> fewCapacityLinks;
+	MappedLinkList<UINT, AbstractLink*> blockedToFronthaulLinks;
+	MappedLinkList<UINT, AbstractLink*> blockedToMidhaulLinks;
+
 	vector<int> channelsToDelete;
 	list<Lightpath*>	auxLightpathsList;
 

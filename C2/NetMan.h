@@ -174,6 +174,9 @@ protected:
 	//-L: smart placement of both CU and DU
 	UINT chooseBestPlacement();
 
+	//-L: set link lists for netework statistics
+	void ltChannelStatistics();
+
 	bool provisionConnectionHelper(Connection*);
 	//bool provisionConnectionHelperxTime(Connection*, list<Event*>&);//-M
 	void genInitialStateGraph();

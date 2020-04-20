@@ -6161,7 +6161,7 @@ bool NetMan::BBU_ProvisionHelper_Unprotected_BIG(Connection*pCon, BandwidthGranu
 		{
 #ifdef DEBUGB
 			cout << " -> Blocked connection due to unreachability" << endl;
-			cin.get();
+
 #endif
 			pCon->m_bBlockedDueToUnreach = true;
 			bSuccess = false;
@@ -6232,7 +6232,7 @@ bool NetMan::BBU_ProvisionHelper_Unprotected_BIG(Connection*pCon, BandwidthGranu
 		{
 #ifdef DEBUGB
 			cout << " -> Blocked connection due to unreachability" << endl;
-			cin.get();
+		
 #endif
 			pCon->m_bBlockedDueToUnreach = true;
 			bSuccess = false;
@@ -7298,6 +7298,50 @@ UINT NetMan::computeTotalPowerConsumption() {
 	return totalConsumption;
 }
 
+//-L: smart placement of both CU and DU
+UINT NetMan::chooseBestPlacement() {
+
+	int policy = -1;
+	int threshold;
+
+	// compute blocking probability
+	int blockingProb = 0;
+
+	// compute status of the network
+	ltChannelStatistics();
+
+	int activeLinks = LT_LINKS - m_hGraph.inactiveLinks.size();
+
+	// -L: percentage of links disabled due to not enough capacity
+	int occupacyPercentage = (m_hGraph.inactiveLinks.size()/ LT_LINKS) * 100;
+	
+	//-L: percentage of links with enough residual capacity 
+	int freeLinkPercentage = 100 - occupacyPercentage;
+	
+	assert(occupacyPercentage >= 0 && occupacyPercentage <= 100);
+	assert(freeLinkPercentage >= 0 && freeLinkPercentage <= 100);
+
+	if (occupacyPercentage == 0)
+		return 0; // 0 means centralize -> I will place the CU/DU as closest as possible to the core network
+
+	//-L: links that have free capatity only for one more FH connnection
+	int lowCapacityLinkPercentage = (m_hGraph.fewCapacityLinks.size()/activeLinks) * 100;
+	assert(lowCapacityLinkPercentage >= 0 && lowCapacityLinkPercentage <= 100);
+
+	//-L: percentage of active links with not enough capacity for a new FH connection
+	// only midhaul and backhaul can be assigned to these links
+	int fhBlockedLinkPercentage = (m_hGraph.blockedToFronthaulLinks.size() / activeLinks) * 100;
+	assert(fhBlockedLinkPercentage >= 0 && fhBlockedLinkPercentage <= 100);
+
+	// get total power consumption of the network
+	int powerCons = computeTotalPowerConsumption();
+
+	return 1; // 1 means distribute
+
+	assert(policy != -1);
+	return policy;
+}
+
 UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime hTime) {
 	OXCNode* pOXCsrc = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
 	OXCNode* pOXCdst = NULL; //-L: best active CU(I use an already active CU)
@@ -7309,14 +7353,17 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	invalidateSimplexLinkDueToCapOrStatus(bwd, 5);
 
 	// -L: a CU is already assigned to this node
-	if (pOXCsrc->m_nCUNodeIdAssigned != 0)
+	/*if (pOXCsrc->m_nCUNodeIdAssigned != 0)
 	{
 		//dst node of this connection will be the CU hotel node already assigned to this source node
 		return pOXCsrc->m_nCUNodeIdAssigned;
 	}
-
+	*/
 	// check other candidate hotel nodes using a sorted hotels list
 	bool enough = true;
+
+	//-L: choose the DU placement policy according to the status of the network
+	int policy = chooseBestPlacement();
 
 	//-B: build a list with all bbu hotel node already active (BBUs > 0) with enough "space" to host a new BBU (BBUs < MAXNUMBBU)
 	vector<OXCNode*>auxBBUsList;
@@ -7326,7 +7373,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	{
 
 		//SEARCH FOR "BEST" CU AMONG (!) ALREADY ACTIVATED (!) CU HOTEL NODES
-		switch (CUPOLICY)
+		switch (policy)
 		{
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
@@ -7362,7 +7409,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 		if (inactiveBBUs.size() > 0)
 		{
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (CUPOLICY)
+			switch (policy)
 			{
 			case 0: //1st algorithm
 				//	(in this function the core CO is preferred over the others as BBU hotel node)
@@ -7503,21 +7550,22 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//-B: STEP 0a: check if this source node has an already assigned BBU in one of the hotel nodes
-	if (pOXCsrc->m_nBBUNodeIdsAssigned != 0) // -L: ???????? why ==1 should be >= 1
+	/*if (pOXCsrc->m_nBBUNodeIdsAssigned != 0) // -L: ???????? why ==1 should be >= 1
 	{
 		//dst node of this connection will be the BBU hotel node already assigned to this source node
 		//	(independently of how many BBUs there are into it)
 		return pOXCsrc->m_nBBUNodeIdsAssigned; //-----------------------------------------------------------------------------------------
-	}
+	}*/
 
 	//ELSE IF this candidate hotel node is still inactive (does not have any BBU in it)
 	//	or is already full of BBUs (or, simply, the source node is not a candidate BBU hotel node)
 	// or I want to allocate a second new BBU:
 	//	------> check other candidate hotel nodes using a sorted hotels list
 
-	//-B: reset BBUsReachCost = UNREACHABLE for all nodes (potentially modified in the previous iteration)
-	//m_hWDMNet.resetBBUsReachabilityCost(); //-B: --> ALREADY DONE BY resetPreProcessing method (inside BBU_newConnection)
 
+	//-L: choose the DU placement policy according to the status of the network
+	int policy = chooseBestPlacement();
+	
 	pOXCdst = NULL;  // -L: best active BBU (I use an already active BBU) 
 	OXCNode* pOXCdst2 = NULL; //-L: best inactive BBU (need to activate a new one)
 	bool enough = true;
@@ -7533,7 +7581,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 #endif // DEBUGB
 
 		//SEARCH FOR "BEST" BBU AMONG (!) ALREADY ACTIVATED (!) BBU HOTEL NODES
-		switch (BBUPOLICY)
+		switch (policy)
 		{
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
@@ -7580,7 +7628,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 #endif // DEBUGB
 
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (BBUPOLICY)
+			switch (policy)
 			{
 			case 0: //1st algorithm
 				//	(in this function the core CO is preferred over the others as BBU hotel node)
@@ -8580,6 +8628,9 @@ UINT NetMan::placeBBUHigh(UINT src, vector<OXCNode*>&BBUsList)
 	bool pathAlreadyFound = false;
 	UINT bestBBUFound = 0;
 
+	if (pSrc->getId() == 46)
+		return 46;
+
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
 		//-B: we must declare it here (and not before the for cycle)!!!
@@ -9030,6 +9081,9 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 	list <AbstractLink*> savedPath;
 	bool pathAlreadyFound = false;
 	UINT bestCUFound = 0;
+
+	if (pSrc->getId() == 46)
+		return 46;
 
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
@@ -9750,6 +9804,38 @@ void NS_OCH::NetMan::printChannelLightpathNetPast()
 	}
 }
 
+//-L linkStatistics
+void NS_OCH::NetMan::ltChannelStatistics() {
+
+	m_hGraph.inactiveLinks.clear();
+	m_hGraph.fewCapacityLinks.clear();
+	m_hGraph.blockedToFronthaulLinks.clear();
+	m_hGraph.blockedToMidhaulLinks.clear();
+
+	SimplexLink* pLink;
+	list<AbstractLink*>::const_iterator itr;
+
+	for (itr = m_hGraph.m_hLinkList.begin(); itr != m_hGraph.m_hLinkList.end(); itr++)
+	{
+		pLink = (SimplexLink*)(*itr);
+
+		if (pLink->getSimplexLinkType() == SimplexLink::LT_Channel)
+		{
+			if (pLink->getValidity())
+			{
+				if (pLink->m_hFreeCap < FH_BWD_FX + BWDGRANULARITY)
+					m_hGraph.fewCapacityLinks.push_front(pLink->getId(), pLink);
+				if (pLink->m_hFreeCap < FH_BWD_FX)
+					m_hGraph.blockedToFronthaulLinks.push_front(pLink->getId(), pLink);
+				if (pLink->m_hFreeCap < BWDGRANULARITY)
+					m_hGraph.blockedToMidhaulLinks.push_front(pLink->getId(), pLink);
+			}
+			else
+				m_hGraph.inactiveLinks.push_front(pLink->getId(), pLink);	
+		}
+	}
+}
+
 //-B: I should have used checkFreedomSimplexLink method to get some help
 void NS_OCH::NetMan::invalidateSimplexLinkDueToFreeStatus()
 {
@@ -9819,7 +9905,6 @@ void NS_OCH::NetMan::invalidateSimplexLinkDueToCapOrStatus(UINT bwd, UINT connTy
 	SimplexLink*pLink;
 	UniFiber*pUniFiber;
 	int w;
-
 	//-B: scan all simplex links
 	for (itr = m_hGraph.m_hLinkList.begin(); itr != m_hGraph.m_hLinkList.end(); itr++)
 	{
@@ -9837,10 +9922,7 @@ void NS_OCH::NetMan::invalidateSimplexLinkDueToCapOrStatus(UINT bwd, UINT connTy
 				continue;
 			}
 		}
-		//-L: DEBUG
-		//SimplexLink::SimplexLinkType LT = pLink->getSimplexLinkType();
 
-		//-L: ??????? perchè?
 		//-B: *********** INVALIDATE SIMPLEX LINK DUE TO FREE STATUS *************
 		//-B: don't know if the following part is really useful
 		//-B: se il simplex link LT_Channel considerato ha un pointer valido alla fibra => if (pLink->m_pUniFiber) 
