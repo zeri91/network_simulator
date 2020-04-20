@@ -24,7 +24,7 @@
 #define DISTANCE_SC_MC 2			//-B: define the distance between a macro cell and a small cell
 #define	PROPAGATIONLATENCY 0.000005 //-B: propagation latency per km
 #define ELSWITCHLATENCY 0.00002		//-B: electronic switch latency 0.00002
-#define LATENCYBUDGET 0.0005		//-B: max fronthaul latency
+#define LATENCYBUDGET 0.0003		//-B: max fronthaul latency
 #define LATENCY_MH 0.001			//-L: max midhaul latency
 #define LATENCY_BH 0.04				//-L: max backhaul latency
 #define MAXNUMBBU 2000				//-B: max num of active BBU in the same hotel node (to not limit: > num of nodes in the network)

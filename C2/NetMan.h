@@ -168,6 +168,9 @@ protected:
 	//-L: compute the power consumption of an Hotel
 	UINT computePowerConsumption(UINT hotelId);
 
+	//-L: compute the overall power consumption of all the hotels in the network
+	UINT computeTotalPowerConsumption();
+
 	bool provisionConnectionHelper(Connection*);
 	//bool provisionConnectionHelperxTime(Connection*, list<Event*>&);//-M
 	void genInitialStateGraph();

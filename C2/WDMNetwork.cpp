@@ -7468,10 +7468,16 @@ void WDMNetwork::updateBBUsUseAfterDeparture(Connection*pCon, ConnectionDB&connD
 				//cin.get();
 
 				//decrease num of active BBUs in this hotel node
-				pOXCDst->m_nBBUs--;
-				assert(pOXCDst->m_nBBUs >= 0);
+				if(pCon->m_eConnType == Connection::FIXED_MIDHAUL)
+					pOXCDst->m_nCUs--;
+				else
+					pOXCDst->m_nBBUs--;
+
+				//-L: ????? no sense, lo commento
+				//assert(pOXCDst->m_nBBUs >= 0);
+
 				//if this hotel node does not have active BBU in itself anymore
-				if (pOXCDst->m_nBBUs == 0)
+				if (pOXCDst->m_nBBUs == 0 && pOXCDst->m_nCUs == 0)
 				{
 					if (pOXCDst->getBBUHotel())
 					{
@@ -7499,10 +7505,16 @@ void WDMNetwork::updateBBUsUseAfterDeparture(Connection*pCon, ConnectionDB&connD
 				pOXCSrc->m_nBBUNodeIdsAssigned = 0;
 
 				//decrease num of active BBUs in this hotel node
-				pOXCDst->m_nBBUs--;
-				assert(pOXCDst->m_nBBUs >= 0);
+				if (pCon->m_eConnType == Connection::FIXED_MIDHAUL)
+					pOXCDst->m_nCUs--;
+				else
+					pOXCDst->m_nBBUs--;
+
+				//-L: ????? no sense, lo commento
+				// assert(pOXCDst->m_nBBUs >= 0);
+
 				//if this hotel node does not have active BBU in itself anymore
-				if (pOXCDst->m_nBBUs == 0)
+				if (pOXCDst->m_nBBUs == 0 && pOXCDst->m_nCUs == 0)
 				{
 					if (pOXCDst->getBBUHotel())
 					{

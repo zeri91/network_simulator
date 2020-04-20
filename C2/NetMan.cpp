@@ -5607,9 +5607,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 
 		if (pCon->m_eConnType == Connection::FIXED_BACKHAUL
 			|| pCon->m_eConnType == Connection::MOBILE_BACKHAUL
-			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL
-			|| pCon->m_eConnType == Connection::FIXED_MIDHAUL
-			|| pCon->m_eConnType == Connection::MOBILE_FRONTHAUL)
+			|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL)
 		{
 			// -L: VA MODIFICATO ???? ERRORE
 			// *************** PRE-PROCESSING ******************
@@ -7287,6 +7285,17 @@ UINT NetMan::computePowerConsumption(UINT hotelId) {
 	UINT CUsConsumption = (nCUs * CUpower) + BHpower;
 
 	return (DUsConsumption + CUsConsumption + CSIpower);
+}
+
+// return the power consumption of all the hotel sites in the network
+UINT NetMan::computeTotalPowerConsumption() {
+
+	UINT totalConsumption = 0; 
+
+	for (int i = 0; i < m_hWDMNet.hotelsList.size(); i++) 
+		totalConsumption += computePowerConsumption(m_hWDMNet.hotelsList[i]->getId());
+	
+	return totalConsumption;
 }
 
 UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime hTime) {
