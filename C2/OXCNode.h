@@ -106,6 +106,10 @@ namespace NS_OCH {
 
 		void resetActivityTime();
 
+		//-L
+		UINT getNumberOfDUs();
+		UINT getNumberOfCUs();
+
 		// mutable attributes
 		UINT					m_nFreeTx;
 		UINT					m_nFreeRx;

@@ -7374,7 +7374,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	{
 
 		//SEARCH FOR "BEST" CU AMONG (!) ALREADY ACTIVATED (!) CU HOTEL NODES
-		switch (policy)
+		switch (CUPOLICY)
 		{
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
@@ -7410,7 +7410,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 		if (inactiveBBUs.size() > 0)
 		{
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (policy)
+			switch (CUPOLICY)
 			{
 			case 0: //1st algorithm
 				//	(in this function the core CO is preferred over the others as BBU hotel node)
@@ -7582,7 +7582,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 #endif // DEBUGB
 
 		//SEARCH FOR "BEST" BBU AMONG (!) ALREADY ACTIVATED (!) BBU HOTEL NODES
-		switch (policy)
+		switch (BBUPOLICY)
 		{
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
@@ -7629,7 +7629,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 #endif // DEBUGB
 
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (policy)
+			switch (BBUPOLICY)
 			{
 			case 0: //1st algorithm
 				//	(in this function the core CO is preferred over the others as BBU hotel node)
@@ -8629,7 +8629,7 @@ UINT NetMan::placeBBUHigh(UINT src, vector<OXCNode*>&BBUsList)
 	bool pathAlreadyFound = false;
 	UINT bestBBUFound = 0;
 
-	if (pSrc->getId() == 46)
+	if (src == 46)
 		return 46;
 
 	for (int j = 0; j < BBUsList.size(); j++)
@@ -9083,7 +9083,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 	bool pathAlreadyFound = false;
 	UINT bestCUFound = 0;
 
-	if (pSrc->getId() == 46)
+	if (src == 46)
 		return 46;
 
 	for (int j = 0; j < BBUsList.size(); j++)

@@ -157,6 +157,16 @@ void OXCNode::dump(ostream &out) const
 //	}
 }
 
+//-L
+UINT OXCNode::getNumberOfDUs() {
+	return this->m_nBBUs;
+}
+
+//-L
+UINT OXCNode::getNumberOfCUs() {
+	return this->m_nCUs;
+}
+
 void OXCNode::addIncomingLink(AbstractLink *pILink)
 {
 	AbstractNode::addIncomingLink(pILink);
