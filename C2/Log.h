@@ -109,6 +109,8 @@ public:
 	double PblockBW_hour[24] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 	double PblockFrontBW_hour[24] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
 	double PblockBackBW_hour[24] = { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 };
+
+	UINT powerConsumption; //-L
 	map<UINT, vector<double> > UniFiberLoad_hour;
 	vector<double> hotelsActivity;
 	UINT peakNumLightpaths;

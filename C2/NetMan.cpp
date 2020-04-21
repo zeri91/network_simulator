@@ -940,6 +940,9 @@ void NetMan::logPeriodical(SimulationTime hTimeSpan)
 	//-B: log peak and average number of BBUs (count only macro cells)
 	this->logActiveBBUs(hTimeSpan);
 
+	//-L: log peak and avg power consumption of hotels
+	this->logHotelsPowerConsumption(hTimeSpan);
+
 	//-B: log peak and average number of active small cells
 	this->logActiveSmallCells(hTimeSpan);
 	//////////////////////////////////////////////////////////////////////////////////
@@ -7288,7 +7291,7 @@ UINT NetMan::computePowerConsumption(UINT hotelId) {
 }
 
 // return the power consumption of all the hotel sites in the network
-UINT NetMan::computeTotalPowerConsumption() {
+UINT NetMan::computeHotelsTotalPowerConsumption() {
 
 	UINT totalConsumption = 0; 
 
@@ -7298,11 +7301,16 @@ UINT NetMan::computeTotalPowerConsumption() {
 	return totalConsumption;
 }
 
-//-L: smart placement of both CU and DU
-UINT NetMan::chooseBestPlacement() {
+//-L: smart placement of both CU and DU cudu == 0 means DU, cudu == 1 means CU
+UINT NetMan::chooseBestPlacement(int cudu) {
+
+	assert(cudu == 0 || cudu == 1);
+
+	if (SMART_PLACEMENT == 0)
+		return (cudu == 0) ? BBUPOLICY : CUPOLICY;
 
 	int policy = -1;
-	int threshold;
+	const float BLOCKTHRESHOLD = 10.0;
 
 	// compute blocking probability
 	int blockingProb = 0;
@@ -7310,20 +7318,17 @@ UINT NetMan::chooseBestPlacement() {
 	// compute status of the network
 	ltChannelStatistics();
 	
-	int inactiveLinks  = m_hGraph.inactiveLinks.size();
-	int activeLinks = LT_LINKS - inactiveLinks;
+	const int inactiveLinks = m_hGraph.inactiveLinks.size();
+	const int activeLinks = LT_LINKS - inactiveLinks;
 
 	// -L: percentage of links disabled due to not enough capacity
-	float occupacyPercentage = ((float)inactiveLinks / (float)LT_LINKS) * 100;
+	const float occupacyPercentage = ((float)inactiveLinks / (float)LT_LINKS) * 100;
 	
 	//-L: percentage of links with enough residual capacity 
-	float freeLinkPercentage = 100 - occupacyPercentage;
+	const float freeLinkPercentage = 100 - occupacyPercentage;
 	
-	assert(occupacyPercentage >= 0 && occupacyPercentage <= 100);
-	assert(freeLinkPercentage >= 0 && freeLinkPercentage <= 100);
-
-	if (occupacyPercentage > 1)
-		return 0; // 0 means centralize -> I will place the CU/DU as closest as possible to the core network
+	assert(occupacyPercentage >= 0.0 && occupacyPercentage <= 100.0);
+	assert(freeLinkPercentage >= 0.0 && freeLinkPercentage <= 100.0);
 
 	//-L: links that have free capatity only for one more FH connnection
 	float lowCapacityLinkPercentage = ((float)(m_hGraph.fewCapacityLinks.size()) / (float)activeLinks) * 100;
@@ -7334,13 +7339,17 @@ UINT NetMan::chooseBestPlacement() {
 	float fhBlockedLinkPercentage = ((float)(m_hGraph.blockedToFronthaulLinks.size()) / (float)activeLinks) * 100;
 	assert(fhBlockedLinkPercentage >= 0 && fhBlockedLinkPercentage <= 100);
 
-	// get total power consumption of the network
-	float powerCons = computeTotalPowerConsumption();
+	// get total power consumption of the hotels in the network
+	float powerCons = computeHotelsTotalPowerConsumption();
+
+	// If the network has few connections I don't have to save BW so I can centralize and save power
+	if (occupacyPercentage < BLOCKTHRESHOLD)
+		return 0; // 0 means centralize -> I will place the CU/DU as closest as possible to the core network
 
 	return 1; // 1 means distribute
 
-	assert(policy != -1);
-	return policy;
+	//assert(policy != -1);
+	//return policy;
 }
 
 UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime hTime) {
@@ -7354,17 +7363,17 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	invalidateSimplexLinkDueToCapOrStatus(bwd, 5);
 
 	// -L: a CU is already assigned to this node
-	/*if (pOXCsrc->m_nCUNodeIdAssigned != 0)
+	if (pOXCsrc->m_nCUNodeIdAssigned != 0)
 	{
 		//dst node of this connection will be the CU hotel node already assigned to this source node
 		return pOXCsrc->m_nCUNodeIdAssigned;
 	}
-	*/
+	
 	// check other candidate hotel nodes using a sorted hotels list
 	bool enough = true;
 
 	//-L: choose the DU placement policy according to the status of the network
-	int policy = chooseBestPlacement();
+	int policy = chooseBestPlacement(1);
 
 	//-B: build a list with all bbu hotel node already active (BBUs > 0) with enough "space" to host a new BBU (BBUs < MAXNUMBBU)
 	vector<OXCNode*>auxBBUsList;
@@ -7374,7 +7383,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	{
 
 		//SEARCH FOR "BEST" CU AMONG (!) ALREADY ACTIVATED (!) CU HOTEL NODES
-		switch (CUPOLICY)
+		switch (policy)
 		{
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
@@ -7410,7 +7419,7 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 		if (inactiveBBUs.size() > 0)
 		{
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (CUPOLICY)
+			switch (policy)
 			{
 			case 0: //1st algorithm
 				//	(in this function the core CO is preferred over the others as BBU hotel node)
@@ -7551,12 +7560,12 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	//-B: STEP 0a: check if this source node has an already assigned BBU in one of the hotel nodes
-	/*if (pOXCsrc->m_nBBUNodeIdsAssigned != 0) // -L: ???????? why ==1 should be >= 1
+	if (pOXCsrc->m_nBBUNodeIdsAssigned != 0) // -L: ???????? why ==1 should be >= 1
 	{
 		//dst node of this connection will be the BBU hotel node already assigned to this source node
 		//	(independently of how many BBUs there are into it)
 		return pOXCsrc->m_nBBUNodeIdsAssigned; //-----------------------------------------------------------------------------------------
-	}*/
+	}
 
 	//ELSE IF this candidate hotel node is still inactive (does not have any BBU in it)
 	//	or is already full of BBUs (or, simply, the source node is not a candidate BBU hotel node)
@@ -7565,7 +7574,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 
 
 	//-L: choose the DU placement policy according to the status of the network
-	int policy = chooseBestPlacement();
+	int policy = chooseBestPlacement(0);
 	
 	pOXCdst = NULL;  // -L: best active BBU (I use an already active BBU) 
 	OXCNode* pOXCdst2 = NULL; //-L: best inactive BBU (need to activate a new one)
@@ -7582,7 +7591,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 #endif // DEBUGB
 
 		//SEARCH FOR "BEST" BBU AMONG (!) ALREADY ACTIVATED (!) BBU HOTEL NODES
-		switch (BBUPOLICY)
+		switch (policy)
 		{
 			//-B: GENERAL ADVICE: BE CAREFUL USING GLOBAL VARIABLE precomputedCost AND precomputedPath INSIDE placeBBU METHODS
 			//	(since they will be used in BBU_ProvisionHelper_Unprotected)
@@ -7629,7 +7638,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 #endif // DEBUGB
 
 			//SEARCH FOR "BEST" BBU AMONG (!) NOT YET ACTIVATED (!) BBU HOTEL NODES
-			switch (BBUPOLICY)
+			switch (policy)
 			{
 			case 0: //1st algorithm
 				//	(in this function the core CO is preferred over the others as BBU hotel node)
@@ -10780,6 +10789,15 @@ void NetMan::logActiveHotelsPeriodical(SimulationTime hTimeSpan)
 	//-B: log average
 	this->m_hLog.avgActiveNodes += (numActiveNodes*hTimeSpan);
 	this->m_runLog.avgActiveNodes += (numActiveNodes*hTimeSpan);
+}
+
+// to have the max power onsumption of hotels in the logs
+void NetMan::logHotelsPowerConsumption(SimulationTime hTimeSpan) {
+
+	UINT power = computeHotelsTotalPowerConsumption();
+
+	if (power > this->m_hLog.powerConsumption)
+		this->m_hLog.powerConsumption = power;
 }
 
 void NetMan::logActiveBBUs(SimulationTime hTimeSpan)

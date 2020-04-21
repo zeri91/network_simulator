@@ -36,7 +36,7 @@ m_dTotalUsedOC1Time(0), m_dSumCarriedLoadMonica(0), m_dSumCarriedLoad(0), m_dSum
 m_nBlockedDueToTx(0), m_nBlockedBWDueToTx(0), avgActiveNodes(0), peakActiveSC(0), avgActiveSC(0),
 m_nSegments(0), m_dPrimaryRc(0), m_nBlockedConDueToPath(0), UnAvLPMedia(0),deltaMedio(0), N(0),
 groomingPossibilities(0), networkCost(0),
-peakNumLightpaths(0), peakNumActiveNodes(0), peakNetCost(0), peakNumActiveBBUs(0),
+peakNumLightpaths(0), peakNumActiveNodes(0), peakNetCost(0), peakNumActiveBBUs(0), powerConsumption(0),
 NumOfConnections(0), transitoryTime(0), totalBBUsChanged(0), m_nNumConnectionsChangingBBU(0
 )
 {
@@ -110,6 +110,9 @@ Log::~Log()
 	m_nSegments = 0;
 	m_dPrimaryRc = 0;
 	m_nBlockedConDueToPath = 0;
+
+	///L:
+	powerConsumption = 0;
 
 	//-B:
 	peakNumLightpaths = 0;

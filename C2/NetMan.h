@@ -164,15 +164,15 @@ public:
 	ConflictType wpverifyCircuitUNPR(Circuit*);
 	ConflictType wpverifyCircuitDED(Circuit*);
 
+	//-L: compute the overall power consumption of all the hotels in the network
+	UINT computeHotelsTotalPowerConsumption();
+
 protected:
 	//-L: compute the power consumption of an Hotel
 	UINT computePowerConsumption(UINT hotelId);
 
-	//-L: compute the overall power consumption of all the hotels in the network
-	UINT computeTotalPowerConsumption();
-
 	//-L: smart placement of both CU and DU
-	UINT chooseBestPlacement();
+	UINT chooseBestPlacement(int cudu);
 
 	//-L: set link lists for netework statistics
 	void ltChannelStatistics();
@@ -447,6 +447,8 @@ public:
 	void logActiveHotelsPeriodical(SimulationTime hTimeSpan);
 
 	void logActiveBBUs(SimulationTime hTimeSpan);
+
+	void logHotelsPowerConsumption(SimulationTime hTimeSpan); //-L
 
 	void logActiveSmallCells(SimulationTime hTimeSpan);
 

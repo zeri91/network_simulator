@@ -275,16 +275,20 @@ else if (0 == strcmp(argv[10], "BBU"))
 	cout << "\nErrore percentuale: " << hNetMan.p_block->confpercerr(hNetMan.conf) << endl;
 	//cout << "Number of grooming 'possibilities': " << hNetMan.m_hLog.groomingPossibilities;
 	
+	cout << "Hotels Power Consumption: " << hNetMan.m_hLog.powerConsumption << " (PEAK) - "
+		<< hNetMan.m_hLog.powerConsumption / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "AVERAGE latency = " << hNetMan.m_hLog.avgLatency / hNetMan.m_hLog.countConnForLatency << endl;
 	cout << "\nNumber of active (hotel) nodes: " << hNetMan.m_hLog.peakNumActiveNodes << " (PEAK) - "
 		<< hNetMan.m_hLog.avgActiveNodes / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
-	cout << "Number of active BBUs: " << hNetMan.m_hLog.peakNumActiveBBUs << " (PEAK) - "
+	cout << "Number of active DUs: " << hNetMan.m_hLog.peakNumActiveBBUs << " (PEAK) - "
 		<< hNetMan.m_hLog.avgActiveBBUs / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "Number of active small cells: " << hNetMan.m_hLog.peakActiveSC << "  (PEAK) - "
 		<< hNetMan.m_hLog.avgActiveSC / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "Number of active lightpaths: " << hNetMan.m_hLog.peakNumLightpaths << " (PEAK) - "
 		<< hNetMan.m_hLog.avgActiveLightpaths / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout <<  "Network cost: " << hNetMan.m_hLog.peakNetCost << " (PEAK) - " << (hNetMan.m_hLog.networkCost / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime))
+		<< " (AVERAGE) [costo rete * time]" << endl;
+	cout << "Hotels power consumption: " << hNetMan.m_hLog.peakNetCost << " (PEAK) - " << (hNetMan.m_hLog.networkCost / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime))
 		<< " (AVERAGE) [costo rete * time]" << endl;
 	cout << "Network cost per OC1 (<--> cost per connection OR cost per bit): costo rete / provisioned backhaul bwd = "
 		<< (hNetMan.m_hLog.networkCost / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime)) << " / "
@@ -558,9 +562,11 @@ else if (0 == strcmp(argv[10], "BBU"))
 		fprintf(out, "%s%f", text, (hNetMan.m_hLog.avgLatency / hNetMan.m_hLog.countConnForLatency));
 		if (BBUPOLICY == 2)
 			fprintf(out, "\nNumber of candidate hotel nodes: %d", hSimulator.m_nNumOfActiveHotels);
+		text = "\nHotels power consumption: "; //-L
+		fprintf(out, "%s%d (PEAK) - %f (AVERAGE)", text, hNetMan.m_hLog.powerConsumption, hNetMan.m_hLog.powerConsumption / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime));
 		text = "\nNumber of active (hotel) nodes: ";
 		fprintf(out, "%s%d (PEAK) - %f (AVERAGE)", text, hNetMan.m_hLog.peakNumActiveNodes, hNetMan.m_hLog.avgActiveNodes / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime));
-		text = "\nNumber of active BBUs: ";
+		text = "\nNumber of active DUs: ";
 		fprintf(out, "%s%d (PEAK) - %f (AVERAGE)", text, hNetMan.m_hLog.peakNumActiveBBUs, hNetMan.m_hLog.avgActiveBBUs / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime));
 		fprintf(out, "\nNumber of active small cells: %d (PEAK) - %f (AVERAGE)", hNetMan.m_hLog.peakActiveSC,
 			(hNetMan.m_hLog.avgActiveSC / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime)));

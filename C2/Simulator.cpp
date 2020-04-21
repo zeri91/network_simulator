@@ -314,7 +314,8 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				/////////////////////////// PERIODICAL STATS
 				UINT networkCost = m_pNetMan->computeNetworkCost();
 				cout << "- NETWORK COST (medio): " << m_pNetMan->m_hLog.networkCost/ (m_pNetMan->m_hLog.m_hSimTimeSpan - m_pNetMan->m_hLog.transitoryTime) << endl;
-				cout << "\tPeak: " << m_pNetMan->m_hLog.peakNetCost << " (active nodes peak = " << m_pNetMan->m_hLog.peakNumActiveNodes
+				cout << "\t
+					: " << m_pNetMan->m_hLog.peakNetCost << " (active nodes peak = " << m_pNetMan->m_hLog.peakNumActiveNodes
 					<< "; lightpaths peak = " << m_pNetMan->m_hLog.peakNumLightpaths << ")" << endl;
 
 				//-B: PRINT RESULTS
@@ -1108,6 +1109,8 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			 << endl
 			 << "*********************************************************************" << endl;
 		 m_pNetMan->m_hWDMNet.printHotelNodes();
+		 std::cout << "Hotels Power Consumption: " << m_pNetMan->computeHotelsTotalPowerConsumption() << endl;
+
 		 if (BBUSTACKING == true)
 		 {
 			 if (m_pNetMan->m_hWDMNet.BBUs.size() > 1 && MAXNUMBBU >= m_pNetMan->m_hWDMNet.numberOfNodes)
