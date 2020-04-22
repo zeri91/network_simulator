@@ -275,8 +275,7 @@ else if (0 == strcmp(argv[10], "BBU"))
 	cout << "\nErrore percentuale: " << hNetMan.p_block->confpercerr(hNetMan.conf) << endl;
 	//cout << "Number of grooming 'possibilities': " << hNetMan.m_hLog.groomingPossibilities;
 	
-	cout << "Hotels Power Consumption: " << hNetMan.m_hLog.powerConsumption << " (
-		) - "
+	cout << "Hotels Power Consumption: " << hNetMan.m_hLog.powerConsumption << " (PEAK) - "
 		<< hNetMan.m_hLog.powerConsumption / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "AVERAGE latency = " << hNetMan.m_hLog.avgLatency / hNetMan.m_hLog.countConnForLatency << endl;
 	cout << "\nNumber of active (hotel) nodes: " << hNetMan.m_hLog.peakNumActiveNodes << " (PEAK) - "

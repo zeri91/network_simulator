@@ -10748,8 +10748,7 @@ void NetMan::logNetCostPeriodical(SimulationTime hTimeSpan)
 {
 	//-B: log 
 	
-	cost
-	UINT nCost = computeNetworkCost();
+	const UINT nCost = computeNetworkCost();
 	if (nCost > this->m_hLog.peakNetCost)
 	{
 		this->m_hLog.peakNetCost = nCost;
