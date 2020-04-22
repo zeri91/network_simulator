@@ -32,11 +32,11 @@ m_nLightpath(0), m_dSumLightpathLoad(0.0), m_dSumLinkLoad(0.0),
 m_nPHopDistance(0), m_nBHopDistance(0), avgLatency(0), countConnForLatency(0),
 m_dSumTxLoad(0.0), m_dSumLightpathHoldingTime(0.0),
 m_nSumPhysicalPHops(0), m_nSumPhysicalBHops(0), avgActiveLightpaths(0),
-m_dTotalUsedOC1Time(0), m_dSumCarriedLoadMonica(0), m_dSumCarriedLoad(0), m_dSumLightpath(0), avgActiveBBUs(0),
+m_dTotalUsedOC1Time(0), m_dSumCarriedLoadMonica(0), m_dSumCarriedLoad(0), m_dSumLightpath(0), avgActiveBBUs(0), avgActiveCUs(0),
 m_nBlockedDueToTx(0), m_nBlockedBWDueToTx(0), avgActiveNodes(0), peakActiveSC(0), avgActiveSC(0),
 m_nSegments(0), m_dPrimaryRc(0), m_nBlockedConDueToPath(0), UnAvLPMedia(0),deltaMedio(0), N(0),
 groomingPossibilities(0), networkCost(0),
-peakNumLightpaths(0), peakNumActiveNodes(0), peakNetCost(0), peakNumActiveBBUs(0), powerConsumption(0),
+peakNumLightpaths(0), peakNumActiveNodes(0), peakNetCost(0), peakNumActiveBBUs(0), powerConsumption(0), peakNumActiveCUs(0),
 NumOfConnections(0), transitoryTime(0), totalBBUsChanged(0), m_nNumConnectionsChangingBBU(0
 )
 {
@@ -120,7 +120,9 @@ Log::~Log()
 	peakNumActiveNodes = 0;
 	avgActiveNodes = 0;
 	peakNumActiveBBUs = 0;
+	peakNumActiveCUs = 0;
 	avgActiveBBUs = 0;
+	avgActiveCUs = 0; //-L
 	peakActiveSC = 0;
 	avgActiveSC = 0;
 	peakNetCost = 0;

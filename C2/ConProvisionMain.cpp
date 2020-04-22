@@ -275,13 +275,16 @@ else if (0 == strcmp(argv[10], "BBU"))
 	cout << "\nErrore percentuale: " << hNetMan.p_block->confpercerr(hNetMan.conf) << endl;
 	//cout << "Number of grooming 'possibilities': " << hNetMan.m_hLog.groomingPossibilities;
 	
-	cout << "Hotels Power Consumption: " << hNetMan.m_hLog.powerConsumption << " (PEAK) - "
+	cout << "Hotels Power Consumption: " << hNetMan.m_hLog.powerConsumption << " (
+		) - "
 		<< hNetMan.m_hLog.powerConsumption / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "AVERAGE latency = " << hNetMan.m_hLog.avgLatency / hNetMan.m_hLog.countConnForLatency << endl;
 	cout << "\nNumber of active (hotel) nodes: " << hNetMan.m_hLog.peakNumActiveNodes << " (PEAK) - "
 		<< hNetMan.m_hLog.avgActiveNodes / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "Number of active DUs: " << hNetMan.m_hLog.peakNumActiveBBUs << " (PEAK) - "
 		<< hNetMan.m_hLog.avgActiveBBUs / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
+	cout << "Number of active CUs: " << hNetMan.m_hLog.peakNumActiveCUs << " (PEAK) - "
+		<< hNetMan.m_hLog.avgActiveCUs / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "Number of active small cells: " << hNetMan.m_hLog.peakActiveSC << "  (PEAK) - "
 		<< hNetMan.m_hLog.avgActiveSC / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime) << " (AVERAGE)" << endl;
 	cout << "Number of active lightpaths: " << hNetMan.m_hLog.peakNumLightpaths << " (PEAK) - "
@@ -553,7 +556,7 @@ else if (0 == strcmp(argv[10], "BBU"))
 			text1 = "placeBBU_Metric";
 		fprintf(out, "%s%s", text, text1);
 		text = "\nErrore percentuale: ";
-		fprintf(out, "%s%f\n", text, hNetMan.p_block->confpercerr(hNetMan.conf));
+		//fprintf(out, "%s%f\n", text, hNetMan.p_block->confpercerr(hNetMan.conf));
 		//text = "\nNumber of grooming 'possibilities': ";
 		//fprintf (out, "%s%f", text, hNetMan.m_hLog.groomingPossibilities);
 		text = "\nCARRIED LOAD [bh prov conn*time] = ";
@@ -568,6 +571,8 @@ else if (0 == strcmp(argv[10], "BBU"))
 		fprintf(out, "%s%d (PEAK) - %f (AVERAGE)", text, hNetMan.m_hLog.peakNumActiveNodes, hNetMan.m_hLog.avgActiveNodes / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime));
 		text = "\nNumber of active DUs: ";
 		fprintf(out, "%s%d (PEAK) - %f (AVERAGE)", text, hNetMan.m_hLog.peakNumActiveBBUs, hNetMan.m_hLog.avgActiveBBUs / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime));
+		text = "\nNumber of active CUs: ";
+		fprintf(out, "%s%d (PEAK) - %f (AVERAGE)", text, hNetMan.m_hLog.peakNumActiveCUs, hNetMan.m_hLog.avgActiveCUs / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime));
 		fprintf(out, "\nNumber of active small cells: %d (PEAK) - %f (AVERAGE)", hNetMan.m_hLog.peakActiveSC,
 			(hNetMan.m_hLog.avgActiveSC / (hNetMan.m_hLog.m_hSimTimeSpan - hNetMan.m_hLog.transitoryTime)));
 		text = "\nNumber of active lightpaths: ";

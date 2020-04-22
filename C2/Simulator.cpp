@@ -324,21 +324,10 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				m_pNetMan->printStat(cout); 
 				//cin.get();
 #endif // DEBUGB
-				//m_pNetMan->m_hLog.output();
-				cout << "------------------------------- TRANSITORY PHASE PASSED: RESETTO LOG e RUN_LOG -------------------------------" << endl;
-				//-B: RESET run_Log after transitory phase: NON DOVREI RESETTARE ANCHE L'hLog?????????????????? COSI' COME LE ALTRE VAR USATE NEL PERIODICAL LOG
-				//-B: RESET Log
-				m_pNetMan->m_hLog.resetLog(); //-B: added by me
-				//-B: RESET runLog
-				m_pNetMan->m_runLog.resetLog();
-				//-B: RESET Sstat OBJECT p_block (added by me)
-				//m_pNetMan->p_block->reset(); //SHOULD NOT BE NEEDED
-				m_pNetMan->m_hWDMNet.resetHotelStats();
 				
 				//LOG SOME STATS
 				span = pEvent->m_hTime;
 				m_pNetMan->m_hLog.transitoryTime = span;
-				count = 0;
 				transitory = true;
 #ifdef DEBUGB
 				//cin.get();
@@ -663,6 +652,11 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				nEv_DepFront->midhaulBlocked = true; //-L
 				m_hEventList.insertEvent(nEv_DepFront);
 
+				if (pEvent->m_pConnection->m_nDst != NULL)
+				{	
+					//remove connection's dst node from list of active CUs, if needed
+					m_pNetMan->m_hWDMNet.updateBBUsUseAfterBlock(pEvent->m_pConnection, m_pNetMan->getConnectionDB());	
+				}
 				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
 				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->fronthaulEvent->m_pConnection->m_nSrc));
 
@@ -962,6 +956,9 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				m_pNetMan->computeAvgLatency(pEvent);
 			}
 		}//END ELSE
+		else if (pEvent->m_pConnection->m_eConnType == Connection::FIXED_MIDHAUL) {
+			; // m_pNetMan->m_hWDMNet.updateCUsUseAfterDeparture(pEvent->m_pConnection, m_pNetMan->getConnectionDB());
+		}
 
 			if (pEvent->m_pConnection->m_pPCircuit || pEvent->m_pConnection->m_pCircuits.size() > 0)
 			{
@@ -1901,6 +1898,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	UINT nDst;
 	UINT nSrc;
 	BandwidthGranularity eBandwidth;
+	BandwidthGranularity BHbwd;
 	BandwidthGranularity CPRIBwd;
 	Connection::ConnectionType connType;
 	bool fronthaulFlag = false;
@@ -1929,7 +1927,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 			pEvent->m_pSource->m_dExtraLatency = 0;
 		
 		//-B: ASSIGN BACKHAUL BANDWIDTH
-		eBandwidth = BWDGRANULARITY;  // -L: why backhaul bw is = to this ??? in findBestBBUhotel CPRIbwd is used
+		eBandwidth = BWDGRANULARITY;
+		BHbwd = BH_BWD;
 
 		//-L: ????????
 		//-B: ASSIGN X-HAUL BANDWIDTH
@@ -1965,16 +1964,16 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	// -B: if fronthaul is not NULL, it has been already routed -> backhaul or midhaul event
 	// -L: if midhaul is NULL, midhaul is not been routed yet, so it's a midhaul 
 	else if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL)    
-	{
-		// -L: sbagliato ??? 
+	{ 
 		eBandwidth = BWDGRANULARITY;
+		BHbwd = BH_BWD;
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
 		nDst = m_pNetMan->findBestCUHotel(nSrc, eBandwidth, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd
 		//nDst = m_pNetMan->m_hWDMNet.DummyNodeMid;					// destination = core CO/PoP node
 
-		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
-		eBandwidth = pEvent->fronthaulEvent->m_pConnection->m_eBandwidth;
+		//-B: ASSIGN FRONTHAUL CONNECTION BANDWIDTH
+		//eBandwidth = pEvent->fronthaulEvent->m_pConnection->m_eBandwidth;
 		CPRIBwd = pEvent->fronthaulEvent->m_pConnection->m_eCPRIBandwidth;
 
 		//-B: assign original holding time
@@ -1995,7 +1994,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		nDst = m_pNetMan->m_hWDMNet.DummyNode;					// destination = core CO/PoP node
 
 		//-B: ASSIGN BACKHAUL CONNECTION BANDWIDTH
-		eBandwidth = pEvent->midhaulEvent->m_pConnection->m_eBandwidth;
+		eBandwidth = BH_BWD;
+		BHbwd = BH_BWD;
 		CPRIBwd = pEvent->midhaulEvent->m_pConnection->m_eCPRIBandwidth;
 
 		//-B: assign original holding time
@@ -2026,53 +2026,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	}
 	//else: it has been already assigned, taken from the corresponding fronthaul connection
 	
-	//-L: if it is backhaul
-	if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent != NULL) {  
-		if (pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved > 0) {
-			UINT seqNumber = pEvent->fronthaulEvent->m_pConnection->m_nBackhaulSaved;
-#ifdef DEBUGC
-			cout << "Sequence number saved for the backhaul in the fronthaul is "
-				<< seqNumber << endl;
-#endif
-			pConnection = new Connection(seqNumber, nSrc, nDst, //LEAK
-				pEvent->m_hTime, holdingTime,
-				eBandwidth, CPRIBwd, m_ePClass, connType);
-
-			//-B: not useful for me
-			pConnection->m_nHopCount = m_nHopCount;
-
-			//Sequence number has not to be increased!
-
-			return pConnection;
-
-		}
-	
-	}
-
-	//-L: if it is midhaul
-	if (pEvent->fronthaulEvent != NULL && pEvent->midhaulEvent == NULL) {
-		if (pEvent->fronthaulEvent->m_pConnection->m_nMidhaulSaved > 0) {
-			UINT seqNumber = pEvent->fronthaulEvent->m_pConnection->m_nMidhaulSaved;
-#ifdef DEBUGC
-			cout << "Sequence number saved for the midhaul in the fronthaul is "
-				<< seqNumber << endl;
-#endif
-			pConnection = new Connection(seqNumber, nSrc, nDst, //LEAK
-				pEvent->m_hTime, holdingTime,
-				eBandwidth, CPRIBwd, m_ePClass, connType);
-
-			//-B: not useful for me
-			pConnection->m_nHopCount = m_nHopCount;
-
-			//Sequence number has not to be increased!
-
-			return pConnection;
-
-		}
-	}
-
-	//-L: if it is fronthaul
-	pConnection = new Connection(g_nConSeqNo, nSrc, nDst, //LEAK
+	//-L: create the new connection
+ 	pConnection = new Connection(g_nConSeqNo, nSrc, nDst, //LEAK
 		pEvent->m_hTime, holdingTime,
 		eBandwidth, CPRIBwd, m_ePClass, connType);
 

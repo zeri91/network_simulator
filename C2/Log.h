@@ -118,7 +118,9 @@ public:
 	UINT peakNumActiveNodes;
 	double avgActiveNodes;
 	UINT peakNumActiveBBUs;
+	UINT peakNumActiveCUs; //-L
 	double avgActiveBBUs;
+	double avgActiveCUs; //-L
 	UINT peakActiveSC;
 	double avgActiveSC;
 	UINT peakNetCost;

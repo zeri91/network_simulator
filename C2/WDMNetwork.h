@@ -99,6 +99,9 @@ public:
 	void updatePoolsUse(Connection * pCon, ConnectionDB & connDB);
 	void updateBBUsUseAfterDeparture(Connection*pCon, ConnectionDB&);
 
+	//-L
+	void updateCUsUseAfterDeparture(Connection* pCon, ConnectionDB& connDB);
+
 	void removeActiveBBUs(OXCNode * pOXCBBUNode);
 
 	void printHotelNodes();
@@ -106,9 +109,13 @@ public:
 
 	UINT countBBUs();
 
+	UINT countCUs();
+
 	void logBBUInHotel();
 
 	int countConnections(OXCNode * pOXCSrc, OXCNode * pOXCDst, ConnectionDB & connDB);
+	//-L
+	int countCUConnections(OXCNode* pOXCSrc, OXCNode* pOXCDst, ConnectionDB& connDB);
 
 	void fillHotelsList();
 

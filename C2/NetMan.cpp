@@ -38,7 +38,7 @@
 //#define Con_Prov
 //#define DEBUG_FABIO
 #ifdef _DEBUG
-#define new DEBUG_NEW
+#define DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
@@ -5570,12 +5570,12 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 		|| pCon->m_eConnType == Connection::MOBILE_BACKHAUL				//-B: if fixed/mobile/fixed-mobile backhaul
 		|| pCon->m_eConnType == Connection::FIXEDMOBILE_BACKHAUL)	
 	{
-		bwd = pCon->m_eBandwidth;
+		bwd = BH_BWD;
 	}
 	//-L: add the midhaul case
 	if (pCon->m_eConnType == Connection::FIXED_MIDHAUL)
 	{
-		bwd = pCon->m_eBandwidth;
+		bwd = BWDGRANULARITY;
 	}
 	//-B: if connType == MOBILE_FRONTHAUL || FIXEDMOBILE_FRONTHAUL
 	else if(pCon->m_eConnType == Connection::MOBILE_FRONTHAUL ||
@@ -5633,9 +5633,6 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 			}
 			//updateCostsForBestFit(); //-B: TO BE USED ONLY IF BBU_NewCircuit ASSIGNS A COST = 0 TO NEW LIGHTPATHS
 			//updateGraphValidityAndCosts(pOXCSrc, bwd);
-		}
-		else {
-			;
 		}
 	}//end IF precomputed path == 0
 
@@ -7309,11 +7306,9 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	if (SMART_PLACEMENT == 0)
 		return (cudu == 0) ? BBUPOLICY : CUPOLICY;
 
-	int policy = -1;
-	const float BLOCKTHRESHOLD = 10.0;
-
-	// compute blocking probability
-	int blockingProb = 0;
+	const float THR1 = 10.0;
+	const float THR2 = 20.0;
+	int status = -1;
 
 	// compute status of the network
 	ltChannelStatistics();
@@ -7331,25 +7326,44 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	assert(freeLinkPercentage >= 0.0 && freeLinkPercentage <= 100.0);
 
 	//-L: links that have free capatity only for one more FH connnection
-	float lowCapacityLinkPercentage = ((float)(m_hGraph.fewCapacityLinks.size()) / (float)activeLinks) * 100;
-	assert(lowCapacityLinkPercentage >= 0 && lowCapacityLinkPercentage <= 100);
+	const float lowCapacityLinkPercentage = ((float)(m_hGraph.fewCapacityLinks.size()) / (float)activeLinks) * 100;
+	assert(lowCapacityLinkPercentage >= 0.0 && lowCapacityLinkPercentage <= 100.0);
 
 	//-L: percentage of active links with not enough capacity for a new FH connection
 	// only midhaul and backhaul can be assigned to these links
-	float fhBlockedLinkPercentage = ((float)(m_hGraph.blockedToFronthaulLinks.size()) / (float)activeLinks) * 100;
-	assert(fhBlockedLinkPercentage >= 0 && fhBlockedLinkPercentage <= 100);
+	const float fhBlockedLinkPercentage = ((float)(m_hGraph.blockedToFronthaulLinks.size()) / (float)activeLinks) * 100;
+	assert(fhBlockedLinkPercentage >= 0.0 && fhBlockedLinkPercentage <= 100.0);
 
 	// get total power consumption of the hotels in the network
-	float powerCons = computeHotelsTotalPowerConsumption();
+	const float powerCons = computeHotelsTotalPowerConsumption();
 
-	// If the network has few connections I don't have to save BW so I can centralize and save power
-	if (occupacyPercentage < BLOCKTHRESHOLD)
-		return 0; // 0 means centralize -> I will place the CU/DU as closest as possible to the core network
+	// check status of the network
+	if (occupacyPercentage <= THR1) {
+		if (lowCapacityLinkPercentage <= 10.0) {
+			status = LOW;
+		}
+		else if (lowCapacityLinkPercentage <= 50.0) {
+			status = MEDIUM;
+		}
+		else
+			status = HIGH;
+	}
+	else if (occupacyPercentage <= THR2 && fhBlockedLinkPercentage <= 50.0) {
+		if (lowCapacityLinkPercentage <= 50)
+			status = MEDIUM;
+		else
+			status = HIGH;
+	}
+	else
+		status = HIGH;
 
-	return 1; // 1 means distribute
-
-	//assert(policy != -1);
-	//return policy;
+	assert(status != -1);
+	if (status == EMPTY || status == LOW) return CENTRALIZE;
+	if (status == MEDIUM) {
+		if (cudu == 0) return DISTRIBUTE;
+		else return CENTRALIZE;
+	}
+	if (status == HIGH) return DISTRIBUTE;
 }
 
 UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime hTime) {
@@ -7362,13 +7376,6 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	m_hGraph.preferWavelPath();
 	invalidateSimplexLinkDueToCapOrStatus(bwd, 5);
 
-	// -L: a CU is already assigned to this node
-	if (pOXCsrc->m_nCUNodeIdAssigned != 0)
-	{
-		//dst node of this connection will be the CU hotel node already assigned to this source node
-		return pOXCsrc->m_nCUNodeIdAssigned;
-	}
-	
 	// check other candidate hotel nodes using a sorted hotels list
 	bool enough = true;
 
@@ -7558,15 +7565,8 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 	//-B: modify simplex links' costs to perform best fit algorithm in choosing a simplex link LT_Lightpath
 	//updateCostsForBestFit(); //-B: TO BE USED ONLY IF BBU_NewCircuit ASSIGNS A COST = 0 TO NEW LIGHTPATHS
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	//-B: STEP 0a: check if this source node has an already assigned BBU in one of the hotel nodes
-	if (pOXCsrc->m_nBBUNodeIdsAssigned != 0) // -L: ???????? why ==1 should be >= 1
-	{
-		//dst node of this connection will be the BBU hotel node already assigned to this source node
-		//	(independently of how many BBUs there are into it)
-		return pOXCsrc->m_nBBUNodeIdsAssigned; //-----------------------------------------------------------------------------------------
-	}
-
+	
 	//ELSE IF this candidate hotel node is still inactive (does not have any BBU in it)
 	//	or is already full of BBUs (or, simply, the source node is not a candidate BBU hotel node)
 	// or I want to allocate a second new BBU:
@@ -8801,7 +8801,8 @@ UINT NetMan::placeBBUClose(UINT src, vector<OXCNode*>&BBUsList)
 	LINK_COST minCost = UNREACHABLE;
 	//LINK_COST cost;
 	UINT bestBBU = 0;
-	//list<AbstractLink*>path;
+	
+	OXCNode* pOXCsrc = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
 	OXCNode*pOXCdst;
 	int id;
 	LINK_COST pathCost;
@@ -8854,6 +8855,8 @@ UINT NetMan::placeBBUClose(UINT src, vector<OXCNode*>&BBUsList)
 					minCost = pathCost;
 					//precomputedPath = pOXCdst->pPath; //then overwritten at the end of findBestBBUHotel --> SO DON'T DO IT!
 					bestBBU = id;
+					if (pOXCsrc->m_nBBUNodeIdsAssigned == bestBBU)
+						return bestBBU;
 				}
 			} //end IF latency
 			else
@@ -9217,6 +9220,7 @@ UINT NetMan::placeCUClose(UINT src, vector<OXCNode*>& BBUsList)
 	LINK_COST minCost = UNREACHABLE;
 	UINT bestBBU = 0;
 	OXCNode* pOXCdst;
+	OXCNode* pOXCsrc = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
 	int id;
 	LINK_COST pathCost;
 
@@ -9250,6 +9254,8 @@ UINT NetMan::placeCUClose(UINT src, vector<OXCNode*>& BBUsList)
 				{
 					minCost = pathCost;
 					bestBBU = id;
+					if (pOXCsrc->m_nBBUNodeIdsAssigned == bestBBU)
+						return bestBBU;
 				}
 			}
 		}
@@ -10740,7 +10746,9 @@ void NetMan::buildGroomNodeList(Circuit*pCircuit)
 
 void NetMan::logNetCostPeriodical(SimulationTime hTimeSpan)
 {
-	//-B: log peak cost
+	//-B: log 
+	
+	cost
 	UINT nCost = computeNetworkCost();
 	if (nCost > this->m_hLog.peakNetCost)
 	{
@@ -10791,7 +10799,7 @@ void NetMan::logActiveHotelsPeriodical(SimulationTime hTimeSpan)
 	this->m_runLog.avgActiveNodes += (numActiveNodes*hTimeSpan);
 }
 
-// to have the max power onsumption of hotels in the logs
+//-L: to have the max power onsumption of hotels in the logs
 void NetMan::logHotelsPowerConsumption(SimulationTime hTimeSpan) {
 
 	UINT power = computeHotelsTotalPowerConsumption();
@@ -10800,10 +10808,24 @@ void NetMan::logHotelsPowerConsumption(SimulationTime hTimeSpan) {
 		this->m_hLog.powerConsumption = power;
 }
 
+//-L
+void NetMan::logActiveCUs(SimulationTime hTimeSpan)
+{
+	//-B: log peak active BBUs
+	UINT numActiveCUs = this->m_hWDMNet.countCUs();
+
+	if (numActiveCUs > this->m_hLog.peakNumActiveCUs)
+		this->m_hLog.peakNumActiveCUs = numActiveCUs;
+
+	//-B: log average
+	this->m_hLog.avgActiveCUs += (numActiveCUs * hTimeSpan);
+	this->m_runLog.avgActiveCUs += (numActiveCUs * hTimeSpan);
+}
+
 void NetMan::logActiveBBUs(SimulationTime hTimeSpan)
 {
 	//-B: log peak active BBUs
-	UINT numActiveBBUs = this->m_hWDMNet.countBBUs();
+	const UINT numActiveBBUs = this->m_hWDMNet.countBBUs();
 	if (numActiveBBUs > this->m_hLog.peakNumActiveBBUs)
 	{
 		this->m_hLog.peakNumActiveBBUs = numActiveBBUs;

@@ -39,7 +39,7 @@ Connection::Connection(UINT nSeqNo, UINT nSrc, UINT nDst,
 	m_dArrivalTime(tArrivalTime), m_dHoldingTime(tHoldingTime),
 	m_eBandwidth(eBW), m_eCPRIBandwidth(OC0), m_eProtectionClass(ePC), m_eStatus(REQUEST),
 	m_pPCircuit(NULL), m_pBCircuit(NULL), m_bBlockedDueToUnreach(false), m_pCircuits(NULL),
-	m_bBlockedDueToTx(false), m_bBlockedDueToLatency(false), m_nHopCount(0), m_nBackhaulSaved(0),
+	m_bBlockedDueToTx(false), m_bBlockedDueToLatency(false), m_nHopCount(0), m_nBackhaulSaved(0), m_nMidhaulSaved(0),
 	m_bTrafficToBeUpdatedForDep(true), midhaul_id(NULL)
 {
 	m_dRoutingTime = 0.0000; //-B: max latency CPRI

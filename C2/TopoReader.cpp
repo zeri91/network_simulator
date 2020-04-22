@@ -99,7 +99,7 @@ bool TopoReader::readTopoHelper(WDMNetwork &hNetwork, ifstream &fin)
 	}
 	sscanf_s(pBuf, "ChannelCapacity = %d", &nChannelCapacity);
 	assert(fin);
-	hNetwork.setChannelCapacity(nChannelCapacity*BWDGRANULARITY);
+	hNetwork.setChannelCapacity(nChannelCapacity*BWDGRANULARITY); //-L: ???
 
 	// read # of transmitters, if every node has the same # of Tx
 	while (fin.getline(pBuf, MAX_LINE_LENGTH) 

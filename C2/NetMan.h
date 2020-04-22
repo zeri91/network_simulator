@@ -447,6 +447,8 @@ public:
 	void logActiveHotelsPeriodical(SimulationTime hTimeSpan);
 
 	void logActiveBBUs(SimulationTime hTimeSpan);
+	//-L
+	void logActiveCUs(SimulationTime hTimeSpan);
 
 	void logHotelsPowerConsumption(SimulationTime hTimeSpan); //-L
 
