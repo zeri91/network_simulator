@@ -346,11 +346,11 @@ void Connection::log(Log &hLog)
 			{
 				hLog.m_nBlockedFixMobFrontConn++;
 				hLog.m_nBlockedBW += this->m_eCPRIBandwidth;
-				hLog.m_nBlockedBW += this->m_eBandwidth; // -L: for the midhaul
-				hLog.m_nBlockedBW += this->m_eBandwidth;
+				hLog.m_nBlockedBW += BWDGRANULARITY; // -L: for the midhaul
+				hLog.m_nBlockedBW += BH_BWD;
 				hLog.m_nBlockedFixMobFrontBW += this->m_eCPRIBandwidth;
-				hLog.m_nBlockedFixMobBackBW += this->m_eBandwidth;
-				hLog.m_nBlockedFixMidBW += this->m_eBandwidth; // -L
+				hLog.m_nBlockedFixMobBackBW += BH_BWD;
+				hLog.m_nBlockedFixMidBW += BWDGRANULARITY; // -L
 				hLog.m_nBlockedFHForFHBlock += this->m_eCPRIBandwidth;
 				break;
 			}
@@ -367,18 +367,18 @@ void Connection::log(Log &hLog)
 			case MOBILE_BACKHAUL:
 			{
 				hLog.m_nBlockedMobileBackConn++;
-				hLog.m_nBlockedBW += this->m_eBandwidth;
-				hLog.m_nBlockedMobileBackBW += this->m_eBandwidth;
-				hLog.m_nBlockedBHForBHBlock += this->m_eBandwidth;
+				hLog.m_nBlockedBW += this->BH_BWD;
+				hLog.m_nBlockedMobileBackBW += BH_BWD;
+				hLog.m_nBlockedBHForBHBlock += BH_BWD;
 				break;
 			}
 
 			case FIXEDMOBILE_BACKHAUL:
 			{
 				hLog.m_nBlockedFixMobBackConn++;
-				hLog.m_nBlockedBW += this->m_eBandwidth;
-				hLog.m_nBlockedFixMobBackBW += this->m_eBandwidth;
-				hLog.m_nBlockedBHForBHBlock += this->m_eBandwidth;
+				hLog.m_nBlockedBW += BH_BWD;
+				hLog.m_nBlockedFixMobBackBW += BH_BWD;
+				hLog.m_nBlockedBHForBHBlock += BH_BWD;
 				break;
 			}
 
@@ -386,10 +386,9 @@ void Connection::log(Log &hLog)
 			case FIXED_MIDHAUL:
 			{
 				hLog.m_nBlockedFixMidConn++;
-				hLog.m_nBlockedBW += this->m_eBandwidth;
-				hLog.m_nBlockedFixMidBW += this->m_eBandwidth;
-				hLog.m_nBlockedBW += this->m_eBandwidth;
-				hLog.m_nBlockedMobileBackBW += this->m_eBandwidth;
+				hLog.m_nBlockedBW += BWDGRANULARITY;
+				hLog.m_nBlockedFixMidBW += BWDGRANULARITY;
+				hLog.m_nBlockedMobileBackBW += BH_BWD;
 				break;
 			}
 
