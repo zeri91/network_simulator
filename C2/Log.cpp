@@ -211,7 +211,7 @@ void Log::output() const
 	double fixedBackBwd_block = this->m_nBlockedFixedBackBW;
 	double mobileBackBwd_block = this->m_nBlockedMobileBackBW;
 	double fixMobBackBwd_block = this->m_nBlockedFixMobBackBW;
-	double fixMobBackBwd_block = this->m_nBlockedFixMidBW;
+	
 	//-B: Provisioned connections
 	double conn_prov = this->m_nProvisionedCon;	// # connessioni instaurate (fino a questo istante) //-B: fronthaul+backhaul should have been counted as a single connection
 	double mobileFrontConn_prov = this->m_nProvisionedMobileFrontConn;

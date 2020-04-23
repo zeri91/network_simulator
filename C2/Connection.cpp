@@ -367,7 +367,7 @@ void Connection::log(Log &hLog)
 			case MOBILE_BACKHAUL:
 			{
 				hLog.m_nBlockedMobileBackConn++;
-				hLog.m_nBlockedBW += this->BH_BWD;
+				hLog.m_nBlockedBW += BH_BWD;
 				hLog.m_nBlockedMobileBackBW += BH_BWD;
 				hLog.m_nBlockedBHForBHBlock += BH_BWD;
 				break;
