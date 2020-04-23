@@ -607,6 +607,8 @@ else if (0 == strcmp(argv[10], "BBU"))
 		text = "\nBWD of blocked fronthaul connections (mob + fixmob): ";
 		fprintf (out, "%s%d + %d = %d", text, hNetMan.m_hLog.m_nBlockedMobileFrontBW, hNetMan.m_hLog.m_nBlockedFixMobFrontBW,
 			(hNetMan.m_hLog.m_nBlockedMobileFrontBW + hNetMan.m_hLog.m_nBlockedFixMobFrontBW));
+		text = "\nBWD of blocked midhaul connections: ";
+		fprintf(out, "%s%d", text, hNetMan.m_hLog.m_nBlockedFixMidBW);
 		text = "\nBWD of blocked backhaul connections (mob + fixmob + fix): ";
 		fprintf (out, "%s%d + %d + %d = %d", text, hNetMan.m_hLog.m_nBlockedMobileBackBW, hNetMan.m_hLog.m_nBlockedFixMobBackBW,
 			hNetMan.m_hLog.m_nBlockedFixedBackBW, (hNetMan.m_hLog.m_nBlockedFixedBackBW + hNetMan.m_hLog.m_nBlockedFixMobBackBW + hNetMan.m_hLog.m_nBlockedMobileBackBW));
