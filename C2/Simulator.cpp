@@ -957,7 +957,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 			}
 		}//END ELSE
 		else if (pEvent->m_pConnection->m_eConnType == Connection::FIXED_MIDHAUL) {
-			; // m_pNetMan->m_hWDMNet.updateCUsUseAfterDeparture(pEvent->m_pConnection, m_pNetMan->getConnectionDB());
+			m_pNetMan->m_hWDMNet.updateCUsUseAfterDeparture(pEvent->m_pConnection, m_pNetMan->getConnectionDB());
 		}
 
 			if (pEvent->m_pConnection->m_pPCircuit || pEvent->m_pConnection->m_pCircuits.size() > 0)

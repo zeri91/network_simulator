@@ -7481,33 +7481,19 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 		//-B: save best precomputed path
 		precomputedPath = pOXCdst2->pPath;
 
-		//Assign a second BBU (which was inactive) for the node
-		if (pOXCsrc->m_nBBUNodeIdsAssigned > 0) {
-
-			// -L: the inactive BBU that we found is the same assigned to the src node
-			// -L: ??? how is possible that this BBU was already assigned to the node if it is inactive?
-			if (pOXCsrc->m_nCUNodeIdAssigned == pOXCdst2->getId()) {
-				return pOXCsrc->m_nCUNodeIdAssigned;
-			}
-
-			//-B: assign, to the source node of the connection, the hotel node hosting its CU
-			pOXCsrc->m_nCUNodeIdAssigned = dst;
-
-			//-B: increase the number of active CUs in the hotel node (the value will be more than 1 since it was already activated)
-			pOXCdst2->m_nCUs++;
-
+		if (dst == pOXCsrc->m_nCUNodeIdAssigned)
 			return dst;
-		}
-
-		this->m_hWDMNet.BBUs.push_back(pOXCdst2);
-		pOXCdst2->m_nCUs++;
 
 		//-B: assign, to the source node of the connection, the hotel node hosting its CU
 		pOXCsrc->m_nCUNodeIdAssigned = dst;
+
+		//-B: increase the number of active CUs in the hotel node (the value will be more than 1 since it was already activated)
+		pOXCdst2->m_nCUs++;
+
 		return dst;
+
+		//this->m_hWDMNet.BBUs.push_back(pOXCdst2);
 	}
-
-
 }
 
 //-B: given the source node id, return the less "expensive" BBU_hotel (according to the policy used)
