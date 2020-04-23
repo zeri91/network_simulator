@@ -11396,7 +11396,7 @@ bool NetMan::verifyCapacity(OXCNode* pOXCSrc, UINT bestBBU, list <AbstractLink*>
 
 	list<Connection*>::const_iterator itr;
 	Connection* pConDB;
-	UINT bwd = 29; //already considering the corrent connection
+	UINT bwd = FH_BWD_FX; //already considering the corrent connection
 	LINK_COST hPrimaryCost = UNREACHABLE;
 
 
