@@ -11,8 +11,8 @@
 #define LT_LINKS 960
 #define CHANNEL_CAPACITY 1944		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
 									// to get the real channel capacity, multiply it by OC1 = 51.48 Mbps
-#define FH_BWD_FX OC96				//-L: BW required for a FH connection at split 7
-#define BWDGRANULARITY OC36			//-B: bandwidth granularity -> amount of bandwidth requested by each mobile connection
+#define FH_BWD_FX OC48				//-L: BW required for a FH connection at split 7
+#define BWDGRANULARITY OC29			//-B: bandwidth granularity -> amount of bandwidth requested by each mobile connection
 									//-> needed for BBUReadTopoHelper to set channel capacity and to set backhaul bwd of macro 
 #define BH_BWD OC6
 #define FIXED_TRAFFIC OC192			//-B: bandwidth requested by fixed requests
@@ -35,7 +35,7 @@
 #define SMALLCELLS_PER_MC 10		//-B: # of small cells for each macro cells
 
 //-L
-#define SMART_PLACEMENT	0			// if 0 it uses BBUPOLICY and CUPOLICY to choose the placement if 1 it will use the smart algorithm
+#define SMART_PLACEMENT	1			// if 0 it uses BBUPOLICY and CUPOLICY to choose the placement if 1 it will use the smart algorithm
 
 //-L: network status
 #define CRITICAL 0					// The blocking probability in the network is really high, I need to save as much BW as possible

@@ -7,7 +7,7 @@ NumberOfTx = 1;
 NumberOfRx = 1;
 NumberOfDataCenter = 0;
 TxScale = 1.0;	// NumberOfTx = Nodal Degree * TxScale
-NumberOfOXCNodes = 52;
+NumberOfOXCNodes = 53;
 NumberOfUniFibers = 130;
 
 // Format: 

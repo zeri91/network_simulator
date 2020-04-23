@@ -7306,8 +7306,11 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	if (SMART_PLACEMENT == 0)
 		return (cudu == 0) ? BBUPOLICY : CUPOLICY;
 
-	const float THR1 = 10.0;
-	const float THR2 = 20.0;
+	if (m_hLog.m_nBlockedCon == 0)
+		return CENTRALIZE;
+
+	const float THR1 = 60.0;
+	const float THR2 = 90.0;
 	int status = -1;
 
 	// compute status of the network
@@ -7339,7 +7342,7 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 
 	// check status of the network
 	if (occupacyPercentage <= THR1) {
-		if (lowCapacityLinkPercentage <= 10.0) {
+		if (lowCapacityLinkPercentage <= 30.0) {
 			status = LOW;
 		}
 		else if (lowCapacityLinkPercentage <= 50.0) {
@@ -7782,7 +7785,7 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 	if (pOXCdst && pOXCdst2)
 	{
 		bool alreadyActive = false;
-		switch (BBUPOLICY)
+		switch (policy)
 		{
 		case 1:
 		case 2:
