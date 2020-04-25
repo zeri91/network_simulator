@@ -655,7 +655,7 @@ this->m_pNetMan->m_hWDMNetPast.dump(cout);
 				if (pEvent->m_pConnection->m_nDst != NULL)
 				{	
 					//remove connection's dst node from list of active CUs, if needed
-					m_pNetMan->m_hWDMNet.updateBBUsUseAfterBlock(pEvent->m_pConnection, m_pNetMan->getConnectionDB());	
+					m_pNetMan->m_hWDMNet.updateCUsUseAfterBlock(pEvent->m_pConnection, m_pNetMan->getConnectionDB());	
 				}
 				//-B: get OXCNode to set it as source in next Bernoulli arrival (after if ... else ...)
 				pOXCNode = (OXCNode*)(this->m_pNetMan->m_hWDMNet.lookUpNodeById(pEvent->fronthaulEvent->m_pConnection->m_nSrc));

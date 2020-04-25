@@ -7315,6 +7315,46 @@ void WDMNetwork::resetBBUsReachabilityCost()
 	}
 }
 
+//-L:
+void WDMNetwork::updateCUsUseAfterBlock(Connection* pCon, ConnectionDB& connDB)
+{
+#ifdef DEBUGB
+	cout << "-> updateBBUsUseAfterBlock" << endl;
+#endif // DEBUGB
+
+	int numOfConn;
+	OXCNode* pOXCDst = (OXCNode*)this->lookUpNodeById(pCon->m_nDst);
+	OXCNode* pOXCSrc = (OXCNode*)this->lookUpNodeById(pCon->m_nSrc);
+	assert(pOXCSrc);
+	assert(pOXCDst);
+
+	//-B: it should be always a BBU hotel, right?! Not if we allow a node to host its own bbu in its cell site as last option
+	//if (pOXCDst->getBBUHotel())
+	//{
+		//-B: count num of (!) FRONTHAUL (!) connections routed between the same source and destination
+	numOfConn = countCUConnections(pOXCSrc, pOXCDst, connDB);
+	//-B: *******************************************************************
+	//	IF THIS SOURCE DOESN'T HAVE ANY OTHER CONNECTION BESIDE THIS CONNECTION THAT WAS JUST BLOCKED
+	//***********************************************************************
+	if (numOfConn == 0)
+	{
+		//reset to default value
+		pOXCSrc->m_nCUNodeIdAssigned = 0;
+		//decrease num of active BBUs in this hotel node
+		pOXCDst->m_nCUs--;
+		assert(pOXCDst->m_nCUs >= 0);
+		//if this hotel node does not have active BBU in itself anymore
+		if (pOXCDst->m_nCUs == 0 && pOXCDst->m_nBBUs == 0)
+		{
+			if (pOXCDst->getBBUHotel())
+			{
+				removeActiveBBUs(pOXCDst);
+			}
+		}
+	}
+	//} //end IF
+}
+
 //-B: method called only if connection type is FIXMOB_FRONTHAUL or MOBILE_FRONTHAUL
 void WDMNetwork::updateBBUsUseAfterBlock(Connection*pCon, ConnectionDB&connDB)
 {

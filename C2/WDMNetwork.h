@@ -96,6 +96,7 @@ public:
 	void resetBBUsReachabilityCost(); //-B: reset BBUsReachCost = UNREACHABLE for all nodes
 
 	void updateBBUsUseAfterBlock(Connection*pCon, ConnectionDB&);
+	void updateCUsUseAfterBlock(Connection* pCon, ConnectionDB&);
 	void updatePoolsUse(Connection * pCon, ConnectionDB & connDB);
 	void updateBBUsUseAfterDeparture(Connection*pCon, ConnectionDB&);
 
