@@ -9,7 +9,7 @@
 									//	in which office hours end and residential hours start
 									//-B: for Ahmed
 #define LT_LINKS 960
-#define CHANNEL_CAPACITY 10000		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
+#define CHANNEL_CAPACITY 1944		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
 									// to get the real channel capacity, multiply it by OC1 = 51.48 Mbps
 #define FH_BWD_FX OC192				//-L: BW required for a FH connection at split 7
 #define BWDGRANULARITY OC48			//-B: bandwidth granularity -> amount of bandwidth requested by each mobile connection
@@ -35,7 +35,7 @@
 #define SMALLCELLS_PER_MC 10		//-B: # of small cells for each macro cells
 
 //-L
-#define SMART_PLACEMENT	1			// if 0 it uses BBUPOLICY and CUPOLICY to choose the placement if 1 it will use the smart algorithm
+#define SMART_PLACEMENT	0			// if 0 it uses BBUPOLICY and CUPOLICY to choose the placement if 1 it will use the smart algorithm
 
 //-L: network status
 #define CRITICAL 0					// The blocking probability in the network is really high, I need to save as much BW as possible
@@ -52,7 +52,7 @@
 #define MIDHAUL_FACTOR 4.751		//-B: value to be multiplied with backhaul bwd to get midhaul bwd
 
 #define ONE_CONN_PER_NODE false		//-B: if true, we consider a on-off model of traffic in each cell
-#define BBUPOLICY 1					//-B: 0 --> placeBBUHigh; 1 --> placeBBUClose; 2 --> placeBBU_Metric; 3--> placeBBUHigh: if last link full, add another BBU
+#define BBUPOLICY 0					//-B: 0 --> placeBBUHigh; 1 --> placeBBUClose; 2 --> placeBBU_Metric; 3--> placeBBUHigh: if last link full, add another BBU
 #define CUPOLICY 0					//-L: 0: placeCUHigh; 1: placeCUClose; 2: placeCUSmart
 #define BBU_CHANGE_INTERVAL 1.2		//-B:  time interval between changes
 #define MAXVALUE_LATENCY 1000		//-B: random high value 
@@ -101,7 +101,6 @@ typedef enum {
 	OC40   = 40,		// 2 Gb/s (2059.2 Mb/s)
 	OC42   = 42,		// 2 Gb/s (2162.16 Mb/s)
 	OC48   = 48,		// 2.5 Gb/s (2488.32 Mb/s)
-	OC96   = 96,		// 5 Gb/s
 	OC120  = 120,		// 6 Gb/s (6177.6 Mb/s)
 	OC192  = 192,		// 10 Gb/s (9953.28 Mb/s)	//-> first steo fixed
 	OC288  = 288,		// 15 Gb/s
