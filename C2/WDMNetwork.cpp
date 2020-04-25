@@ -7556,9 +7556,11 @@ void WDMNetwork::updateCUsUseAfterDeparture(Connection* pCon, ConnectionDB& conn
 	//-B: *******************************************************************
 	//	IF THIS SOURCE HAS ONLY THIS CONNECTION THAT IT IS GOING TO DEPROVIDE
 	//***********************************************************************
-	if(numOfConn == 1)
+	if (numOfConn == 1) {
 		pOXCDst->m_nCUs--;
-	
+		pOXCSrc->m_nCUNodeIdAssigned = 0;
+	}
+
 	//if this hotel node does not have active BBU in itself anymore
 	if (pOXCDst->m_nBBUs == 0 && pOXCDst->m_nCUs == 0)
 	{
