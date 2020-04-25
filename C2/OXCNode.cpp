@@ -158,6 +158,37 @@ void OXCNode::dump(ostream &out) const
 }
 
 //-L
+int OXCNode::findCU(int key) {
+	it = CUs_placed.find(key);
+	if (it != CUs_placed.end())
+		return it->second;
+	return 0;
+}
+
+//-L
+int OXCNode::findDU(int key) {
+	it = DUs_placed.find(key);
+	if (it != DUs_placed.end())
+		return it->second;
+	return 0;
+}
+
+bool OXCNode::removeCU(int key) {
+	it = CUs_placed.find(key);
+	if(CUs_placed.erase(key) == 1)
+		return true;
+	return false;
+	
+}
+
+bool OXCNode::removeDU(int key) {
+	it = CUs_placed.find(key);
+	if(DUs_placed.erase(key) == 1)
+		return true;
+	return false;
+}
+
+//-L
 UINT OXCNode::getNumberOfDUs() {
 	return this->m_nBBUs;
 }

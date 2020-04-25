@@ -9,6 +9,8 @@
 									//	in which office hours end and residential hours start
 									//-B: for Ahmed
 #define LT_LINKS 960
+#define LT_LINKS_W16 2080
+
 #define CHANNEL_CAPACITY 1944		//-B: it sets OCLightpath - 10G = OC192; 25G = OC486; 40G = OC768; 100G = OC1944
 									// to get the real channel capacity, multiply it by OC1 = 51.48 Mbps
 #define FH_BWD_FX OC192				//-L: BW required for a FH connection at split 7
@@ -52,8 +54,8 @@
 #define MIDHAUL_FACTOR 4.751		//-B: value to be multiplied with backhaul bwd to get midhaul bwd
 
 #define ONE_CONN_PER_NODE false		//-B: if true, we consider a on-off model of traffic in each cell
-#define BBUPOLICY 0					//-B: 0 --> placeBBUHigh; 1 --> placeBBUClose; 2 --> placeBBU_Metric; 3--> placeBBUHigh: if last link full, add another BBU
-#define CUPOLICY 0					//-L: 0: placeCUHigh; 1: placeCUClose; 2: placeCUSmart
+#define BBUPOLICY 1					//-B: 0 --> placeBBUHigh; 1 --> placeBBUClose; 2 --> placeBBU_Metric; 3--> placeBBUHigh: if last link full, add another BBU
+#define CUPOLICY 1					//-L: 0: placeCUHigh; 1: placeCUClose; 2: placeCUSmart
 #define BBU_CHANGE_INTERVAL 1.2		//-B:  time interval between changes
 #define MAXVALUE_LATENCY 1000		//-B: random high value 
 

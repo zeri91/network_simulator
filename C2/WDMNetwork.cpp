@@ -7339,10 +7339,12 @@ void WDMNetwork::updateCUsUseAfterBlock(Connection* pCon, ConnectionDB& connDB)
 	if (numOfConn == 0)
 	{
 		//reset to default value
-		pOXCSrc->m_nCUNodeIdAssigned = 0;
+		assert(pOXCSrc->removeCU(pOXCDst->getId()) == true);
 		//decrease num of active BBUs in this hotel node
 		pOXCDst->m_nCUs--;
+
 		assert(pOXCDst->m_nCUs >= 0);
+
 		//if this hotel node does not have active BBU in itself anymore
 		if (pOXCDst->m_nCUs == 0 && pOXCDst->m_nBBUs == 0)
 		{
@@ -7597,8 +7599,9 @@ void WDMNetwork::updateCUsUseAfterDeparture(Connection* pCon, ConnectionDB& conn
 	//	IF THIS SOURCE HAS ONLY THIS CONNECTION THAT IT IS GOING TO DEPROVIDE
 	//***********************************************************************
 	if (numOfConn == 1) {
+		assert(pOXCSrc->removeCU(pOXCDst->getId()) == true);
 		pOXCDst->m_nCUs--;
-		pOXCSrc->m_nCUNodeIdAssigned = 0;
+		assert(pOXCDst->m_nCUs >= 0);
 	}
 
 	//if this hotel node does not have active BBU in itself anymore

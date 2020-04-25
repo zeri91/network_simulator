@@ -97,6 +97,11 @@ namespace NS_OCH {
 		vector<UINT>			m_vLogHotels;
 		double					m_uNumOfBBUSupported; //-B: see computeNumOfActiveHotels to understand what it means
 
+		//-L
+		int findCU(int key);
+		int findDU(int key);
+		bool removeCU(int key);
+		bool removeDU(int key);
 
 		double getTrafficProcessed();
 
@@ -120,6 +125,9 @@ namespace NS_OCH {
 		int						m_nBBUs; // 0 for all nodes, both nodes that are not hotels and for hotel nodes
 										 // num of BBU actives in this hotel node (obviously, in case it is an hotel node)
 		int						m_nCUs; // -L: 0 for all nodes, numof CU actives in this hotel node
+		map<int, int>				DUs_placed; //-L
+		map<int, int>				CUs_placed; //-L
+		map<int, int>::iterator		it; //-L
 
 		LINK_COST				m_nBBUReachCost;			//cost-distance from a node to THIS candiate hotel
 		LINK_COST				m_nNetStage;				//cost-distance of a node from core CO

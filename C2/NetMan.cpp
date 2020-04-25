@@ -7449,6 +7449,8 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	}
 
 	OXCNode* bbuNode = NULL;
+	if (pOXCdst == NULL && pOXCdst2 == NULL)
+		return 0;
 
 	//CASE 1 - use an already active CU
 	if (pOXCdst && pOXCdst2 == NULL)
@@ -7459,11 +7461,11 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 		//-B: save best precomputed path
 		precomputedPath = pOXCdst->pPath;
 
-		// -L: bestBBU trovata è quella che aveva gia
-		if (bestCU == pOXCsrc->m_nCUNodeIdAssigned)
+		if (pOXCsrc->findCU(bestCU) == 1)
 			return bestCU;
 
-		//-B: increase the number of active CUs in the hotel node (the value will be more than 1 since it was already activated)
+		pOXCsrc->CUs_placed.insert({pOXCdst->getId() , 1});
+
 		pOXCdst->m_nCUs++;
 
 		//-B: assign, to the source node of the connection, the hotel node hosting its BBU
@@ -7481,14 +7483,15 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 		//-B: save best precomputed path
 		precomputedPath = pOXCdst2->pPath;
 
-		if (dst == pOXCsrc->m_nCUNodeIdAssigned)
+		if (pOXCsrc->findCU(dst) == 1)
 			return dst;
+
+		pOXCsrc->CUs_placed.insert({dst, 1 });
+
+		pOXCdst2->m_nCUs++;
 
 		//-B: assign, to the source node of the connection, the hotel node hosting its CU
 		pOXCsrc->m_nCUNodeIdAssigned = dst;
-
-		//-B: increase the number of active CUs in the hotel node (the value will be more than 1 since it was already activated)
-		pOXCdst2->m_nCUs++;
 
 		return dst;
 
@@ -8651,7 +8654,7 @@ UINT NetMan::placeBBUHigh(UINT src, vector<OXCNode*>&BBUsList)
 		//	fino al nodo destinazione che cambia ad ogni ciclo
 	
 		list<AbsPath*> hPathList;
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 5, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 #ifdef DEBUG
@@ -9826,16 +9829,14 @@ void NS_OCH::NetMan::ltChannelStatistics() {
 
 		if (pLink->getSimplexLinkType() == SimplexLink::LT_Channel)
 		{
-			if (pLink->getValidity())
-			{
-				if (pLink->m_hFreeCap < FH_BWD_FX + BWDGRANULARITY)
-					m_hGraph.fewCapacityLinks.push_front(pLink->getId(), pLink);
-				if (pLink->m_hFreeCap < FH_BWD_FX)
-					m_hGraph.blockedToFronthaulLinks.push_front(pLink->getId(), pLink);
-				if (pLink->m_hFreeCap < BWDGRANULARITY)
-					m_hGraph.blockedToMidhaulLinks.push_front(pLink->getId(), pLink);
-			}
-			else
+			if (pLink->m_hFreeCap < 2*FH_BWD_FX)
+				m_hGraph.fewCapacityLinks.push_front(pLink->getId(), pLink);
+			if (pLink->m_hFreeCap < FH_BWD_FX)
+				m_hGraph.blockedToFronthaulLinks.push_front(pLink->getId(), pLink);
+			if (pLink->m_hFreeCap < BWDGRANULARITY)
+				m_hGraph.blockedToMidhaulLinks.push_front(pLink->getId(), pLink);
+
+			if (!pLink->getValidity())
 				m_hGraph.inactiveLinks.push_front(pLink->getId(), pLink);	
 		}
 	}
