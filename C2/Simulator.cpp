@@ -1901,6 +1901,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 
 	//-B: precomputedPath cleared, from previous cycle calculation, each time the cycle calls BBU_newConnection method
 	m_pNetMan->clearPrecomputedPath();
+	m_pNetMan->m_hGraph.resetLinks();
 
 	//-L:  significa che è un fronthaulEvent
 	//-B: if fronthaul has not been routed yet
@@ -1908,7 +1909,7 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	{
 
 		assert(pEvent->m_pSource != NULL);
-
+		
 		//-B: ASSIGN SOURCE
 		nSrc = pEvent->m_pSource->getId();
 		int numOfFreeSources = (pEvent->m_pSource->getNumberOfSources() - pEvent->m_pSource->getNumberOfBusySources());
@@ -1938,6 +1939,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 		//-B: ASSIGN CONNECTION TYPE
 		connType = Connection::MOBILE_FRONTHAUL;
 		
+		m_pNetMan->invalidateSimplexLinkDueToCapOrStatus(FH_BWD_FX, 1);
+
 		//-B: ASSIGN DESTINATION --> FIND BEST BBU HOTEL NODE
 		//-B: ONLY BBUSTACKING IS ACCEPTED (RRH-BBU --> 1:1 ASSOCIATION)
 		if (BBUSTACKING == true && INTRA_BBUPOOLING == false && INTER_BBUPOOLING == false)
@@ -1961,6 +1964,8 @@ Connection* Simulator::BBU_newConnection_Bernoulli(Event*pEvent, int runningPhas
 	{ 
 		eBandwidth = BWDGRANULARITY;
 		BHbwd = BH_BWD;
+		
+		m_pNetMan->invalidateSimplexLinkDueToCapOrStatus(BWDGRANULARITY, 5);
 		//-B: SELECT SOURCE AND DESTINATION
 		nSrc = pEvent->fronthaulEvent->m_pConnection->m_nDst;	// source = original connection's source node
 		nDst = m_pNetMan->findBestCUHotel(nSrc, eBandwidth, pEvent->m_hTime); // -L: CPRIbwd to be changed with midhaul bwd

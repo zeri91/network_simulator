@@ -7377,7 +7377,6 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	UINT dst = 0, bestCU = 0;
 
 	m_hGraph.preferWavelPath();
-	invalidateSimplexLinkDueToCapOrStatus(bwd, 5);
 
 	// check other candidate hotel nodes using a sorted hotels list
 	bool enough = true;
@@ -7544,7 +7543,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 	//invalidateSimplexLinkDueToFreeStatus(); 
 
 	//-B: following function should include both the previous ones -> to reduce computational time
-	invalidateSimplexLinkDueToCapOrStatus(bwd, 1);
 
 	//-B: we can't aggregate previous and following functions because we could decide 
 	//	to not use the second one (it's up to our assumptions), while the first one is essential
@@ -9195,7 +9193,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 		//	fino al nodo destinazione che cambia ad ogni ciclo
 
 		list<AbsPath*> hPathList;
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 3, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 
@@ -11463,6 +11461,44 @@ void NetMan::printSecondBBUs() {
 #endif		
 		}
 	}
+}
+
+bool NetMan::verifyCapacityNew(OXCNode* pOXCSrc, list <AbstractLink*> pathToCheck, UINT bandwidth) {
+	
+	UINT bwd = bandwidth; //already considering the corrent connection
+	list<AbstractLink*>::const_iterator itrLink = pathToCheck.begin();
+
+	while (itrLink != pathToCheck.end())
+	{
+		SimplexLink* pLink = (SimplexLink*)(*itrLink);
+
+		if (pLink->m_eSimplexLinkType == SimplexLink::LT_Lightpath) {
+
+			if (pLink->m_hFreeCap < bwd) {
+				return false;
+			}
+		}
+		else if (pLink->m_eSimplexLinkType == SimplexLink::LT_UniFiber) {
+
+			// here the condition is satisfied only if i need a bwd > channel capacity
+			if (pLink->m_hFreeCap < bwd) {
+				return false;
+			}
+
+		}
+		else if (pLink->m_eSimplexLinkType == SimplexLink::LT_Channel) {
+
+			// here the condition is satisfied only if i need a bwd > channel capacity
+			if (pLink->m_hFreeCap < bwd) {
+				return false;
+			}
+
+		}
+
+		itrLink++;
+
+	}
+	return true;
 }
 
 //Verify that by adding all the connections (which are originated in pOXCSrc),

@@ -418,6 +418,8 @@ public:
 	
 	bool verifyCapacity(OXCNode*, UINT, list<AbstractLink*>);
 
+	bool verifyCapacityNew(OXCNode*, list<AbstractLink*>, UINT bandwidth);
+
 	void clearPrecomputedPath();
 
 	void setPrecomputedPath(Circuit*);
