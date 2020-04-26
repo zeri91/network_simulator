@@ -9077,18 +9077,109 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 	UINT bestCU = 0;
 	OXCNode* pOXCdst;
 	OXCNode* pOXCsrc;
+	OXCNode* pOXCsrcCore = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
+	OXCNode* pOXCdstCore = (OXCNode*)m_hWDMNet.lookUpNodeById(46);
 	UINT id;
 	LINK_COST pathCost = UNREACHABLE;
-
-	//lookup source vertex
-	Vertex* pSrc = m_hGraph.lookUpVertex(src, Vertex::VT_Access_Out, -1);	//-B: ATTENTION!!! VT_Access_Out
 
 	list <AbstractLink*> savedPath;
 	bool pathAlreadyFound = false;
 	UINT bestCUFound = 0;
+	list<AbsPath*> coreCOlist;
 
 	if (src == 46)
 		return 46;
+
+	//-L try to place CU in the core CO
+	Vertex* pDstCore = m_hGraph.lookUpVertex(46, Vertex::VT_Access_In, -1);	//-B: ATTENTION!!! VT_Access_In
+	Vertex* pSrc = m_hGraph.lookUpVertex(src, Vertex::VT_Access_Out, -1);
+
+	m_hGraph.Yen(coreCOlist, pSrc, pOXCsrcCore, pDstCore, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
+	pOXCdstCore->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
+	pOXCdstCore->m_dCostMetric += pOXCdstCore->m_nBBUReachCost;
+
+	if (coreCOlist.size() == 0) {
+		groomingConnections.clear();
+	}
+	else if (coreCOlist.size() == 1) {
+
+		list<AbsPath*>::const_iterator itrPath;
+
+		itrPath = coreCOlist.begin();
+		bool pathAlreadyFound = false;
+
+
+		list <AbstractLink*> pathComputedByYen = (*itrPath)->m_hLinkList;
+
+		printPath(pathComputedByYen);
+
+		//-B: STEP 2 - *********** CALCULATE PATH AND RELATED COST ***********
+		//-B: calcolo il costo dello shortest path che va dalla source data in input alla funzione
+		//	fino al nodo destinazione che cambia ad ogni ciclo
+		pathCost = (*itrPath)->calculateCost();
+		pOXCdstCore->m_nBBUReachCost = pathCost;
+
+		pOXCdstCore->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
+		pOXCdstCore->m_dCostMetric += pOXCdstCore->m_nBBUReachCost;
+
+		//-B: *********** UPDATE COST METRIC ************ (cost metric is reset in resetPreProcessing method, inside BBU_newConnection)
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////    POLICY 0    ///////////////////////////////////////
+		////////////////// (CHOOSE CORE CO OR THE "HIGHEST" BBU HOTEL NODE) //////////////////// ("highest" = closest to the core co)
+		///////////////////////////////////////////////////////////////////////////////////////////////////////
+		if (pathCost < UNREACHABLE)
+		{
+
+
+			if ((pOXCdstCore->m_dCostMetric < bestCost)) {
+
+				bestCost = pOXCdstCore->m_dCostMetric;
+				pathAlreadyFound = true;
+				pOXCdstCore->pPath = pathComputedByYen;
+
+				//Reset grooming time related to the old best bbu
+				//otherwise, I will update the grooming time to connections not on the chosen path
+				list <Connection*>::const_iterator itrG;
+				Connection* pConG;
+				list<Connection*> connectinGroomingReset;
+
+				for (itrG = groomingConnections.begin(); itrG != groomingConnections.end(); itrG++) {
+
+					pConG = (Connection*)(*itrG);
+#ifdef DEBUGC
+					cout << "Connection from " << pConG->m_nSrc << " to "
+						<< pConG->m_nDst << " has grooming time > 0" << endl;
+#endif						
+					Connection* connFound = checkLinks(pConG, savedPath, pOXCdstCore->pPath);
+					if (connFound != NULL) {
+						connectinGroomingReset.push_back(connFound);
+					}
+				}
+
+				list < Connection*>::const_iterator itrCheckLinks;
+				Connection* connectionToDelete;
+
+				for (itrCheckLinks = connectinGroomingReset.begin(); itrCheckLinks != connectinGroomingReset.end(); itrCheckLinks++) {
+					connectionToDelete = (Connection*)(*itrCheckLinks);
+					groomingConnections.erase(connectionToDelete->m_nSequenceNo);
+				}
+
+				savedPath = pOXCdstCore->pPath;
+
+				bestCU = pOXCdstCore->getId();
+				//-L: da controllare meglio
+				if (bestCU == 46) {
+					return bestCU;
+				}
+
+			}
+			else {
+				groomingConnections.clear();
+			}
+
+		} //end IF unreachable
+	}
 
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
