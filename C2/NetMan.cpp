@@ -8654,7 +8654,7 @@ UINT NetMan::placeBBUHigh(UINT src, vector<OXCNode*>&BBUsList)
 		//	fino al nodo destinazione che cambia ad ogni ciclo
 	
 		list<AbsPath*> hPathList;
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 5, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 1, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 #ifdef DEBUG
@@ -9105,7 +9105,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 		//	fino al nodo destinazione che cambia ad ogni ciclo
 
 		list<AbsPath*> hPathList;
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 1, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 
@@ -9228,7 +9228,7 @@ UINT NetMan::placeCUClose(UINT src, vector<OXCNode*>& BBUsList)
 		Vertex* pDst = m_hGraph.lookUpVertex(id, Vertex::VT_Access_In, -1);
 
 		// computation of the path cost from src to destination
-		pathCost = m_hGraph.DijkstraLatency(pOXCdst->pPath, pSrc, pDst, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
+		pathCost = m_hGraph.DijkstraLatency(pOXCdst->pPath, pSrc, pDst, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->m_nBBUReachCost = pathCost; //-L: ??? this makes no sense. It changes at every iteration of the for. no way to know the source node.
 
 		////////////////////////////////////////////////////////////////////////////////////////

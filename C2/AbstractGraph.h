@@ -279,11 +279,11 @@ public:
 
 	// algorithms
 	void Yen(list<AbsPath*>&, AbstractNode* pSrc, AbstractNode* pDst, 
-			UINT nNumberOfPaths, LinkCostFunction hLCF = LCF_ByHop);
+			UINT nNumberOfPaths, LinkCostFunction hLCF = LCF_ByHop, double latency = LATENCYBUDGET);
 	void YenGreen(list<AbsPath*>&, AbstractNode* pSrc, AbstractNode* pDst, 
 			UINT nNumberOfPaths, LinkCostFunction hLCF = LCF_ByHop);
 	void Yen(list<AbsPath*>&, UINT nSrc, UINT nDst, 
-			UINT nNumberOfPaths, LinkCostFunction hLCF = LCF_ByHop);
+			UINT nNumberOfPaths, LinkCostFunction hLCF = LCF_ByHop, double latency = LATENCYBUDGET);
 	void Floyd(UINT nNumberOfPaths, LinkCostFunction hLCF = LCF_ByHop);
 
 	void DijkstraHelperYen(AbstractNode* pSrc, AbstractNode* pDst, LinkCostFunction hLCF);
@@ -300,7 +300,7 @@ public:
 				LinkCostFunction hLCF = LCF_ByHop);
 	LINK_COST Dijkstra(list<AbstractLink*>&, AbstractNode*, AbstractNode*,
 				LinkCostFunction hLCF = LCF_ByHop);
-	LINK_COST DijkstraLatency(list<AbstractLink*>& hMinCostPath, AbstractNode * pSrc, AbstractNode * pDst, LinkCostFunction hLCF);
+	LINK_COST DijkstraLatency(list<AbstractLink*>& hMinCostPath, AbstractNode * pSrc, AbstractNode * pDst, LinkCostFunction hLCFint, double latency = LATENCYBUDGET);
 	LINK_COST recordMinCostPath(list<AbstractLink*>&, AbstractNode*);
 	LINK_COST Dijkstra_BBU(BandwidthGranularity bw, Connection * pCon, list<AbstractLink*>& hMinCostPath,
 		AbstractNode * pSrc, AbstractNode * pDst, LinkCostFunction hLCF); //-B
@@ -316,7 +316,7 @@ public:
 	void setSimplexLinkCostForGrooming(MappedLinkList<UINT, AbstractLink*>);
 	void DijkstraHelper(AbstractNode*, AbstractNode*, 
 				LinkCostFunction hLCF = LCF_ByHop);
-	void DijkstraHelperLatency(AbstractNode * pSrc, AbstractNode * pDst, LinkCostFunction hLCF);
+	void DijkstraHelperLatency(AbstractNode * pSrc, AbstractNode * pDst, LinkCostFunction hLCF, double lat = LATENCYBUDGET);
 	double getLinkLatency(float linkLength);
 	void DijkstraHelper_BBU(BandwidthGranularity bw, Connection * pCon, AbstractNode * pSrc, AbstractNode * pDst, LinkCostFunction hLCF);
 	void invalidateSimplexLinkDueToFreeStatus(MappedLinkList<UINT, AbstractLink*> pOutLinkList);
@@ -376,7 +376,7 @@ protected:
 protected:
 	// algorithms: inline functions
 	void YenHelper(list<AbsPath*>&, AbstractNode* pSrc, AbstractNode* pDst, 
-			UINT nNumberOfPaths, LinkCostFunction hLCF);
+			UINT nNumberOfPaths, LinkCostFunction hLCF, double latency = LATENCYBUDGET);
 	void YenHelperGreen(list<AbsPath*>&, AbstractNode* pSrc, AbstractNode* pDst, 
 			UINT nNumberOfPaths, LinkCostFunction hLCF);
 	void FloydHelper(UINT nNumberOfPaths, LinkCostFunction hLCF);

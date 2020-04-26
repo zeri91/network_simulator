@@ -577,7 +577,7 @@ void Graph::allocateConflictSet(UINT nSize)
 // compute K-shortest loopless paths
 void Graph::Yen(list<AbsPath*>& hKPaths, 
 				UINT nSrc, UINT nDst, 
-				UINT nNumberOfPaths, NetMan *m_pNetman, LinkCostFunction hLCF)
+				UINT nNumberOfPaths, NetMan *m_pNetman, LinkCostFunction hLCF, double latency)
 {
 	AbstractNode *pSrc = m_hNodeList.find(nSrc);
 	AbstractNode *pDst = m_hNodeList.find(nDst);
@@ -589,14 +589,14 @@ void Graph::Yen(list<AbsPath*>& hKPaths,
 
 void Graph::Yen(list<AbsPath*>& hKPaths, 
 				AbstractNode* pSrc, OXCNode* pOXCsrc, AbstractNode* pDst, 
-				UINT nNumberOfPaths, NetMan *m_pNetman, LinkCostFunction hLCF)
+				UINT nNumberOfPaths, NetMan *m_pNetman, LinkCostFunction hLCF, double latency)
 {
-	this->YenHelper(hKPaths, pSrc, pOXCsrc, pDst, nNumberOfPaths, m_pNetman, hLCF);
+	this->YenHelper(hKPaths, pSrc, pOXCsrc, pDst, nNumberOfPaths, m_pNetman, hLCF, latency);
 }
 
 inline void Graph::YenHelper(list<AbsPath*>& hKPaths, 
 							 AbstractNode* pSrc, OXCNode* pOXCsrc, AbstractNode* pDst,
-							 UINT nNumberOfPaths, NetMan *m_pNetman, LinkCostFunction hLCF)
+							 UINT nNumberOfPaths, NetMan *m_pNetman, LinkCostFunction hLCF, double lat)
 {
 	BinaryHeap<AbsPath*, vector<AbsPath*>, PAbsPathComp> hPQ;
 	LINK_COST hCost;
@@ -604,7 +604,7 @@ inline void Graph::YenHelper(list<AbsPath*>& hKPaths,
 	list<AbsPath*> hKPathsTmp;
 	bool pathToAdd = true;
 
-	DijkstraHelperLatency(pSrc, pDst, hLCF);
+	DijkstraHelperLatency(pSrc, pDst, hLCF, lat);
 	hCost = recordMinCostPath(hMinCostPath, pDst);
 	if (UNREACHABLE == hCost || hCost == 0)
 		return;	// graph disconnected
@@ -643,7 +643,7 @@ inline void Graph::YenHelper(list<AbsPath*>& hKPaths,
 		// If the path respects the latency constraint, but the source has already a BBU assigned, I have to check if the capacity
 		// towards the new candidate BBU is enough.
 		float latency = m_pNetman->computeLatencyP3(pCurrentPath->m_hLinkList, (Vertex*)pSrc, 1);
-		if (latency < LATENCYBUDGET) {
+		if (latency < lat) {
 			if (!m_pNetman->isLatencyExceeded()) {
 
 				if (pOXCsrc->m_nBBUNodeIdsAssigned > 0 && pOXCsrc->m_nBBUNodeIdsAssigned != ((Vertex*)pDst)->m_pOXCNode->getId()) {
@@ -771,7 +771,7 @@ inline void Graph::YenHelper(list<AbsPath*>& hKPaths,
 			UINT idSrc = ((Vertex*)(*itr)->getSrc())->m_pOXCNode->getId();
 			Vertex* newSrc = lookUpVertex(idSrc, Vertex::VT_Access_Out, -1);	//-B: ATTENTION!!! VT_Access_In
 
-			DijkstraHelperLatency(newSrc, pDst, hLCF);
+			DijkstraHelperLatency(newSrc, pDst, hLCF, lat);
 			// enable nodes/links
 			list<AbstractNode*>::const_iterator itrDNodes;
 			list<AbstractLink*>::const_iterator itrDLinks;

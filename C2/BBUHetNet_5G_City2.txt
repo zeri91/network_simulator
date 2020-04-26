@@ -1,5 +1,5 @@
 
-NumberOfWavelengths = 10;
+NumberOfWavelengths = 16;
 ChannelCapacity = 324; 
 Num of trees = 40; 
 Num of rings = 15; 

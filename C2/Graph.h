@@ -33,9 +33,9 @@ public:
 
 	// K-shortest loopless paths
 	void Yen(list<AbsPath*>&, AbstractNode* pSrc, OXCNode* pOXCsrc, AbstractNode* pDst, 
-			UINT nNumberOfPaths, NetMan* m_pNetman, LinkCostFunction hLCF = LCF_ByHop);
+			UINT nNumberOfPaths, NetMan* m_pNetman, LinkCostFunction hLCF = LCF_ByHop, double latency = LATENCYBUDGET);
 	void Yen(list<AbsPath*>&, UINT nSrc, UINT nDst, 
-			UINT nNumberOfPaths, NetMan* m_pNetman, LinkCostFunction hLCF = LCF_ByHop);
+			UINT nNumberOfPaths, NetMan* m_pNetman, LinkCostFunction hLCF = LCF_ByHop, double latency = LATENCYBUDGET);
 
 	SimplexLink* lookUpSimplexLink(UINT, Vertex::VertexType, int,
 					UINT, Vertex::VertexType, int) const;
@@ -95,7 +95,7 @@ protected:
 	void SPAC_Opt_ComputePrimaryGivenBackup_Aux(const list<AbstractLink*>&, 
 				Vertex*, Vertex*);
 	void YenHelper(list<AbsPath*>&, AbstractNode* pSrc, OXCNode* pOXCsrc, AbstractNode* pDst,
-			UINT nNumberOfPaths, NetMan* m_pNetman, LinkCostFunction hLCF);
+			UINT nNumberOfPaths, NetMan* m_pNetman, LinkCostFunction hLCF, double lat = LATENCYBUDGET);
 	void invalidateVNode(list<AbstractNode*>&, Vertex*, int);
 	void invalidateVLink(list<AbstractLink*>&, SimplexLink*);
 	list<AbstractLink*> removeRXLink(list<AbstractLink*>, list<AbstractLink*>);

@@ -863,7 +863,7 @@ LINK_COST AbstractGraph::Dijkstra(list<AbstractLink*>& hMinCostPath,
 //-B: same as Dijkstra but this method is specifically for fronthaul connections:
 //	it checks latency constraint during shortest path computation
 LINK_COST AbstractGraph::DijkstraLatency(list<AbstractLink*>& hMinCostPath,
-	AbstractNode* pSrc, AbstractNode* pDst, LinkCostFunction hLCF)
+	AbstractNode* pSrc, AbstractNode* pDst, LinkCostFunction hLCF, double latency)
 {
 	DijkstraHelperLatency(pSrc, pDst, hLCF);
 
@@ -1150,7 +1150,7 @@ LINK_COST AbstractGraph::Dijkstra_BBU(BandwidthGranularity bw, Connection*pCon, 
 
 
 inline void AbstractGraph::DijkstraHelperLatency(AbstractNode* pSrc, AbstractNode* pDst,
-	LinkCostFunction hLCF)
+	LinkCostFunction hLCF, double lat)
 {
 #ifdef DEBUG
 	cout << "-> DijkstraHelperLatency" << endl;
@@ -1216,7 +1216,7 @@ inline void AbstractGraph::DijkstraHelperLatency(AbstractNode* pSrc, AbstractNod
 		//-B: LATENCY CONSTRAINT ONLY FOR FRONTHAUL CONNECTIONS
 		//-B: if this vertex has a latency > than the latency budget, we should not consider it
 		// (THIS CONTROL MUST BE DONE BEFORE CHECKING IF pLinkSrc == pDst, ELSE IT CAN ACCEPT A TOO LONG PATH!)
-		if (pLinkSrc->m_dLatency > LATENCYBUDGET)
+		if (pLinkSrc->m_dLatency > lat)
 		{
 #ifdef DEBUGX
 			//cout << "\n\tTOO LONG PATH!!!!!";
@@ -1991,7 +1991,7 @@ void AbstractGraph::genCostMatrix(LINK_COST ***pppCost,
 // compute K-shortest loopless paths
 void AbstractGraph::Yen(list<AbsPath*>& hKPaths, 
 						UINT nSrc, UINT nDst, 
-						UINT nNumberOfPaths, LinkCostFunction hLCF)
+						UINT nNumberOfPaths, LinkCostFunction hLCF, double latency)
 {
 	AbstractNode *pSrc = m_hNodeList.find(nSrc);
 	AbstractNode *pDst = m_hNodeList.find(nDst);
@@ -2003,9 +2003,9 @@ void AbstractGraph::Yen(list<AbsPath*>& hKPaths,
 
 void AbstractGraph::Yen(list<AbsPath*>& hKPaths, 
 						AbstractNode* pSrc, AbstractNode* pDst, 
-						UINT nNumberOfPaths, LinkCostFunction hLCF)
+						UINT nNumberOfPaths, LinkCostFunction hLCF, double latency)
 {
-	YenHelper(hKPaths, pSrc, pDst, nNumberOfPaths, hLCF);
+	YenHelper(hKPaths, pSrc, pDst, nNumberOfPaths, hLCF, latency);
 }
 
 void AbstractGraph::YenWP(list<AbsPath*>& hKPaths, 
@@ -2017,7 +2017,7 @@ void AbstractGraph::YenWP(list<AbsPath*>& hKPaths,
 
 inline void AbstractGraph::YenHelper(list<AbsPath*>& hKPaths, 
 									 AbstractNode* pSrc, AbstractNode* pDst, 
-									 UINT nNumberOfPaths, LinkCostFunction hLCF)
+									 UINT nNumberOfPaths, LinkCostFunction hLCF, double latency)
 {
 	BinaryHeap<AbsPath*, vector<AbsPath*>, PAbsPathComp> hPQ;
 	LINK_COST hCost;
