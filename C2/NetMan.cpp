@@ -7377,7 +7377,6 @@ UINT NetMan::findBestCUHotel(UINT src, BandwidthGranularity& bwd, SimulationTime
 	UINT dst = 0, bestCU = 0;
 
 	m_hGraph.preferWavelPath();
-	invalidateSimplexLinkDueToCapOrStatus(bwd, 5);
 
 	// check other candidate hotel nodes using a sorted hotels list
 	bool enough = true;
@@ -7544,7 +7543,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 	//invalidateSimplexLinkDueToFreeStatus(); 
 
 	//-B: following function should include both the previous ones -> to reduce computational time
-	invalidateSimplexLinkDueToCapOrStatus(bwd, 1);
 
 	//-B: we can't aggregate previous and following functions because we could decide 
 	//	to not use the second one (it's up to our assumptions), while the first one is essential
@@ -9077,22 +9075,114 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 	UINT bestCU = 0;
 	OXCNode* pOXCdst;
 	OXCNode* pOXCsrc;
+	OXCNode* pOXCsrcCore = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
+	OXCNode* pOXCdstCore = (OXCNode*)m_hWDMNet.lookUpNodeById(46);
 	UINT id;
 	LINK_COST pathCost = UNREACHABLE;
-
-	//lookup source vertex
-	Vertex* pSrc = m_hGraph.lookUpVertex(src, Vertex::VT_Access_Out, -1);	//-B: ATTENTION!!! VT_Access_Out
 
 	list <AbstractLink*> savedPath;
 	bool pathAlreadyFound = false;
 	UINT bestCUFound = 0;
+	list<AbsPath*> coreCOlist;
 
 	if (src == 46)
 		return 46;
 
+	//-L try to place CU in the core CO
+	Vertex* pDstCore = m_hGraph.lookUpVertex(46, Vertex::VT_Access_In, -1);	//-B: ATTENTION!!! VT_Access_In
+	Vertex* pSrc = m_hGraph.lookUpVertex(src, Vertex::VT_Access_Out, -1);
+
+	m_hGraph.Yen(coreCOlist, pSrc, pOXCsrcCore, pDstCore, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
+	pOXCdstCore->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
+	pOXCdstCore->m_dCostMetric += pOXCdstCore->m_nBBUReachCost;
+
+	if (coreCOlist.size() == 0) {
+		groomingConnections.clear();
+	}
+	else if (coreCOlist.size() == 1) {
+
+		list<AbsPath*>::const_iterator itrPath;
+
+		itrPath = coreCOlist.begin();
+		bool pathAlreadyFound = false;
+
+
+		list <AbstractLink*> pathComputedByYen = (*itrPath)->m_hLinkList;
+
+		printPath(pathComputedByYen);
+
+		//-B: STEP 2 - *********** CALCULATE PATH AND RELATED COST ***********
+		//-B: calcolo il costo dello shortest path che va dalla source data in input alla funzione
+		//	fino al nodo destinazione che cambia ad ogni ciclo
+		pathCost = (*itrPath)->calculateCost();
+		pOXCdstCore->m_nBBUReachCost = pathCost;
+
+		pOXCdstCore->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
+		pOXCdstCore->m_dCostMetric += pOXCdstCore->m_nBBUReachCost;
+
+		//-B: *********** UPDATE COST METRIC ************ (cost metric is reset in resetPreProcessing method, inside BBU_newConnection)
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////    POLICY 0    ///////////////////////////////////////
+		////////////////// (CHOOSE CORE CO OR THE "HIGHEST" BBU HOTEL NODE) //////////////////// ("highest" = closest to the core co)
+		///////////////////////////////////////////////////////////////////////////////////////////////////////
+		if (pathCost < UNREACHABLE)
+		{
+
+
+			if ((pOXCdstCore->m_dCostMetric < bestCost)) {
+
+				bestCost = pOXCdstCore->m_dCostMetric;
+				pathAlreadyFound = true;
+				pOXCdstCore->pPath = pathComputedByYen;
+
+				//Reset grooming time related to the old best bbu
+				//otherwise, I will update the grooming time to connections not on the chosen path
+				list <Connection*>::const_iterator itrG;
+				Connection* pConG;
+				list<Connection*> connectinGroomingReset;
+
+				for (itrG = groomingConnections.begin(); itrG != groomingConnections.end(); itrG++) {
+
+					pConG = (Connection*)(*itrG);
+#ifdef DEBUGC
+					cout << "Connection from " << pConG->m_nSrc << " to "
+						<< pConG->m_nDst << " has grooming time > 0" << endl;
+#endif						
+					Connection* connFound = checkLinks(pConG, savedPath, pOXCdstCore->pPath);
+					if (connFound != NULL) {
+						connectinGroomingReset.push_back(connFound);
+					}
+				}
+
+				list < Connection*>::const_iterator itrCheckLinks;
+				Connection* connectionToDelete;
+
+				for (itrCheckLinks = connectinGroomingReset.begin(); itrCheckLinks != connectinGroomingReset.end(); itrCheckLinks++) {
+					connectionToDelete = (Connection*)(*itrCheckLinks);
+					groomingConnections.erase(connectionToDelete->m_nSequenceNo);
+				}
+
+				savedPath = pOXCdstCore->pPath;
+
+				bestCU = pOXCdstCore->getId();
+				//-L: da controllare meglio
+				if (bestCU == 46) {
+					return bestCU;
+				}
+
+			}
+			else {
+				groomingConnections.clear();
+			}
+
+		} //end IF unreachable
+	}
+
 	for (int j = 0; j < BBUsList.size(); j++)
 	{
 		id = BBUsList[j]->getId();
+
 		pOXCdst = (OXCNode*)m_hWDMNet.lookUpNodeById(id);
 		pOXCsrc = (OXCNode*)m_hWDMNet.lookUpNodeById(src);
 		Vertex* pDst = m_hGraph.lookUpVertex(id, Vertex::VT_Access_In, -1);	//-B: ATTENTION!!! VT_Access_In
@@ -9103,7 +9193,8 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 		//	fino al nodo destinazione che cambia ad ogni ciclo
 
 		list<AbsPath*> hPathList;
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 5, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
+
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 3, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 
@@ -11371,6 +11462,44 @@ void NetMan::printSecondBBUs() {
 #endif		
 		}
 	}
+}
+
+bool NetMan::verifyCapacityNew(OXCNode* pOXCSrc, list <AbstractLink*> pathToCheck, UINT bandwidth) {
+	
+	UINT bwd = bandwidth; //already considering the corrent connection
+	list<AbstractLink*>::const_iterator itrLink = pathToCheck.begin();
+
+	while (itrLink != pathToCheck.end())
+	{
+		SimplexLink* pLink = (SimplexLink*)(*itrLink);
+
+		if (pLink->m_eSimplexLinkType == SimplexLink::LT_Lightpath) {
+
+			if (pLink->m_hFreeCap < bwd) {
+				return false;
+			}
+		}
+		else if (pLink->m_eSimplexLinkType == SimplexLink::LT_UniFiber) {
+
+			// here the condition is satisfied only if i need a bwd > channel capacity
+			if (pLink->m_hFreeCap < bwd) {
+				return false;
+			}
+
+		}
+		else if (pLink->m_eSimplexLinkType == SimplexLink::LT_Channel) {
+
+			// here the condition is satisfied only if i need a bwd > channel capacity
+			if (pLink->m_hFreeCap < bwd) {
+				return false;
+			}
+
+		}
+
+		itrLink++;
+
+	}
+	return true;
 }
 
 //Verify that by adding all the connections (which are originated in pOXCSrc),
