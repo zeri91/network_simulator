@@ -9193,6 +9193,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 		//	fino al nodo destinazione che cambia ad ogni ciclo
 
 		list<AbsPath*> hPathList;
+
 		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 3, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
@@ -10501,7 +10502,7 @@ float NetMan::computeLatencyP3(list<AbstractLink*>&path, Vertex* pSrc, UINT conn
 									if (!connPresent) {
 										groomingConnections.push_front(pCon->m_nSequenceNo, pCon);
 									}
-									if ((pCon->m_dRoutingTime + ELSWITCHLATENCY) > LATENCYBUDGET) {
+									if ((pCon->m_dRoutingTime + ELSWITCHLATENCY) > LATENCY_MH) {
 									
 										latency = MAXVALUE_LATENCY;
 										return latency;
@@ -11787,6 +11788,19 @@ bool NetMan::isLatencyExceeded() {
 		{
 
 			if ((pConG->m_dRoutingTime + ELSWITCHLATENCY) > LATENCYBUDGET) {
+#ifdef DEBUG
+				cout << "Connection on grooming path from source " << pConG->m_nSrc <<
+					" exceeds the latency budget" << endl;
+				cout << "\tRouting + grooming time = " << pConG->m_dRoutingTime + ELSWITCHLATENCY << endl;
+#endif
+				return true;
+			}
+
+
+		}
+		if (pConG->m_eConnType == Connection::FIXED_MIDHAUL)
+		{
+			if ((pConG->m_dRoutingTime + ELSWITCHLATENCY) > LATENCY_MH) {
 #ifdef DEBUG
 				cout << "Connection on grooming path from source " << pConG->m_nSrc <<
 					" exceeds the latency budget" << endl;
