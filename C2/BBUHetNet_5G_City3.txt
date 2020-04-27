@@ -7,8 +7,8 @@ NumberOfTx = 1;
 NumberOfRx = 1;
 NumberOfDataCenter = 0;
 TxScale = 1.0;	// NumberOfTx = Nodal Degree * TxScale
-NumberOfOXCNodes = 53;
-NumberOfUniFibers = 130;
+NumberOfOXCNodes = 57;
+NumberOfUniFibers = 158;
 
 // Format: 
 //	<OXCNodeId, WConvertible(0,F|1,P|2,N), GroomingCap(0,F|1,P|2,N), Tx, Rx, NodeFlag(-1,CO|1,M|2,F|3,FM), 

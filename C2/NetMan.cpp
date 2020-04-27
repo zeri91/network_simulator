@@ -7277,6 +7277,8 @@ UINT NetMan::computePowerConsumption(UINT hotelId) {
 	UINT nDUs = hotelNode->m_nBBUs;
 	UINT nCUs = hotelNode->m_nCUs;
 
+	if (nDUs > 53) nDUs = 53;
+
 	// if the hotel is not active return the idle power consumption
 	if (nDUs == 0 && nCUs == 0)
 		return CSIidlePower;
@@ -7309,18 +7311,18 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	if (m_hLog.m_nBlockedCon == 0)
 		return CENTRALIZE;
 
-	const float THR1 = 60.0;
-	const float THR2 = 90.0;
+	const float THR1 = 30.0;
+	const float THR2 = 50.0;
 	int status = -1;
 
 	// compute status of the network
 	ltChannelStatistics();
 	
 	const int inactiveLinks = m_hGraph.inactiveLinks.size();
-	const int activeLinks = LT_LINKS - inactiveLinks;
+	const int activeLinks = LT_LINKS_W16 - inactiveLinks;
 
 	// -L: percentage of links disabled due to not enough capacity
-	const float occupacyPercentage = ((float)inactiveLinks / (float)LT_LINKS) * 100;
+	const float occupacyPercentage = ((float)inactiveLinks / (float)LT_LINKS_W16) * 100;
 	
 	//-L: percentage of links with enough residual capacity 
 	const float freeLinkPercentage = 100 - occupacyPercentage;
@@ -7329,12 +7331,12 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	assert(freeLinkPercentage >= 0.0 && freeLinkPercentage <= 100.0);
 
 	//-L: links that have free capatity only for one more FH connnection
-	const float lowCapacityLinkPercentage = ((float)(m_hGraph.fewCapacityLinks.size()) / (float)activeLinks) * 100;
+	const float lowCapacityLinkPercentage = ((float)(m_hGraph.fewCapacityLinks.size()) / (float)LT_LINKS_W16) * 100;
 	assert(lowCapacityLinkPercentage >= 0.0 && lowCapacityLinkPercentage <= 100.0);
 
 	//-L: percentage of active links with not enough capacity for a new FH connection
 	// only midhaul and backhaul can be assigned to these links
-	const float fhBlockedLinkPercentage = ((float)(m_hGraph.blockedToFronthaulLinks.size()) / (float)activeLinks) * 100;
+	const float fhBlockedLinkPercentage = ((float)(m_hGraph.blockedToFronthaulLinks.size()) / (float)LT_LINKS_W16) * 100;
 	assert(fhBlockedLinkPercentage >= 0.0 && fhBlockedLinkPercentage <= 100.0);
 
 	// get total power consumption of the hotels in the network
@@ -8652,7 +8654,7 @@ UINT NetMan::placeBBUHigh(UINT src, vector<OXCNode*>&BBUsList)
 		//	fino al nodo destinazione che cambia ad ogni ciclo
 	
 		list<AbsPath*> hPathList;
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 1, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 #ifdef DEBUG
@@ -9194,7 +9196,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 
 		list<AbsPath*> hPathList;
 
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 3, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 5, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 
@@ -10253,9 +10255,8 @@ void NetMan::genAuxCUsList(int srcId, vector<OXCNode*>& auxBBUsList)
 	//scorro la lista ordinata di tutti i candidate bbu hotel nodes (sorted in base al costo di reachability del core co)
 	for (i = 0; i < m_hWDMNet.hotelsList.size(); i++)
 	{
-		if (m_hWDMNet.hotelsList[i]->m_nBBUs > 0 && m_hWDMNet.hotelsList[i]->m_nBBUs < MAXNUMBBU)
+		if ((m_hWDMNet.hotelsList[i]->m_nBBUs > 0 && m_hWDMNet.hotelsList[i]->m_nBBUs < MAXNUMBBU) || m_hWDMNet.hotelsList[i]->m_nCUs > 0)
 		{
-			if(m_hWDMNet.hotelsList[i]->getId() != srcId || srcId == 46)
 			//lo inserisco nella lista dei nodi attivi non pieni
 			auxBBUsList.push_back(m_hWDMNet.hotelsList[i]);
 		}

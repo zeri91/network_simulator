@@ -648,7 +648,11 @@ inline void Graph::YenHelper(list<AbsPath*>& hKPaths,
 
 				if (pOXCsrc->m_nBBUNodeIdsAssigned > 0 && pOXCsrc->m_nBBUNodeIdsAssigned != ((Vertex*)pDst)->m_pOXCNode->getId()) {
 				
-					bool capacityIsEnough = m_pNetman->verifyCapacityNew(pOXCsrc, pCurrentPath->m_hLinkList, BWDGRANULARITY);
+					bool capacityIsEnough;
+					if(lat == LATENCY_MH)
+						capacityIsEnough = m_pNetman->verifyCapacityNew(pOXCsrc, pCurrentPath->m_hLinkList, BWDGRANULARITY);
+					else
+						capacityIsEnough = m_pNetman->verifyCapacity(pOXCsrc, ((OXCNode*)pDst)->getId(), pCurrentPath->m_hLinkList);
 					if (capacityIsEnough) {
 #ifdef DEBUG
 						cout << "Capacity is enough" << endl;

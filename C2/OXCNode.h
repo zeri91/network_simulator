@@ -125,6 +125,8 @@ namespace NS_OCH {
 		int						m_nBBUs; // 0 for all nodes, both nodes that are not hotels and for hotel nodes
 										 // num of BBU actives in this hotel node (obviously, in case it is an hotel node)
 		int						m_nCUs; // -L: 0 for all nodes, numof CU actives in this hotel node
+		int						m_nDUs; //-L
+
 		map<int, int>				DUs_placed; //-L
 		map<int, int>				CUs_placed; //-L
 		map<int, int>::iterator		it; //-L
