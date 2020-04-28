@@ -7302,16 +7302,24 @@ UINT NetMan::computeHotelsTotalPowerConsumption() {
 
 //-L: smart placement of both CU and DU cudu == 0 means DU, cudu == 1 means CU
 UINT NetMan::chooseBestPlacement(int cudu) {
+	double bCon = m_hLog.m_nBlockedCon;
+	double pCon = m_hLog.m_nProvisionedCon;
 
 	assert(cudu == 0 || cudu == 1);
 
 	if (SMART_PLACEMENT == 0)
 		return (cudu == 0) ? BBUPOLICY : CUPOLICY;
 
-	if (m_hLog.m_nBlockedCon == 0)
-		return CENTRALIZE;
+	if ((bCon / pCon) > 0.001) {
+		if (cudu == 0)
+			return DISTRIBUTE;
+		else if (bCon / pCon < 0.003)
+			return CENTRALIZE;
+		else
+			return DISTRIBUTE;
+	}
 
-	const float THR1 = 30.0;
+	const float THR1 = 20.0;
 	const float THR2 = 50.0;
 	int status = -1;
 
