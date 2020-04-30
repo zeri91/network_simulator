@@ -7304,23 +7304,15 @@ UINT NetMan::computeHotelsTotalPowerConsumption() {
 UINT NetMan::chooseBestPlacement(int cudu) {
 	double bCon = m_hLog.m_nBlockedCon;
 	double pCon = m_hLog.m_nProvisionedCon;
+	double pBloc = bCon / pCon;
 
 	assert(cudu == 0 || cudu == 1);
 
 	if (SMART_PLACEMENT == 0)
 		return (cudu == 0) ? BBUPOLICY : CUPOLICY;
 
-	if ((bCon / pCon) > 0.001) {
-		if (cudu == 0)
-			return DISTRIBUTE;
-		else if (bCon / pCon < 0.003)
-			return CENTRALIZE;
-		else
-			return DISTRIBUTE;
-	}
-
 	const float THR1 = 20.0;
-	const float THR2 = 50.0;
+	const float THR2 = 40.0;
 	int status = -1;
 
 	// compute status of the network
@@ -7350,24 +7342,13 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	// get total power consumption of the hotels in the network
 	const float powerCons = computeHotelsTotalPowerConsumption();
 
-	// check status of the network
-	if (occupacyPercentage <= THR1) {
-		if (lowCapacityLinkPercentage <= 30.0) {
+	status = MEDIUM;
+	
+	if (powerCons > 25000 && pBloc < 0.0015) {
+		if (lowCapacityLinkPercentage < 30)
 			status = LOW;
-		}
-		else if (lowCapacityLinkPercentage <= 50.0) {
-			status = MEDIUM;
-		}
-		else
-			status = HIGH;
 	}
-	else if (occupacyPercentage <= THR2 && fhBlockedLinkPercentage <= 50.0) {
-		if (lowCapacityLinkPercentage <= 50)
-			status = MEDIUM;
-		else
-			status = HIGH;
-	}
-	else
+	else if(pBloc > 0.0015)
 		status = HIGH;
 
 	assert(status != -1);
@@ -9204,7 +9185,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 
 		list<AbsPath*> hPathList;
 
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 5, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 
