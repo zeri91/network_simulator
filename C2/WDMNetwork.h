@@ -18,7 +18,7 @@ class Event;
 class ConnectionDB;
 class Log;
 
-class WDMNetwork: public AbstractGraph {
+class WDMNetwork : public AbstractGraph {
 public:
 	WDMNetwork();								//-B: set m_nChannelCapacity e m_dTxScale equal to 0. Set the full wavel conversion everywhere
 	WDMNetwork(const WDMNetwork&);				//-B: reference of 'this' object points to WDMNetwork object passed as parameter
@@ -35,75 +35,75 @@ public:
 												//	(I guess buecause the num of channles is the same for every link)
 	LINK_COST hCost;
 	// for SEG_SP with hop-count constraint on (p + b) path
-	LINK_COST SEG_SP_PB_HOP_ComputeRoute(Circuit&, NetMan*, 
-		OXCNode*, OXCNode*, Connection *pCon);
+	LINK_COST SEG_SP_PB_HOP_ComputeRoute(Circuit&, NetMan*,
+		OXCNode*, OXCNode*, Connection* pCon);
 
 	// for SEG_SP with hop-count constraint on backup path 
-	LINK_COST SEG_SP_B_HOP_ComputeRoute(Circuit&, NetMan*, 
-		OXCNode*, OXCNode*, Connection *pCon);
+	LINK_COST SEG_SP_B_HOP_ComputeRoute(Circuit&, NetMan*,
+		OXCNode*, OXCNode*, Connection* pCon);
 
 	// for SEG_SP with graph tranformation
-	LINK_COST SEG_SP_NO_HOP_ComputeRoute(Circuit&, NetMan*, 
+	LINK_COST SEG_SP_NO_HOP_ComputeRoute(Circuit&, NetMan*,
 		OXCNode*, OXCNode*);
 
-    //for link protection
+	//for link protection
 	LINK_COST SEG_SP_L_NO_HOP_ComputeRoute(Circuit&, NetMan*, //-t
-		OXCNode*, OXCNode*, Connection *pCon);
-	
+		OXCNode*, OXCNode*, Connection* pCon);
+
 	//for SEG_AGBSP
-    LINK_COST SEG_SP_AGBSP_ComputeRoute(Circuit&, NetMan*, //-t
+	LINK_COST SEG_SP_AGBSP_ComputeRoute(Circuit&, NetMan*, //-t
 		OXCNode*, OXCNode*);
 
-	
+
 	// for SEG_SPP
-	LINK_COST SEG_SPP_ComputeRoute(Circuit&, NetMan*, 
+	LINK_COST SEG_SPP_ComputeRoute(Circuit&, NetMan*,
 		OXCNode*, OXCNode*);
-	LINK_COST wpSEG_SPP_ComputeRoute(Circuit&, NetMan*, 
+	LINK_COST wpSEG_SPP_ComputeRoute(Circuit&, NetMan*,
 		OXCNode*, OXCNode*);
-	LINK_COST SEG_SPP_B_HOP_ComputeRoute(Circuit&, NetMan*, 
+	LINK_COST SEG_SPP_B_HOP_ComputeRoute(Circuit&, NetMan*,
 		OXCNode*, OXCNode*, Connection*);
-	LINK_COST SEG_SPP_PB_HOP_ComputeRoute(Circuit&, NetMan*, 
+	LINK_COST SEG_SPP_PB_HOP_ComputeRoute(Circuit&, NetMan*,
 		OXCNode*, OXCNode*, Connection*);
 
 	//UNPROTECTED 9 dic
 	LINK_COST UNPROTECTED_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*);
 	LINK_COST UNPROTECTED_ComputeRouteGreen(Circuit&, NetMan*, OXCNode*, OXCNode*);
-	
-	LINK_COST wpUNPROTECTED_ComputeRoute(Circuit& ,NetMan *,  OXCNode* ,  OXCNode* );
+
+	LINK_COST wpUNPROTECTED_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*);
 	//DEDICATA 9 dic
 	LINK_COST PAL_DPP_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*);
 
-	LINK_COST wpPAL_DPP_ComputeRoute(Circuit& ,NetMan* ,OXCNode* ,OXCNode* );
+	LINK_COST wpPAL_DPP_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*);
 
 	//-B: MIE FUNZIONI DI PROVISIONING
 	LINK_COST BBU_ComputeRoute(Circuit*, NetMan*, OXCNode*, OXCNode*, int);
-	LINK_COST wpBBU_ComputeRoute(Circuit*hCircuit, NetMan * pNetMan, OXCNode * pSrc, OXCNode * pDst);
-	
+	LINK_COST wpBBU_ComputeRoute(Circuit* hCircuit, NetMan* pNetMan, OXCNode* pSrc, OXCNode* pDst);
+
 	bool checkPathExist(NetMan*, Lightpath*);
 	bool isMobileNode(UINT nodeId); //-B
 	bool isFixMobNode(UINT nodeId); //-B
 	bool isFixedNode(UINT nodeId); //-B
 	void setVectNodes(UINT numOfNodes);
 
-	void genReachabilityGraphOCLightpath(AbstractGraph & hGraph, NetMan*) const;
+	void genReachabilityGraphOCLightpath(AbstractGraph& hGraph, NetMan*) const;
 
-	LINK_COST BBU_UNPROTECTED_ComputeRoute(list<AbstractLink*> hPPath, OXCNode * pSrc, OXCNode * pDst, UINT & channel);
+	LINK_COST BBU_UNPROTECTED_ComputeRoute(list<AbstractLink*> hPPath, OXCNode* pSrc, OXCNode* pDst, UINT& channel);
 
-	void BBU_WDMNetdump(ostream & out) const;
+	void BBU_WDMNetdump(ostream& out) const;
 
-	void invalidateWlOccupationLinks(Circuit*pCircuit, Graph&pGraph); //-B
+	void invalidateWlOccupationLinks(Circuit* pCircuit, Graph& pGraph); //-B
 
 	void resetBBUsReachabilityCost(); //-B: reset BBUsReachCost = UNREACHABLE for all nodes
 
-	void updateBBUsUseAfterBlock(Connection*pCon, ConnectionDB&);
+	void updateBBUsUseAfterBlock(Connection* pCon, ConnectionDB&);
 	void updateCUsUseAfterBlock(Connection* pCon, ConnectionDB&);
-	void updatePoolsUse(Connection * pCon, ConnectionDB & connDB);
-	void updateBBUsUseAfterDeparture(Connection*pCon, ConnectionDB&);
+	void updatePoolsUse(Connection* pCon, ConnectionDB& connDB);
+	void updateBBUsUseAfterDeparture(Connection* pCon, ConnectionDB&);
 
 	//-L
 	void updateCUsUseAfterDeparture(Connection* pCon, ConnectionDB& connDB);
 
-	void removeActiveBBUs(OXCNode * pOXCBBUNode);
+	void removeActiveBBUs(OXCNode* pOXCBBUNode);
 
 	void printHotelNodes();
 	void printBBUs();
@@ -114,15 +114,15 @@ public:
 
 	void logBBUInHotel();
 
-	int countConnections(OXCNode * pOXCSrc, OXCNode * pOXCDst, ConnectionDB & connDB);
+	int countConnections(OXCNode* pOXCSrc, OXCNode* pOXCDst, ConnectionDB& connDB);
 	//-L
 	int countCUConnections(OXCNode* pOXCSrc, OXCNode* pOXCDst, ConnectionDB& connDB);
 
 	void fillHotelsList();
 
-	void sortHotelsList(Graph & m_hGraph);
+	void sortHotelsList(Graph& m_hGraph);
 
-	void sortHotelsList_Evolved(Graph & m_hGraph);
+	void sortHotelsList_Evolved(Graph& m_hGraph);
 
 	void logPeriodical(Log&, SimulationTime);
 
@@ -134,39 +134,39 @@ public:
 
 	UINT countActiveNodes();
 
-	UINT countActivePools(ConnectionDB & connDB);
+	UINT countActivePools(ConnectionDB& connDB);
 
 	void restoreNodeCost();
 
-	void computeShortestPaths(Graph & m_hGraph);
+	void computeShortestPaths(Graph& m_hGraph);
 
-	void setNodesStage(Graph&m_hGraph);
+	void setNodesStage(Graph& m_hGraph);
 
-	void setReachabilityDegree(Graph & m_hGraph);
+	void setReachabilityDegree(Graph& m_hGraph);
 
 	void resetPreProcessing();
 
-	void setProximityDegree(Graph & m_hGraph);
+	void setProximityDegree(Graph& m_hGraph);
 
-	void setBetweennessCentrality(Graph & m_hGraph);
+	void setBetweennessCentrality(Graph& m_hGraph);
 
 	void genAreasOfNodes();
 
-	void extractSameStageNodes(vector<OXCNode*>&auxHotelsList, list<OXCNode*>&sameStageNodes, LINK_COST nStage);
+	void extractSameStageNodes(vector<OXCNode*>& auxHotelsList, list<OXCNode*>& sameStageNodes, LINK_COST nStage);
 
 	void extractSameReachDegreeNodes(list<OXCNode*>& sameStageNodes, list<OXCNode*>& sameReachDegreeNodes, int reachDegree);
 
 	void sortHotelsByDistance(vector<OXCNode*>&);
 
-	void updateTrafficPerNode(Event*pEvent);
+	void updateTrafficPerNode(Event* pEvent);
 
 	void extractPotentialSourcesMC_Nconn(bool, vector<UINT>&, BandwidthGranularity, double);
 
 	void extractPotentialSourcesMC_1conn(bool, vector<UINT>&, MappedLinkList<UINT, Connection*>&);
 
-	void computeTrafficProcessed_BBUStacking(OXCNode * pNode);
+	void computeTrafficProcessed_BBUStacking(OXCNode* pNode);
 
-	void computeTrafficProcessed_BBUPooling(OXCNode * pNode, MappedLinkList<UINT, Connection*>& connectionList);
+	void computeTrafficProcessed_BBUPooling(OXCNode* pNode, MappedLinkList<UINT, Connection*>& connectionList);
 
 	void extractPotentialSourcesSC_1conn(vector<UINT>& potentialSources, MappedLinkList<UINT, Connection*>& connectionList, UINT);
 
@@ -185,30 +185,30 @@ public:
 	void computeNumOfBBUSupported_CONSERVATIVE(UINT offeredTraffic_MC);
 
 	void sortHotelsListByMetric();
-	
+
 	//LINK_COST myAlg(AbsPath&,OXCNode*,OXCNode*,int&);
 	void ExtractListUniFiber(list<AbstractLink*>&); //-B: build as many UniFiber object as the num of link in m_hLinkList and put them in the hLinkToBeDecr list passed as parameter
-	void SEG_SPP_UpdateBackupCostWP(const list<AbstractLink*>&,set<Lightpath*>&,bool);
+	void SEG_SPP_UpdateBackupCostWP(const list<AbstractLink*>&, set<Lightpath*>&, bool);
 	void SEG_SPP_RestoreBackupCostWP(set<Lightpath*>& result); //fabio 4 genn
-	void DEDICATED_UpdateBackupCostWP(const list<AbstractLink*>& ,set<Lightpath*>& ,bool);
+	void DEDICATED_UpdateBackupCostWP(const list<AbstractLink*>&, set<Lightpath*>&, bool);
 
 	//BARCELLONA
-	LINK_COST SPPBw_ComputeRoute(Circuit& ,NetMan* ,OXCNode* ,OXCNode* );
-	LINK_COST SPPCh_ComputeRoute(Circuit& ,NetMan* ,OXCNode* ,OXCNode* );
+	LINK_COST SPPBw_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*);
+	LINK_COST SPPCh_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*);
 
 	// for PAL2_SP
-	LINK_COST PAL2_SP_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*, 
-			BandwidthGranularity);
+	LINK_COST PAL2_SP_ComputeRoute(Circuit&, NetMan*, OXCNode*, OXCNode*,
+		BandwidthGranularity);
 	void PAL2_SP_ComputeRoute_ReleaseMem(OXCNode*);
-	void PAL2_SP_ComputeRoute_RelaxOneHop(NetMan*, OXCNode*, OXCNode*, 
-			BandwidthGranularity);
-	LINK_COST PAL2_SP_ComputeRoute_RelaxOneHop_Aux(list<AbstractLink*>&, 
-			list<AbstractLink*>&, OXCNode*, OXCNode*, 
-			UINT, LINK_COST, BandwidthGranularity);
+	void PAL2_SP_ComputeRoute_RelaxOneHop(NetMan*, OXCNode*, OXCNode*,
+		BandwidthGranularity);
+	LINK_COST PAL2_SP_ComputeRoute_RelaxOneHop_Aux(list<AbstractLink*>&,
+		list<AbstractLink*>&, OXCNode*, OXCNode*,
+		UINT, LINK_COST, BandwidthGranularity);
 	void PAL2_SP_UpdateLinkCost_Backup(const list<AbstractLink*>&);
-	WDMNetwork* PAL2_SP_ComputeRoute_RelaxOneHop_NewState(Lightpath&, 
-			OXCNode*, OXCNode*,
-			const list<AbstractLink*>&, const list<AbstractLink*>&);
+	WDMNetwork* PAL2_SP_ComputeRoute_RelaxOneHop_NewState(Lightpath&,
+		OXCNode*, OXCNode*,
+		const list<AbstractLink*>&, const list<AbstractLink*>&);
 
 	// wavelength-continuous case
 	void setWavelengthContinuous(bool bWContinuous = true);
@@ -224,18 +224,18 @@ public:
 																				//	and creates a new OXCNode object that refers to the WDMNetwork is in
 	UniFiber* addUniFiber(UINT, UINT, UINT, UINT, LINK_COST, float);				//-B: add a new UniFiber object (derived from AbstractLink object) to the AbstractGraph object.
 																				//	Each UniFiber object has a Channel array, whose size is the num of wavel/channels
-	UniFiber* addUniFiberOnServCopy(UINT, UINT, UINT, UINT, LINK_COST,UINT);	//-B: as addUniFiber, but it doesn't add the UniFiber object to the AbstractGraph.
+	UniFiber* addUniFiberOnServCopy(UINT, UINT, UINT, UINT, LINK_COST, UINT);	//-B: as addUniFiber, but it doesn't add the UniFiber object to the AbstractGraph.
 																				//This way it returns a reference to a new Unifiber object
 	void setChannelCapacity(UINT);												//-B: simply set the related var to the value passed as parameter
 
 	UINT getChannelCapacity();
-	
-	double EstimateGreenPower(int,int,int); //-ι*°ης@#@@@@@@@@@@@@@@@@@@@@@
-	double SolarPower(int,int);
-	double WindPower(int,int);
-	double BrownPower(int,int);
-										 //-ι*°ης@#@@@@@@@@@@@@@@@@@@@@@
-	// for debugging purpose
+
+	double EstimateGreenPower(int, int, int); //-ι*°ης@#@@@@@@@@@@@@@@@@@@@@@
+	double SolarPower(int, int);
+	double WindPower(int, int);
+	double BrownPower(int, int);
+	//-ι*°ης@#@@@@@@@@@@@@@@@@@@@@@
+// for debugging purpose
 	UINT countFreeChannels() const;				//-B: for each link of the network, it counts the num of free channels over all the links
 	void dumpcontrol(); //FABIO 5 nov			//-B: it checks, for each link of the network, if the real num of backup channels
 												//	is equal to the value stored in the var m_nBChannels (attribute of the lin itself)
@@ -253,7 +253,7 @@ public:
 	int DCvettS[MAX_DC_NUMBER];			// vettore con i nodeId dei DataCenter SOLAR
 	int DCvettH[MAX_DC_NUMBER];			// vettore con i nodeId dei DataCenter HYDRO
 	int DCCount[MAX_DC_NUMBER];			// vettore contatore delle connessioni che passano per un DC
-	int nconn[MAX_DC_NUMBER];				 
+	int nconn[MAX_DC_NUMBER];
 	double gp[MAX_DC_NUMBER];			//vettore con energia rinnovabile disponibile in ogni DataCenter
 	double g_en_residual[MAX_DC_NUMBER];
 	double DCprocessing[MAX_DC_NUMBER];
@@ -262,9 +262,9 @@ public:
 	double NodeProcessingCost;			//consumo di potenza dovuto al processing dei nodi
 
 	//-B: added by me
-	UINT				*MobileNodes;
-	UINT				*FixedNodes;
-	UINT				*FixMobNodes;
+	UINT* MobileNodes;
+	UINT* FixedNodes;
+	UINT* FixMobNodes;
 	UINT				numMobileNodes;
 	UINT				numFixedNodes;
 	UINT				numFixMobNodes;
@@ -272,6 +272,8 @@ public:
 	vector<OXCNode*>		ResidentialNodes;
 	vector<OXCNode*>	BBUs; //candidate hotel nodes that are ACTIVE BBU hotel nodes (simple mobile nodes that host their own BBU don't belong to this list)
 	vector<OXCNode*>	hotelsList; //all BBU candidate hotel nodes, sorted by several parameters
+	vector<OXCNode*>	hotelCentralList;
+	const int			centralHotelsId[3] = {46, 16, 27};
 	vector<UINT>		groomingNodesIds; //a NetMan method (getGroomNodesList) build a list of all nodes ids in which grooming is performed
 	float				consolidationFactor;
 	UINT				m_nNumOfTrees;
