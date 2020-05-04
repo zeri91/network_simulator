@@ -5741,6 +5741,7 @@ inline bool NetMan::BBU_ProvisionNew(Connection *pCon)
 		groomingConnections.clear();
 		delete pPCircuit;
 		pCon->m_eStatus = Connection::DROPPED;
+		blockedSrc.push_back(pCon->m_nSrc);
 	}
 
 	//-B: STEP 10 - POST-PROCESS: validate those links that have been invalidated temporarily
@@ -5876,27 +5877,7 @@ inline bool NetMan::BBU_ProvisionHelper_Unprotected(Connection *pCon, Circuit& h
 		list <Connection*>::const_iterator itrG;
 		Connection* pConG;
 
-		for (itrG = groomingConnections.begin(); itrG != groomingConnections.end(); itrG++) {
 
-			pConG = (Connection*)(*itrG);
-
-			if (pConG->m_eConnType == Connection::MOBILE_FRONTHAUL || pConG->m_eConnType == Connection::FIXEDMOBILE_FRONTHAUL)
-			{
-				
-				if ((pConG->m_dRoutingTime + ELSWITCHLATENCY) > LATENCYBUDGET) {
-#ifdef DEBUG
-					cout << "Connection on grooming path fron source " << pConG->m_nSrc <<
-						" exceeds the latency budget" << endl;
-					cout << "\tRouting + grooming time = " << pConG->m_dRoutingTime + ELSWITCHLATENCY << endl;
-#endif
-					conditionSatisfied = false;
-					//cin.get();
-					break;
-				}
-
-
-			}
-		}
 		if (!conditionSatisfied || pCon->m_bBlockedDueToLatency == true) {
 
 			cout << "Grooming time reset" << endl;

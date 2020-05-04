@@ -108,6 +108,7 @@ public:
 	LINK_COST hCost;
 	LINK_COST transport_cost;
 	bool isLinkDisjointActive;//FABIO 24 Genn:
+	list<int> blockedSrc;
 
 public:
 	void logPeriodical(SimulationTime);					//-B: Log some info about lightpaths, count num of backup channels and other logs
