@@ -9,7 +9,7 @@
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>123 BBUHetNet_5G.txt BBU_HOTEL 100 45 1 30 0.00001 0 BBU 0.005 1 1</LocalDebuggerCommandArguments>
+    <LocalDebuggerCommandArguments>123 BBUHetNet_5G_City.txt BBU_HOTEL 50000 15 1 30 0.00001 0 BBU 0.005 1 1</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerDebuggerType>Auto</LocalDebuggerDebuggerType>
   </PropertyGroup>

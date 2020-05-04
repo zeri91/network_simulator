@@ -366,6 +366,8 @@ public:
 	MappedLinkList<UINT, AbstractLink*> fewCapacityLinks;
 	MappedLinkList<UINT, AbstractLink*> blockedToFronthaulLinks;
 	MappedLinkList<UINT, AbstractLink*> blockedToMidhaulLinks;
+	MappedLinkList<UINT, AbstractLink*> lightpathLinks;
+	MappedLinkList<UINT, AbstractLink*> fewCapLightpath;
 
 	vector<int> channelsToDelete;
 	list<Lightpath*>	auxLightpathsList;

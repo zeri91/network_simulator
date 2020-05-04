@@ -7304,23 +7304,17 @@ UINT NetMan::computeHotelsTotalPowerConsumption() {
 UINT NetMan::chooseBestPlacement(int cudu) {
 	double bCon = m_hLog.m_nBlockedCon;
 	double pCon = m_hLog.m_nProvisionedCon;
+	double pBloc = 0;
+	if(pCon > 0)
+		pBloc = bCon / pCon;
 
 	assert(cudu == 0 || cudu == 1);
 
 	if (SMART_PLACEMENT == 0)
 		return (cudu == 0) ? BBUPOLICY : CUPOLICY;
 
-	if ((bCon / pCon) > 0.001) {
-		if (cudu == 0)
-			return DISTRIBUTE;
-		else if (bCon / pCon < 0.003)
-			return CENTRALIZE;
-		else
-			return DISTRIBUTE;
-	}
-
 	const float THR1 = 20.0;
-	const float THR2 = 50.0;
+	const float THR2 = 40.0;
 	int status = -1;
 
 	// compute status of the network
@@ -7350,26 +7344,15 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	// get total power consumption of the hotels in the network
 	const float powerCons = computeHotelsTotalPowerConsumption();
 
-	// check status of the network
-	if (occupacyPercentage <= THR1) {
-		if (lowCapacityLinkPercentage <= 30.0) {
+	status = HIGH;
+	/*
+	if (powerCons > 25000 && pBloc < 0.0015) {
+		if (lowCapacityLinkPercentage < 30)
 			status = LOW;
-		}
-		else if (lowCapacityLinkPercentage <= 50.0) {
-			status = MEDIUM;
-		}
-		else
-			status = HIGH;
 	}
-	else if (occupacyPercentage <= THR2 && fhBlockedLinkPercentage <= 50.0) {
-		if (lowCapacityLinkPercentage <= 50)
-			status = MEDIUM;
-		else
-			status = HIGH;
-	}
-	else
+	else if(pBloc >= 0.0015)
 		status = HIGH;
-
+*/
 	assert(status != -1);
 	if (status == EMPTY || status == LOW) return CENTRALIZE;
 	if (status == MEDIUM) {
@@ -7582,8 +7565,11 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 
 	//-B: build a list with all bbu hotel node already active (BBUs > 0) with enough "space" to host a new BBU (BBUs < MAXNUMBBU)
 	vector<OXCNode*>auxBBUsList;
-	genAuxBBUsList(auxBBUsList); // -L: list with already active BBUs
-
+	if(SMART_PLACEMENT == 0)
+		genAuxBBUsList(auxBBUsList); // -L: list with already active BBUs
+	else
+		genAuxCentralList(auxBBUsList);
+	
 	if (auxBBUsList.size() > 0)
 	{
 #ifdef DEBUG
@@ -9204,7 +9190,7 @@ UINT NetMan::placeCUHigh(UINT src, vector<OXCNode*>& BBUsList)
 
 		list<AbsPath*> hPathList;
 
-		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 5, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
+		m_hGraph.Yen(hPathList, pSrc, pOXCsrc, pDst, 10, this, AbstractGraph::LinkCostFunction::LCF_ByOriginalLinkCost, LATENCY_MH);
 		pOXCdst->updateHotelCostMetricForP0(this->m_hWDMNet.getNumberOfNodes());
 		pOXCdst->m_dCostMetric += pOXCdst->m_nBBUReachCost;
 
@@ -9918,6 +9904,8 @@ void NS_OCH::NetMan::ltChannelStatistics() {
 	m_hGraph.fewCapacityLinks.clear();
 	m_hGraph.blockedToFronthaulLinks.clear();
 	m_hGraph.blockedToMidhaulLinks.clear();
+	m_hGraph.lightpathLinks.clear();
+	m_hGraph.fewCapLightpath.clear();
 
 	SimplexLink* pLink;
 	list<AbstractLink*>::const_iterator itr;
@@ -9937,6 +9925,11 @@ void NS_OCH::NetMan::ltChannelStatistics() {
 
 			if (!pLink->getValidity())
 				m_hGraph.inactiveLinks.push_front(pLink->getId(), pLink);	
+		}
+		if (pLink->getSimplexLinkType() == SimplexLink::LT_Lightpath) {
+			m_hGraph.lightpathLinks.push_front(pLink->getId(), pLink);
+			if (pLink->m_hFreeCap < FH_BWD_FX)
+				m_hGraph.fewCapLightpath.push_front(pLink->getId(), pLink);
 		}
 	}
 }
@@ -10253,7 +10246,7 @@ void NetMan:: genAuxBBUsList(vector<OXCNode*>&auxBBUsList)
 
 }
 
-//-L: costruisce la lista delle BBU già attive non piene, escludendo il nodo srcId se non è il CoreCO
+//-L: costruisce la lista delle BBU già attive non piene
 void NetMan::genAuxCUsList(int srcId, vector<OXCNode*>& auxBBUsList)
 {
 	//per scrupolo (per fare un assert alla fine)
@@ -10264,6 +10257,26 @@ void NetMan::genAuxCUsList(int srcId, vector<OXCNode*>& auxBBUsList)
 	for (i = 0; i < m_hWDMNet.hotelsList.size(); i++)
 	{
 		if ((m_hWDMNet.hotelsList[i]->m_nBBUs > 0 && m_hWDMNet.hotelsList[i]->m_nBBUs < MAXNUMBBU) || m_hWDMNet.hotelsList[i]->m_nCUs > 0)
+		{
+			//lo inserisco nella lista dei nodi attivi non pieni
+			auxBBUsList.push_back(m_hWDMNet.hotelsList[i]);
+		}
+	}
+}
+
+//-L: costruisce la lista delle BBU già attive non piene
+void NetMan::genAuxCentralList(vector<OXCNode*>& auxBBUsList)
+{
+	//per scrupolo (per fare un assert alla fine)
+	auxBBUsList.clear();
+	int i;
+
+	//scorro la lista ordinata di tutti i candidate bbu hotel nodes (sorted in base al costo di reachability del core co)
+	for (i = 0; i < m_hWDMNet.hotelsList.size(); i++)
+	{
+		if (m_hWDMNet.hotelsList[i]->getId() == 16 || m_hWDMNet.hotelsList[i]->getId() == 21 || m_hWDMNet.hotelsList[i]->getId() == 37
+			|| m_hWDMNet.hotelsList[i]->getId() == 49 || m_hWDMNet.hotelsList[i]->getId() == 5 || m_hWDMNet.hotelsList[i]->getId() == 13
+			|| m_hWDMNet.hotelsList[i]->getId() == 33 || m_hWDMNet.hotelsList[i]->getId() == 41)
 		{
 			//lo inserisco nella lista dei nodi attivi non pieni
 			auxBBUsList.push_back(m_hWDMNet.hotelsList[i]);

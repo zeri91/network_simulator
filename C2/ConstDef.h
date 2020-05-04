@@ -28,7 +28,7 @@
 #define DISTANCE_SC_MC 2			//-B: define the distance between a macro cell and a small cell
 #define	PROPAGATIONLATENCY 0.000005 //-B: propagation latency per km
 #define ELSWITCHLATENCY 0.00002		//-B: electronic switch latency 0.00002
-#define LATENCYBUDGET 0.0002		//-B: max fronthaul latency
+#define LATENCYBUDGET 0.00015		//-B: max fronthaul latency
 #define LATENCY_MH 0.001			//-L: max midhaul latency
 #define LATENCY_BH 0.04				//-L: max backhaul latency
 #define MAXNUMBBU 2000				//-B: max num of active BBU in the same hotel node (to not limit: > num of nodes in the network)
@@ -37,7 +37,7 @@
 #define SMALLCELLS_PER_MC 10		//-B: # of small cells for each macro cells
 
 //-L
-#define SMART_PLACEMENT	0			// if 0 it uses BBUPOLICY and CUPOLICY to choose the placement if 1 it will use the smart algorithm
+#define SMART_PLACEMENT	1			// if 0 it uses BBUPOLICY and CUPOLICY to choose the placement if 1 it will use the smart algorithm
 
 //-L: network status
 #define CRITICAL 0					// The blocking probability in the network is really high, I need to save as much BW as possible
