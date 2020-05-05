@@ -7325,15 +7325,15 @@ UINT NetMan::chooseBestPlacement(int cudu) {
 	// get total power consumption of the hotels in the network
 	const float powerCons = computeHotelsTotalPowerConsumption();
 
-	status = HIGH;
-	/*
-	if (powerCons > 25000 && pBloc < 0.0015) {
+	status = MEDIUM;
+	
+	if (powerCons > 25000 && pBloc < 0.0005) {
 		if (lowCapacityLinkPercentage < 30)
 			status = LOW;
 	}
-	else if(pBloc >= 0.0015)
+	else if(pBloc >= 0.0005)
 		status = HIGH;
-*/
+
 	assert(status != -1);
 	if (status == EMPTY || status == LOW) return CENTRALIZE;
 	if (status == MEDIUM) {
@@ -7567,7 +7567,6 @@ UINT NetMan::findBestBBUHotel(UINT src, BandwidthGranularity& bwd, SimulationTim
 			break;
 		case 1:
 			bestBBU = placeBBUClose(src, auxBBUsList);
-			enough = false;
 			break;
 		case 2:
 			bestBBU = placeBBU_Metric(src, auxBBUsList);
@@ -10255,9 +10254,8 @@ void NetMan::genAuxCentralList(vector<OXCNode*>& auxBBUsList)
 	//scorro la lista ordinata di tutti i candidate bbu hotel nodes (sorted in base al costo di reachability del core co)
 	for (i = 0; i < m_hWDMNet.hotelsList.size(); i++)
 	{
-		if (m_hWDMNet.hotelsList[i]->getId() == 16 || m_hWDMNet.hotelsList[i]->getId() == 21 || m_hWDMNet.hotelsList[i]->getId() == 37
-			|| m_hWDMNet.hotelsList[i]->getId() == 49 || m_hWDMNet.hotelsList[i]->getId() == 5 || m_hWDMNet.hotelsList[i]->getId() == 13
-			|| m_hWDMNet.hotelsList[i]->getId() == 33 || m_hWDMNet.hotelsList[i]->getId() == 41)
+		if (m_hWDMNet.hotelsList[i]->getId() != 16 || m_hWDMNet.hotelsList[i]->getId() != 27 || m_hWDMNet.hotelsList[i]->getId() != 37
+			|| m_hWDMNet.hotelsList[i]->getId() != 46 || m_hWDMNet.hotelsList[i]->getId() != 1 || m_hWDMNet.hotelsList[i]->getId() != 9)
 		{
 			//lo inserisco nella lista dei nodi attivi non pieni
 			auxBBUsList.push_back(m_hWDMNet.hotelsList[i]);
